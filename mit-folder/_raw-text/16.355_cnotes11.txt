@@ -1,0 +1,3132 @@
+c 
+. 
+Software System Safety
+Nancy G. Leveson 
+MIT Aero/Astro Dept. 
+Copyright by the author, November 2004.
+
+�     	 
+   
+�     	 
+   
+     	   
+     	   
+Accident with No Component Failures 
+LC
+COMPUTER
+WATER
+COOLING
+CONDENSER
+VENT
+REFLUX
+REACTOR
+VAPOR
+LA
+CATALYST
+GEARBOX
+c
+c
+Caused by interactive complexity and tight coupling
+Exacerbated by the introduction of computers.
+Arise in interactions among components 
+Single or multiple component failures
+Component Failure Accidents
+Types of Accidents
+Usually assume random failure
+System Accidents
+No components may have "failed"
+..
+
+From a blue ribbon panel report on the V−22 Osprey problems:
+From an FAA report on ATC software architectures:
+Confusing Safety and Reliability
+reliability."
+en route automation systems must posses ultra−high
+consideration as a safety−critical system.  Therefore,
+"The FAA’s en route automation meets the criteria for
+  
+          
+
+
+     
+  
+          
+
+
+     
+Recommendation:   Improve reliability, then verify by
+extensive test/fix/test in challenging environments."
+.
+..
+to safety accordingly.
+their nature, and we must change our approaches
+Accidents in high−tech systems are changing
+ReliabilitySafety
+"Safety [software]: ...
+.
+     	   ! #
+     	   ! 
+c
+c
+
+  
+          
+
+
+     
+  
+          
+
+
+     
+Reliability: The probability an item will perform its required
+function in the specified manner over a given time
+period and under specified or assumed conditions.
+Concerned primarily with failures and failure rate reduction
+Parallel redundancy
+Standby sparing
+Safety factors and margins
+Derating
+Screening
+Timed replacements
+Reliability Engineering Approach to Safety
+(Note:  Most software−related accidents result from errors 
+from assumed conditions.)
+in specified requirements or function and deviations 
+     	   ! 
+     	   ! %
+c
+c
+Failure: Nonperformance or inability of system or component
+to perform its intended function for a specified time
+under specified environmental conditions.
+A basic abnormal occurrence, e.g.,
+burned out bearing in a pump
+relay not closing properly when voltage applied
+Fault: Higher−order events, e.g.,
+relay closes at wrong time due to improper functioning
+of an upstream component.
+All failures are faults but not all faults are failures.
+Does Software Fail?
+
+  
+          
+
+
+     
+  
+          
+
+
+     
+Highly reliable components are not necessarily safe.
+Incomplete or wrong assumptions about operation of
+     	   ! '
+c
+Are usually caused by flawed requirements
+     	   ! (
+controlled system or required operation of computer.
+Unhandled controlled−system states and environmental
+conditions.
+Merely trying to get the software ‘‘correct’’ or to make it
+Software−Related Accidents
+reliable will not make it safer under these conditions.
+c
+Reliability Engineering Approach to Safety (2)
+Assumes accidents are the result of component failure.
+Techniques exist to increase component reliability
+Failure rates in hardware are quantifiable.
+Omits important factors in accidents.
+May even decrease safety.
+Many accidents occur without any component ‘‘failure’’
+e.g.  Accidents may be caused by equipment operation
+outside parameters and time limits upon which 
+reliability analyses are based.
+Or may be caused by interactions of components
+all operating according to specification
+
+Example (batch reactor)
+System safety constraint:
+Water must be flowing into reflux condenser whenever
+catalyst is added to reactor.
+Software must always open water valve before catalyst valve
+constraints of materials to intellectual limits
+A Possible Solution
+Enforce discipline and control complexity
+Build safety in by enforcing constraints on behavior
+Limits have changed from structural integrity and physical 
+Improve communication among engineers
+  
+          
+
+
+     
+�   ) * *  	
+ +
+
+Software safety constraint:
+c
+     	   ,
+     	   # -
+     	   ! .
+what is specified in requirements.
+Software has unintended (and unsafe) behavior beyond
+Requirements do not specify some particular behavior
+behavior unsafe from a system perspective.
+Correctly implements requirements but specified
+required for system safety (incomplete)
+Software may be highly reliable and ‘‘correct’’ and still
+be unsafe.
+Software−Related Accidents (con’t.)
+c
+c
+
+The primary safety problem in computer−based systems
+is the lack of appropriate constraints on design.
+The job of the system safety engineer is to identify the 
+design constraints necessary to maintain safety and to
+ensure the system and software design enforces them.
+The Problem to be Solved
+.
+�   ) * *  	
+ +
+
+c      	   # !
+
+�   ) * *  	
+ +
+
+�   ) * *  	
+ +
+
+identification
+management
+evaluation
+elimination
+control
+A planned, disciplined, and systematic approach to
+preventing or reducing accidents throughout the life
+‘‘Organized common sense ’’ (Mueller, 1968)
+cycle of a system.
+Primary concern is the management of hazards:
+System Safety
+MIL−STD−882
+     	   ' !
+     	   ' #
+design
+c
+c
+Engineers should recognize that reducing risk is not an
+impossible task, even under financial and time constraints.
+All it takes in many cases is a different perspective on the
+design problem.
+Mike Martin and Roland Schinzinger
+Ethics in Engineering
+An Overview of The Approach
+Hazard
+through
+analysis
+
+Process Steps
+2.  Perform a System Hazard Analysis (not just Failure Analysis) 
+Identifies potential causes of hazards
+Produces hazard list 
+4.  Design at system level to eliminate or control hazards.
+5.  Trace unresolved hazards and system hazard controls to
+and humans.
+3.  Identify appropriate design constraints on system, software,
+software requirements.
+�   ) * *  	
+ +
+
+�   ) * *  	
+ +
+
+1.  Perform a Preliminary Hazard Analysis
+development
+Conceptual
+throughout system development and use.
+Design Development Operations
+Hazard identification
+Hazard resolution
+Verification
+Change analysis
+Operational feedback
+System Safety (2)
+Management
+c      	   ' 
+Hazard analysis and control is a continuous, iterative process
+c      	   ' 
+Hazard resolution precedence:
+1.  Eliminate the hazard
+2.  Prevent or minimize the occurrence of the hazard
+3.  Control the hazard if it occurs.
+4.  Minimize damage.
+
+Process Steps (2)
+6.
+Human factors analyses (usability, workload, etc.)
+Mode confusion and other human error analyses
+Robustness (environment) analysis
+Software hazard analysis
+Simulation and animation
+Software requirements review and analysis
+�   ) * *  	
+ +
+
+Derive from system hazard analysis
+Specifying Safety Constraints
+What must not do is not inverse of what must do
+Need to specify what software must NOT do
+Need to specify off−nominal behavior
+Most software requirements only specify nominal behavior
+�   ) * *  	
+ +
+
+Completeness
+     	   ' '
+     	   ' %c
+c
+
+9.
+Process Steps (4)
+Periodic audits
+Performance monitoring
+Incident and accident analysis
+Change analysis
+Operational Analysis and Auditing
+�   ) * *  	
+ +
+
+8.
+7.
+Off−nominal and safety testing
+Exception−handling etc.
+Elimination of unnecessary functions
+Separation of critical functions
+Assertions and run−time checking
+Defensive programming
+Implementation with safety in mind
+�   ) * *  	
+ +
+
+Process Steps (3)
+     	   ' ,
+     	   ' (c
+c
+
+0 1 3 5 7 7 9 : ; < 1
+Usability Analysis
+Other Human Factors
+Evaluation
+(workload, situation
+awareness, etc.)
+Performance Monitoring
+Task Allocation Principles 
+Training Requirements
+Operator Goals and
+> ? A B C E F ? A G H J L M
+Operator Task and 
+Responsibilities
+> N O N P Q R F Q N ? G A M
+U
+C V B W
+U X Y U
+Q [ V \ ?
+X ]
+P V N W N V A F B
+X
+R _
+X
+A Q A P
+J
+X
+F Q C V A F Q \ V C E V P Q
+X
+_ Q
+]
+V P
+X ]
+a
+? Q C F P Q N P ? A G b ? A N P V C C V P ?
+X
+A b
+c _ Q
+]
+V P ?
+X
+A N
+V A F P
+]
+V ? A ? A G
+Hazard List
+Simulation/Experiments
+Change Analysis
+Incident and accident analysis
+Periodic audits
+Performance MonitoringChange Analysis
+Periodic audits
+Preliminary Hazard Analysis
+System Hazard Analysis
+Safety Verification
+Operational AnalysisOperational Analysis
+Operator Task Analysis
+Preliminary Task Analysis 
+Fault Tree Analysis
+Safety Requirements and
+Constraints
+Completeness/Consistency
+Analysis
+State Machine Hazard 
+Analysis
+Deviation Analysis (FMECA)
+Mode Confusion Analysis
+Human Error Analysis
+Timing and other analyses
+Safety Testing
+Software FTA
+Simulation and Animation
+System
+V A F F Q N ? G A B
+X
+A N P
+]
+V ? A P N
+X
+_ Q
+]
+V P ?
+X
+A V C
+]
+Q d E ?
+]
+Q R Q A P N
+e Q A Q
+]
+V P Q N O N P Q R V A F
+f
+Q
+]
+? g ? B V P ?
+X
+A
+V A F
+X
+_ Q
+]
+V P
+X ]
+R V A E V C N
+F ? N _ C V O N b P
+]
+V ? A ? A G R V P Q
+]
+? V C N b
+B
+X
+R _
+X
+A Q A P N b B
+X
+A P
+] X
+C N V A F
+h
+Q N ? G A V A F B
+X
+A N P
+]
+E B P
+Q A \ ?
+] X
+A R Q A P V C V N N E R _ P ?
+X
+A N
+L F Q A P ? g O N O N P Q R G
+X
+V C N V A F
+c
+G Q A Q
+]
+V P Q N O N P Q R F Q N ? G A
+j
+C C
+X
+B V P Q P V N W N V A F
+System SafetyEngineeringHuman Factors
+A Human−Centered, Safety−Driven Design Process
+k 3 l 3 n : o q s u v w x
+
+y
+ z 
+ { ) 
+
+    
+4.  Establish the hazard log.
+1.  Identify system hazards
+2.  Translate system hazards into high−level 
+3.  Assess hazards if required to do so.
+system safety design constraints.
+Preliminary Hazard Analysis
+.
+.
+.
+.
+y
+ z 
+ { ) 
+
+    
+Door that closes on an obstruction does not reopen or reopened
+door does not reclose.
+Doors cannot be opened for emergency evacuation.
+     	    (
+     	    ,
+c
+Door closes while someone is in doorway
+Door opens while improperly aligned with station platform.
+Door opens while train is in motion.
+Train starts with door open.
+System Hazards for Automated Train Doors
+c
+
+other than a safe point of touchdown on assigned runway (CFIT)
+y
+ z 
+ { ) 
+
+    
+violate minimum separation.
+with stationary objects or leaves the paved area.
+Controlled aircraft executes an extreme maneuver within its
+Identify the system hazards for this cruise−control systemExercise:
+The cruise control system operates only when the engine is running.
+traveling at that instant is maintained.  The system monitors the car’s
+When the driver turns the system on, the speed at which the car is
+speed by sensing the rate at which the wheels are turning, and it
+maintains desired speed by controlling the throttle position.  After the 
+system has been turned on, the driver may tell it to start increasing
+speed, wait a period of time, and then tell it to stop increasing speed.
+Throughout the time period, the system will increase the speed at a
+fixed rate, and then will maintain the final speed reached.
+The driver may turn off the system at any time.  The system will turn
+off if it senses that the accelerator has been depressed far enough to
+override the throttle control.  If the system is on and senses that the
+brake has been depressed, it will cease maintaining speed but will not
+turn off.  The driver may tell the system to resume speed, whereupon
+it will return to the speed it was maintaining before braking and resume
+maintenance of that speed.
+authorization.
+Controlled airborne aircraft and an intruder in controlled airspace
+y
+ z 
+ { ) 
+
+    
+Controlled airborne aircraft gets too close to a fixed obstable
+Controlled aircraft operates outside its performance envelope.
+Aircraft on ground comes too close to moving objects or collides
+Aircraft enters a runway for which it does not have clearance.
+performance envelope.
+Loss of aircraft control.
+System Hazards for Air Traffic Control
+Controlled aircraft violate minimum separation standards (NMAC).
+Airborne controlled aircraft enters an unsafe atmospheric region.
+Controlled airborne aircraft enters restricted airspace without
+     	    .
+     	    -
+c
+c
+
+
+c 
+    	    ! 
+y 
+ z 
+ { ) 
+
+    
+Hazards must be translated into design constraints. 
+HAZARD DESIGN CRITERION 
+Train starts with door open. Train must not be capable of moving with 
+any door open. 
+Door opens while train is in motion. Doors must remain closed while train is in 
+motion. 
+Door opens while improperly aligned Door must be capable of opening only after 
+with station platform. train is stopped and properly aligned with 
+platform unless emergency exists (see below). 
+Door closes while someone is in Door areas must be clear before door 
+doorway. closing begins. 
+Door that closes on an obstruction An obstructed door must reopen to permit 
+does not reopen or reopened door removal of obstruction and then automatically 
+does not reclose. reclose. 
+Doors cannot be opened for Means must be provided to open doors 
+emergency evacuation. anywhere when the train is stopped for 
+emergency evacuation. 
+Example PHA for ATC Approach Control 
+HAZARDS REQUIREMENTS/CONSTRAINTS 
+1. A pair of controlled aircraft 1a. ATC shall provide advisories that 
+violate minimum separation maintain safe separation between 
+standards. aircraft. 
+1b. ATC shall provide conflict alerts. 
+areas, thunderstorm cells) 
+(icing conditions, windshear 
+unsafe atmospheric region. 
+2. A controlled aircraft enters an 
+direct aircraft into areas with unsafe 
+atmospheric conditions. 
+2a. ATC must not issue advisories that 
+2b. ATC shall provide weather advisories 
+and alerts to flight crews. 
+2c. ATC shall warn aircraft that enter an 
+unsafe atmospheric region. 
+
+c      	    # 
+y 
+ z 
+ { ) 
+
+    
+Example PHA for ATC Approach Control (2) 
+HAZARDS REQUIREMENTS/CONSTRAINTS 
+3. A controlled aircraft enters 3a. ATC must not issue advisories that 
+restricted airspace without direct an aircraft into restricted airspace 
+authorization. unless avoiding a greater hazard. 
+3b. ATC shall provide timely warnings to 
+aircraft to prevent their incursion into 
+restricted airspace. 
+4. A controlled aircraft gets too 4. ATC shall provide advisories that 
+close to a fixed obstacle or maintain safe separation between 
+terrain other than a safe point of aircraft and terrain or physical obstacles. 
+touchdown on assigned runway. 
+5. A controlled aircraft and an 5. ATC shall provide alerts and advisories 
+intruder in controlled airspace to avoid intruders if at all possible. 
+violate minimum separation 
+standards. 
+HAZARDS REQUIREMENTS/CONSTRAINTS 
+6. Loss of controlled flight or loss 6a. ATC must not issue advisories outside 
+of airframe integrity. the safe performance envelope of the 
+aircraft. 
+6b. 	 ATC advisories must not distract 
+or disrupt the crew from maintaining 
+safety of flight. 
+6c. 	 ATC must not issue advisories that 
+the pilot or aircraft cannot fly or that 
+degrade the continued safe flight of 
+the aircraft. 
+6d. 	 ATC must not provide advisories 
+that cause an aircraft to fall below 
+the standard glidepath or intersect 
+it at the wrong place. 
+
+y
+ z 
+ { ) 
+
+    
+y
+ z 
+ { ) 
+
+    
+10 12 12
+121212121110
+| } ~ }         
+     }     
+            
+            
+     }     
+| } ~ }         
+      
+
+   }      
+   } ~ }  
+           
+| } ~ }      
+        } ~ }  
+      }    
+         
+6
+Impossible
+Catastrophic
+I
+Critical
+II
+Marginal
+III
+Negligible
+IV
+1234 129
+12127643
+58
+            
+     ¡   ¢ £  ¤  ¡ ¥
+¦  ¤  ¡ ¥ § ¨  
+©       ¡   ¢ ¢  ¥
+  ¡ £  ¤  ¡ ¥
+ª
+¡   ©  ©  ¢   «
+¡  ¥ ¨   ¥
+¬   ¢    © ¢  £  ¤  ¡ ¥
+    ¨ ¡ ¡    
+® §
+ª
+     © ¢ ¯   ¨ §  °  ¢ ¢
+        ¨ ¡
+¬   ¡ §  ¢ ¢ «    
+      ² ²     ³ 
+AB C DE F
+´ µ ¶ µ · ¸ ¹ º » ¼ ½
+Another Example Hazard Level Matrix
+ ¢  §        ¡
+¡  ¥ ¨   ¥
+ª
+¡   ©  ©  ¢   «
+  ¡ £  ¤  ¡ ¥
+©       ¡   ¢ ¢  ¥
+¦  ¤  ¡ ¥ § ¨  
+            
+¡   ¨  ¡  ¥   
+ ¢  §        ¡
+     ¡   ¢ £  ¤  ¡ ¥
+            
+¡   ¨  ¡  ¥   
+ ¢  §        ¡
+     ¡   ¢ £  ¤  ¡ ¥
+            
+¡   ¨  ¡  ¥   
+ ¢  §        ¡
+     ¡   ¢ £  ¤  ¡ ¥
+            
+¡   ¨  ¡  ¥   
+ ¢  §        ¡
+     ¡   ¢ £  ¤  ¡ ¥
+            
+¡   ¨  ¡  ¥   
+Improbable
+Remote
+Unlikely
+Impossible
+Catastrophic Critical Marginal Negligible
+I−A
+I−B
+I−C
+I−E
+I−F
+II−A
+II−B
+II−C
+II−D
+II−E
+II−F
+III−A
+III−B
+III−C
+III−D
+Occasional
+c
+c ´ µ ¶ µ · ¸ ¹ º » ¼ ¾
+A
+B
+C
+D
+E
+F
+Frequent
+Moderate
+III−E
+Frequent Probable Occasional Remote
+III−F
+IV−A
+IV−B
+IV−C
+IV−D
+IV−E
+IV−F
+I−D
+IVIIIIII
+LIKELIHOOD
+SEVERITY
+Classic Hazard Level Matrix
+
+´c µ ¶ µ · ¸ ¹ º » » ¾ 
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë · 
+Hazard Causal Analysis 
+Used to refine the high−level safety constraints into more 
+detailed constraints. 
+Requires some type of model (even if only in head of analyst) 
+Almost always involves some type of search through the 
+system design (model) for states or conditions that could lead 
+to system hazards. 
+Top−down 
+Bottom−up 
+Forward 
+Backward 
+µ ¶ µ · ¸ ¹ º » » ½ 
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë · 
+´c 
+Forward vs. Backward Search 
+States 
+InitiatingFinal 
+Events 
+Initiating 
+nonhazard 
+nonhazard 
+nonhazard 
+X 
+Z 
+Y 
+W 
+D 
+C 
+B 
+A 
+Final 
+HAZARDHAZARD 
+nonhazard 
+nonhazard 
+nonhazard 
+X 
+Z 
+Y 
+W 
+D 
+C 
+B 
+A 
+StatesEvents 
+Forward Search Backward Search 
+
+´
+c 
+µ ¶ µ · ¸ ¹ º » » Î 
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë · 
+FTA and Software 
+Appropriate for qualitative analyses, not quantitative ones 
+System fault trees helpful in identifying potentially hazardous 
+software behavior.
+Can use to refine system design constraints.
+FTA can be used to verify code. 
+Identifies any paths from inputs to hazardous outputs or
+provides some assurance they don’t exist.
+Not looking for failures but incorrect paths (functions)
+¿ À 
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê 
+À 
+· 
+not open 
+valve 1 
+too high 
+Pressure 
+fails on 
+Position 
+Indicator 
+Valve 1 
+too late Light fails on 
+Open
+Indicator 
+failure 
+Computer does 
+failure 
+Valve 
+inattentive 
+Operator 
+open valve 2 
+not know to 
+Operator does 
+Failure 
+Sensor 
+does not open 
+Relief valve 2 
+Computer 
+´ µ ¶ µ · ¸ ¹ º 
+Fault Tree Example 
+or 
+or 
+and 
+and 
+or 
+open valve 1 
+command to 
+does not issueComputeroutput 
+c 
+does not open 
+Valve 
+Explosion 
+Relief valve 1 
+» » Í 
+Ë · 
+
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Ð Ñ Ò Ô Ñ Ö Ø Ù Û Ô Ý Ô Ù Þ ÐÞ Ù Û à á Ô â
+Ý Ñ ã ã á Ö Û Ý Ù Ð Û Ñ Ö Ý Ñ ã ã á Ö Û Ý Ù Ð Û Ñ Ö
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û ç ç á â ç
+è é è é
+é
+Ù ì Û Ñ Þ Ù Û à á Ô â
+é
+Ù ì Û Ñ Ñ Ö Ò Ô Ñ Ö Ø
+Þ Ô â í á â Ö Ý î
+ï
+ç î Ý ð Ñ à Ñ Ø Û Ý Ù à ç à Û ò ó Ù ô â à Û Ö
+ã Û ç à â Ù ì Û Ö Ø
+ò à Ù Ý â Ñ Ö
+ç ò â â ì Ù ì õ Û ç Ñ Ô î
+Þ Ù Û à á Ô â
+ö
+á ã Ù Ö
+ï
+ð î ç Û Ý Ù à
+è é
+è é
+Ù Û Ô Ý Ô Ù Þ Ð Ð Ñ ã Ù ù â Ö â Ý â ç ç Ù Ô î ç ò â â ì Ý ð Ù Ö Ø â
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û Ö ç Ð Ô á Ý Ð Û Ñ Ö ç ì Ñ Ö Ñ Ð Ý Ù á ç â
+Example Fault Tree for ATC Arrival Traffic
+è é
+è é
+ã Û Ö Û ã á ã ç â ò Ù Ô Ù Ð Û Ñ Ö ç Ð Ù Ö ì Ù Ô ì ç
+ü
+ò Ù Û Ô Ñ Þ Ý Ñ Ö Ð Ô Ñ à à â ì Ù Û Ô Ý Ô Ù Þ Ð õ Û Ñ à Ù Ð â
+´ µ ¶ µ · ¸ ¹ º » » ý
+þ
+Ô Ñ Ö Ø à Ù ô â à
+´ µ ¶ µ · ¸ ¹ º » » ÿ
+Example Fault Tree for ATC Arrival Traffic (2)
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û ç ç á â ç
+ç â ò Ù Ô Ù Ð Û Ñ Ö
+õ Û Ñ à Ù Ð Û Ñ Ö �
+Ð Ñ Ñ à Ù Ð â Ð Ñ Ù õ Ñ Û ì
+ç ò â â ì Ù ì õ Û ç Ñ Ô î
+õ Û Ñ à Ù Ð Û Ñ Ö
+Ù õ Ñ Û ì ç â ò Ù Ô Ù Ð Û Ñ Ö
+Ð ð Ù Ð ì Ñ â ç Ö Ñ Ð
+ç ò â â ì Ù ì õ Û ç Ñ Ô î
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û ç ç á â ç
+Ö Ñ Ð Þ Ñ à à Ñ Ò Û Ð �
+Ô â Ý â Û õ â ç Û Ð ô á Ð ì Ñ â ç
+ç Ý Ô â â Ö
+Ù ç ç Ñ Ý Û Ù Ð â ì Ò Û Ð ð
+Ù Û Ô Ý Ô Ù Þ Ð Ñ Ö
+ò à Ù Ö õ Û â Ò ì Û ç ò à Ù î
+æ
+Ñ Ö Ð Ô Ñ à à â Ô ì Ñ â ç
+Ö Ñ Ð Û ç ç á â ç ò â â ì
+Ù ì õ Û ç Ñ Ô î
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û ç ç á â ç
+Ù ò ò Ô Ñ ò Ô Û Ù Ð â ç ò â â ì
+Ù ì õ Û ç Ñ Ô î ô á Ð ò Û à Ñ Ð
+ì Ñ â ç Ö Ñ Ð Ô â Ý â Û õ â Û Ð �
+æ
+Ñ Ö Ð Ô Ñ à à â Ô Û ç ç á â ç
+Ù ò ò Ô Ñ ò Ô Û Ù Ð â ç ò â â ì
+Ù ì õ Û ç Ñ Ô î Ù Ö ì ò Û à Ñ Ð
+c
+Ù ò ò Ô Ñ Ù Ý ð Ð Ñ ò Ù Ô Ù à à â à
+Ô á Ö Ò Ù î ç Ö Ñ Ð ç ò Ù Ð Û Ù à à î
+ç Ð Ù Ø Ø â Ô â ì �
+
+Ò Ñ Ù Û Ô Ý Ô Ù Þ Ð à Ù Ö ì Û Ö Ø
+Ý Ñ Ö ç â Ý á Ð Û õ â à î Ñ Ö ì Û Þ Þ â Ô â Ö Ð
+Ô á Ö Ò Ù î ç Û Ö Û Ö Ð â Ô ç â Ý Ð Û Ö Ø Ñ Ô
+Ý Ñ Ö õ â Ô Ø Û Ö Ø Ñ ò â Ô Ù Ð Û Ñ Ö ç õ Û Ñ à Ù Ð â
+ã Û Ö Û ã á ã ì Û Þ Þ â Ô â Ö Ý â Û Ö
+Ð ð Ô â ç ð Ñ à ì Ý Ô Ñ ç ç Û Ö Ø Ð Û ã â �
+ü
+Ö Ù Û Ô Ý Ô Ù Þ Ð õ Û Ñ à Ù Ð â ç Ð ð â
+Ö Ñ Ö  Ð Ô Ù Ö ç Ø Ô â ç ç Û Ñ Ö  Ñ Ö â
+Ò ð Û à â Ù Û Ô ò Ñ Ô Ð Û ç Ý Ñ Ö ì á Ý Ð Û Ö Ø
+Û Ö ì â ò â Ö ì â Ö Ð 
+ ó  Ù ò ò Ô Ñ Ù Ý ð â ç
+Ð Ñ ò Ù Ô Ù à à â à Ô á Ö Ò Ù î ç �
+
+Ò Ñ Ù Û Ô Ý Ô Ù Þ Ð Ñ Ö Þ Û Ö Ù à
+Û Ö  Ð Ô Ù Û à ç â ò Ù Ô Ù Ð Û Ñ Ö Ò ð Û à â
+
+Û Ñ à Ù Ð Û Ñ Ö Ñ Þ ã Û Ö Û ã á ã
+Ñ Ö Þ Û Ö Ù à Ù ò ò Ô Ñ Ù Ý ð Ð Ñ
+ç Ù ã â Ô á Ö Ò Ù î
+
+Û Ñ à Ù Ð Û Ñ Ö Ñ Þ ì Û ç Ð Ù Ö Ý â Ñ Ô Ð Û ã â
+ç â ò Ù Ô Ù Ð Û Ñ Ö ô â Ð Ò â â Ö ç Ð Ô â Ù ã ç
+Ñ Þ Ù Û Ô Ý Ô Ù Þ Ð à Ù Ö ì Û Ö Ø Ñ Ö ì Û Þ Þ â Ô â Ö Ð
+Ô á Ö Ò Ù î ç
+
+Û Ñ à Ù Ð Û Ñ Ö Ñ Þ ã Û Ö Û ã á ã ç â ò Ù Ô Ù Ð Û Ñ Ö
+ì â ò Ù Ô Ð á Ô â Ð Ô Ù Þ Þ Û Ý Þ Ô Ñ ã Ö â Ù Ô ô î
+ô â Ð Ò â â Ö Ù Ô Ô Û õ Ù à Ð Ô Ù Þ Þ Û Ý Ù Ö ì
+Þ â â ì â Ô Ù Û Ô ò Ñ Ô Ð ç �
+ü
+Ö Ù Û Ô Ý Ô Ù Þ Ð Þ Ù Û à ç
+Ð Ñ ã Ù ù â Ð á Ô Ö
+Þ Ô Ñ ã ô Ù ç â Ð Ñ
+Þ Û Ö Ù à Ù ò ò Ô Ñ Ù Ý ð �
+c
+
+¿
+¸  Á  Å Ç µ Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿
+¸  Á  Å Ç µ Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Added what have learned from accidents
+Mathematical completeness
+States, inputs, outputs, transitions
+Added basic engineering principles (e.g., feedback)
+Defined completeness for each part of state machine
+Mapped the parts of a control loop to a state machine
+How were criteria derived?
+I/O
+I/O
+´ µ ¶ µ · ¸ ¹ º » Î Î
+´ µ ¶ µ · ¸ ¹ º » Î Í
+Requirements Completeness Criteria (2)
+c
+c
+Completeness: Requirements are sufficient to distinguish
+the desired behavior of the software from
+that of any other undesired program that
+might be designed.
+Most software−related accidents involve software requirements
+deficiencies.
+Accidents often result from unhandled and unspecified cases.
+We have defined a set of criteria to determine whether a
+requirements specification is complete.
+Derived from accidents and basic engineering principles.
+Validated (at JPL) and used on industrial projects.
+Requirements Completeness 
+
+c 
+´ µ ¶ µ · ¸ ¹ º ½ ÿ 
+ µ   Ë Ç µ Â µ ¹ Á · É ¹ Å Ê
+À
+· Ë · 
+Requirements Completeness Criteria (3) 
+About 60 criteria in all including human−computer interaction. 
+(won’t go through them all they are in the book) 
+Startup, shutdown Robustness
+Mode transitions Data age
+Inputs and outputs Latency
+Value and timing Feedback
+Load and capacity Reversibility
+Environment capacity Preemption
+Failure states and transitions Path Robustness
+Human−computer interface
+Most integrated into SpecTRM−RL language design or simple
+tools can check them.
+
+
+¿
+¸  Á  Å Ç µ Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Automatic code generation?
+Human Error Analysis
+Software Deviation Analysis
+State Machine Hazard Analysis (backwards reachability)
+Model Execution, Animation, and Visualization
+Requirements Analysis
+Completeness
+¿
+¸  Á  Å Ç µ Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Test Coverage Analysis and Test Case Generation
+Results of execution could be input into a graphical
+output can go into another model or simulator.
+Inputs can come from another model or simulator and
+Model Execution and Animation
+´ µ ¶ µ · ¸ ¹ º » Î ½
+SpecTRM−RL models are executable.
+´ µ ¶ µ · ¸ ¹ º » Î ¾c
+visualization
+Model execution is animated
+c
+
+´c µ ¶ µ · ¸ ¹ º ½  
+ µ · Ë  ¹ 
+Design for Safety 
+Software design must enforce safety constraints 
+Should be able to trace from requirements to code (vice versa) 
+Design should incorporate basic safety design principles 
+´
+c 
+µ ¶ µ · ¸ ¹ º Î ¼ 
+ µ · Ë  ¹ 
+Safe Design Precedence 
+HAZARD ELIMINATION 
+Substitution 
+Simplification 
+Decoupling 
+Elimination of human errors 
+Reduction of hazardous materials or conditions 
+HAZARD REDUCTION 
+Redundancy 
+Safety Factors and Margins 
+Failure Minimization 
+Design for controllability 
+Barriers 
+Lockins, Lockouts, Interlocks 
+HAZARD CONTROL 
+Reducing exposure 
+Isolation and containment 
+Protection systems and fail−safe design 
+DAMAGE REDUCTION 
+Decreasing cost 
+Increasing effectiveness 
+
+(Systems Theory Accident Modeling and Processes)
+STAMP is a new theoretical underpinning for developing
+.
+..
+STAMP
+more effective hazard analysis techniques for complex systems.
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Design for safety
+Hazard analysis
+´ µ ¶ µ · ¸ ¹ º » » 
+´ µ ¶ µ · ¸ ¹ º »  ¼
+Investigating and analyzing accidents
+Preventing accidents
+Accident models provide the basis for
+c
+suitable for use)
+Assessing risk (determining whether systems are
+c
+Performance modeling and defining safety metrics
+
+¿ ¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+   ! # % & ' ) ! # + ,
+.
+ / 1 , # , 1 + 5 1 6 1 7
+' , ' 8 )  # 8 8 &  ' < # = >
+?
+' / ' + ' , 7   , 1 + 5 6 A ' C #
+D
+# # ) ) #  8  + + # C    !
+)  8 8 ' E C #   1 F ! # + , 8 >
+8 /  # # + ,  /  + , 1 ' +
+G
+ 
+?
+' = # ! # 8 A
+ & ,   , 1 + 5 >
+,  5 # # ) !  ' 8 , &  #
+1 8 , 1 + 5 1 F # 8 >
+I
+8 # = # 8 ' / / 1 + ,
+J
+# = & / # )  # 8 8 &  #
+rupturemetal
+Weakened
+projected
+Fragments
+injured
+Personnel
+damaged
+8 & 8 / # ) , ' E C # ,  = 1 ! 1 F # >
+´ µ ¶ µ · ¸ ¹ º »  
+´ µ ¶ µ · ¸ ¹ º »  »
+1 + =   1 F ! # + , 1 , '  + >
+# K , # + 8 '
+?
+# = 1 ! 1 F #
+=  # 8 L )  #
+?
+# + , ' + F !   #
+,   & ) , &  # E #    # , 1 + 5
+I
+8 # E &  8 , = ' 1 ) A  1 F !
+   # 8 # # 1 E C # C '  # , ' ! # >
+ 1 ' C &  # )  ' + , = &  ' + F
+ # = & / # 8 ,  # + F , A , 
+/     8 '  + 6 ' C C +  ,
+, A ' / 5 + # 8 8 8 
+M
+?
+#  = # 8 ' F + ! # , 1 C
+!  ' 8 , &  # >
+/  + , 1 / , 6 ' , A
+8 , # # C ,  )  #
+?
+# + ,
+) C 1 , # / 1  E  +
+8 , # # C   /  1 ,  
+I
+8 # 8 , 1 ' + C # 8 8
+c
+AND OR
+Events almost always involve component failure, human 
+error, or energy−related event
+Form the basis of most safety−engineering and reliability
+engineering analysis:
+e.g., Fault Tree Analysis, Probabilistic Risk Assessment,
+FMEA, Event Trees
+and design:
+e.g., redundancy, overdesign, safety margins, ...
+as a forward chain over time.
+Explain accidents in terms of multiple events, sequenced 
+Chain−of−Events Models
+c
+Equipment
+pressure
+Operating
+Moisture Corrosion Tank
+Chain−of−Events Example
+
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+Software error
+System accidents
+Models need to include the social system as well as the 
+technology and its underlying science. 
+O P R S T V X R Y Z [ ] _
+Z ` b X P R Z c Z e Y f e T P e S ] ` i X j Y Z S l ] S ` Z Y m n ` P R Z m P o j j Y b X Z X ` o b ] X e Y ] X P _
+Z b X Y o b Y Y f Y ] n Y Z _ q i Y ] R c X o n Y i Y ] c e Y b T o X b P R ` ] b X i X R Z c Z e Y f X Z P
+P R e T ` l n T e T Y e Y b T o ` R ` n c f P c z Y { Y R R j Y i Y R ` S Y j R ` o n z Y } ` ] Y e T Y
+~ o j Y ] R c X o n Y i Y ] c e Y b T o ` R ` n c X Z P e R Y P Z e ` o Y z P Z X b Z b X Y o b Y m
+Limitations of Event Chain Models:
+Social and organizational factors in accidents
+E1:  Worker washes pipes without inserting slip blind
+E2:  Water leaks into MIT tank
+E6:  Wind carries MIC into populated area around plant
+E5:  MIC vented into air
+Chain−of−Events Example:  Bhopal
+E4:  Relief valve opens
+E3:  Explosion occurs
+c
+´ µ ¶ µ · ¸ ¹ º »  ¾
+´ µ ¶ µ · ¸ ¹ º »  ½
+c
+
+c ´ µ ¶ µ · ¸ ¹ º »  Î 
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë · 
+Limitations of Event Chain Models (2) 
+Human error 
+Deviation from normative procedure vs. established practice 
+Cannot effectively model human behavior by decomposing 
+it into individual decisions and actions and studying it 
+in isolation from the 
+physical and social context 
+value system in which it takes place 
+dynamic work process 
+Adaptation 
+Major accidents involve systematic migration of organizational 
+behavior under pressure toward cost effectiveness in an 
+aggressive, competitive environment. 
+c ´ µ ¶ µ · ¸ ¹ º »  Í 
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë · 
+Design 
+Vessel Stability Analysis 
+Design Shipyard ImpairedEquipment stabilityload added 
+Harbor 
+Truck companiesDesign Excess load routines 
+Passenger management
+Cargo Excess numbers 
+Management 
+Berth design
+Calais
+CapsizingPassenger DockingOperations management procedure Change ofManagement Standing orders docking 
+procedure 
+Berth design 
+Zeebrugge
+Traffic 
+UnsafeScheduling Operations management heuristicsTransfer of Herald 
+to Zeebrugge 
+Vessel Captain’s planning Crew working 
+patternsOperation Operations management
+Time pressure
+Accident Analysis:Operational Decision Making: Combinatorial structure Decision makers from separate of possible accidentsdepartments in operational context can easily be identified.very likely will not see the forest 
+for the trees. 
+
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+3.
+Analytic Reduction (Descartes)
+Statistics
+Treat as a structureless mass with interchangeable parts.
+in their behavior that they can be studied statistically.
+Use Law of Large Numbers to describe behavior in
+Assumes components sufficiently regular and random
+terms of averages.
+Ways to Cope with Complexity (con’t.)
+´ µ ¶ µ · ¸ ¹ º »  ÿ
+´ µ ¶ µ · ¸ ¹ º »  ý
+c
+into the whole are themselves straightforward.
+c
+Ways to Cope with Complexity
+Divide system into distinct parts for analysis purposes.
+Examine the parts separately.
+Three important assumptions:
+The division into parts will not distort the 
+phenomenon being studied.
+1.
+Components are the same when examined singly
+as when playing their part in the whole.
+2.
+Principles governing the assembling of the components
+
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+(basis of system engineering)
+systems −− how they interact and fit together.
+These properties derive from relationships between the parts of
+Some properties can only be treated adequately in their entirety,
+taking into account all social and technical aspects.
+Systems Theory
+Developed for biology (Bertalanffly) and cybernetics (Norbert Weiner)
+c
+Most important properties are emergent.
+Separation into non−interacting subsystems distorts results
+For systems too complex for complete analysis
+and too organized for statistical analysis
+Concentrates on analysis and design of whole as distinct from parts
+´ µ ¶ µ · ¸ ¹ º »  
+´ µ ¶ µ · ¸ ¹ º » ¾ ¼
+c
+Too organized for statistics
+Separation into non−interacting subsystems distorts
+the results.
+The most important properties are emergent.
+Too much underlying structure that distorts
+the statistics.
+What about software?
+Too complex for complete analysis:
+
+Irreducible
+Represent constraints upon the degree of freedom of 
+components a lower level.
+Safety is an emergent system property
+It is NOT a component property.
+Hierarchies characterized by control processes working at
+the interfaces between levels.
+A control action imposes constraints upon the activity 
+at one level of a hierarchy.
+Control in open systems implies need for communication
+information and control.
+in a state of dynamic equilibrium by feedback loops of
+Open systems are viewed as interrelated components kept
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+¿ À
+· Á µ Â Ã Å Æ Å Ç È É ¹ Å Ê
+À
+· Ë ·
+It can only be analyzed in the context of the whole.
+c ´ µ ¶ µ · ¸ ¹ º » ¾ 
+´ µ ¶ µ · ¸ ¹ º » ¾ »c
+Levels characterized by emergent properties
+2.  Communication and control
+Systems Theory (3)
+Two pairs of ideas:
+Systems Theory (2)
+1.  Emergence and hierarchy
+Levels of organization, each more complex than one below.
+
+c c´ 
+cc ´ µ ¶ µ · ¸ ¹ º » ½ ÿ 
+¿  
+É   
+A Systems Theory Model of Accidents 
+Safety is an emergent system property. 
+Accidents arise from interactions among 
+People 
+Societal and organizational structures 
+Engineering activities 
+Physical system components 
+that violate the constraints on safe component 
+behavior and interactions. 
+Not simply chains of events or linear causality, 
+but more complex types of causal connections. 
+Need to include the entire socio−technical system 
+µ ¶ µ · ¸ ¹ º » ½ ý 
+¿  
+É   
+
+´cc µ ¶ µ · ¸ ¹ º » ½  
+¿  
+É   
+STAMP (Systems−Theoretic Accident Model and Processes) 
+Based on systems and control theory 
+Systems not treated as a static design 
+A socio−technical system is a dynamic process 
+continually adapting to achieve its ends and to 
+react to changes in itself and its environment 
+Preventing accidents requires designing a control 
+structure to enforce constraints on system behavior 
+and adaptation. 
+µ ¶ µ · ¸ ¹ º » Î ¼ 
+¿  
+É   
+´cc
+STAMP (2) 
+Views accidents as a control problem 
+e.g., O−ring did not control propellant gas release by 
+sealing gap in field joint 
+Software did not adequately control descent speed of 
+Mars Polar Lander. 
+Events are the result of the inadequate control 
+Result from lack of enforcement of safety constraints 
+To understand accidents, need to examine control structure 
+itself to determine why inadequate to maintain safety constraints 
+and why events occurred. 
+
+Performance Audits Manufacturing 
+Maintenance 
+Congress and Legislatures 
+Legislation 
+Company 
+Congress and Legislatures 
+Legislation 
+Legal penalties 
+Certification 
+Standards 
+Regulations 
+Government Reports 
+Lobbying 
+Hearings and open meetings 
+Accidents 
+Case Law 
+Legal penalties 
+Certification 
+Standards 
+Problem reports 
+Incident Reports 
+Risk Assessments 
+Status Reports 
+Test reports 
+Test Requirements 
+Standards 
+Review Results 
+Safety Constraints 
+Implementation 
+Hazard Analyses 
+Progress Reports 
+Safety Standards Hazard Analyses 
+Progress Reports 
+Design, Work Instructions Change requests Audit reports 
+Regulations 
+Insurance Companies, Courts 
+User Associations, Unions, 
+Industry Associations, 
+Government Regulatory Agencies 
+Management 
+Management 
+Management 
+Project 
+Government Regulatory Agencies 
+Industry Associations, 
+User Associations, Unions, 
+Documentation 
+and assurance 
+and Evolution 
+SYSTEM OPERATIONS 
+Insurance Companies, Courts 
+Physical 
+Actuator(s) 
+SYSTEM DEVELOPMENT 
+Accidents and incidents 
+Government Reports 
+Lobbying 
+Hearings and open meetings 
+Accidents 
+Whistleblowers 
+Change reports 
+Maintenance Reports 
+Operations reports 
+Accident and incident reports 
+Change Requests 
+Incidents 
+Problem Reports 
+Hardware replacements 
+Software revisions 
+Hazard Analyses Operating Process 
+Case Law 
+Safety−Related Changes 
+Operating Assumptions 
+Operating Procedures 
+Revised 
+operating procedures 
+Whistleblowers 
+Change reports 
+Certification Info. 
+Procedures 
+safety reports 
+work logs 
+inspections 
+Hazard Analyses 
+Documentation 
+Design Rationale 
+Company 
+Resources 
+Standards 
+Safety Policy Operations Reports 
+Management 
+Operations 
+Resources 
+Standards 
+Safety Policy 
+audits 
+Manufacturing 
+Management 
+Safety 
+Reports 
+Work 
+Policy, stds. 
+Process 
+Controller 
+Sensor(s) 
+Human Controller(s) 
+Automated 
+
+´cc µ ¶ µ · ¸ ¹ º » Î  
+¿  
+É   
+Note: 
+Does not imply need for a "controller" 
+Component failures may be controlled through design 
+e.g., redundancy, interlocks, fail−safe design 
+or through process 
+manufacturing processes and procedures 
+maintenance procedures 
+But does imply the need to enforce the safety constraints 
+in some way. 
+New model includes what do now and more 
+´cc µ ¶ µ · ¸ ¹ º » Î ¾ 
+¿  
+É   
+Accidents occur when: 
+Design does not enforce safety constraints
+unhandled disturbances, failures, dysfunctional interactions
+Inadequate control actions 
+Control structure degrades over time, asynchronous evolution 
+Controller 1 
+Controller 2 Process 2 
+Control actions inadequately coordinated among multiple 
+controllers. 
+Overlap areas (side effects of decisions and control actions) 
+Boundary areas 
+Process 1 
+Controller 1 
+Controller 2 
+Process 
+
+´cc µ ¶ µ · ¸ ¹ º » Î ½ 
+¿  
+É  
+Process Models 
+Measured 
+Model of 
+(Controller) 
+Human Supervisor Automated Controller 
+InterfacesProcess 
+Model of Model of 
+Sensors 
+Actuators 
+Process 
+Controlled 
+inputs 
+Process 
+Controls 
+Displays 
+DisturbancesAutomationProcess Model of 
+variables 
+Controlled 
+Process 
+outputs 
+variables 
+Process models must contain: 
+Required relationship among process variables 
+Current state (values of process variables) 
+The ways the process can change state 
+´cc µ ¶ µ · ¸ ¹ º » Î Î 
+¿  
+É   
+Relationship between Safety and Process Model 
+Accidents occur when the models do not match the process and 
+incorrect control commands are given (or correct ones not given) 
+How do they become inconsistent?
+Wrong from beginning
+e.g. uncontrolled disturbances
+unhandled process states 
+inadvertently commanding system into a hazardous state 
+unhandled or incorrectly handled system component failures 
+[Note these are related to what we called system accidents] 
+Missing or incorrect feedback and not updated correctly 
+Time lags not accounted for 
+Explains most software−related accidents 
+
+´cc µ ¶ µ · ¸ ¹ º » Î Í
+Safety and Human Mental Models ¿  
+É   
+Explains developer errors
+May have incorrect model of 
+required system or software behavior
+development process
+physical laws
+etc.
+Also explains most human/computer interaction problems 
+Pilots and others are not understanding the automation 
+What did it just do?
+Why did it do that?
+What will it do next?
+How did it get us into this state?
+How do I get it to do what I want?
+Why won’t it let us do that? 
+What caused the failure? 
+What can we do so it does not 
+happen again? 
+Or don’t get feedback to update mental models or disbelieve it 
+´cc µ ¶ µ · ¸ ¹ º » Î ÿ 
+¿  
+É   
+Validating and Using the Model 
+Can it explain (model) accidents that have already occurred? 
+Is it useful?
+In accident and mishap investigation
+In preventing accidents
+Hazard analysis
+Designing for safety
+Is it better for these purposes than the chain−of−events model? 
+
+µ ¶ µ · ¸ ¹ º » Î ý 
+¿  
+É   
+Using STAMP in Accident and 
+Mishap Investigation and 
+Root Cause Analysis 
+µ ¶ µ · ¸ ¹ º » Î  
+¿  
+É   
+c 
+c 
+c
+c ´ 
+´ 
+Modeling Accidents Using STAMP 
+Three types of models are needed: 
+1. Static safety control structure 
+Safety requirements and constraints 
+Flawed control actions 
+Context (social, political, etc.) 
+Mental model flaws 
+Coordination flaws 
+2. 	Dynamic structure 
+Shows how the safety control structure changed over time 
+3. Behavioral dynamics 
+Dynamic processes behind the changes, i.e., why the 
+system changes 
+
+c c            
+     
+ARIANE 5 LAUNCHER 
+Diagnostic and 
+flight information 
+Horizontal velocity 
+command 
+commandMain engine 
+Horizontalvelocity 
+Main engine 
+Nozzle 
+OBC 
+SRI 
+Backup SRI 
+Booster 
+Nozzles 
+platform 
+Strapdown inertial 
+Nozzle 
+Executes flight program; 
+Controls nozzles of solid 
+boosters and Vulcain 
+cryogenic engine 
+Measures attitude of 
+launcher and its 
+movements in space 
+Measures attitude of 
+launcher and its 
+movements in space; 
+Takes over if SRI unable 
+to send guidance info 
+A 
+B 
+D C 
+C 
+Ariane 5: A rapid change in attitude and high aerodynamic loads stemming from a 
+high angle of attack create aerodynamic forces that cause the launcher 
+to disintegrate at 39 seconds after command for main engine ignition (H0). 
+Nozzles:	 Full nozzle deflections of solid boosters and main engine lead to angle 
+of attack of more than 20 degrees. 
+Self−Destruct System: Triggered (as designed) by boosters separating from main 
+stage at altitude of 4 km and 1 km from launch pad. 
+OBC (On−Board Computer) 
+OBC Safety Constraint Violated: Commands from the OBC to the nozzles must not 
+result in the launcher operating outside its safe envelope. 
+Unsafe Behavior: Control command sent to booster nozzles and later to main engine 
+nozzle to make a large correction for an attitude deviation that had not occurred. 
+Process Model: Model of the current launch attitude is incorrect, i.e., it contains 
+an attitude deviation that had not occurred. Results in incorrect commands 
+being sent to nozzles. 
+Feedback: Diagnostic information received from SRI 
+Interface Model: Incomplete or incorrect (not enough information in accident report 
+to determine which) − does not include the diagnostic information from the 
+SRI that is available on the databus. 
+Control Algorithm Flaw: Interprets diagnostic information from SRI as flight data and 
+uses it for flight control calculations. With both SRI and backup SRI shut down 
+and therefore no possibility of getting correct guidance and attitude information, 
+loss was inevitable. 
+
+c c            
+     
+ARIANE 5 LAUNCHER 
+Diagnostic and 
+flight information 
+Nozzlecommand 
+command 
+Horizontal velocity 
+Main engine 
+Horizontalvelocity 
+Main engine 
+Nozzle 
+OBC 
+SRI 
+Backup SRI 
+Booster 
+Nozzles 
+platform 
+Strapdown inertial 
+Executes flight program; 
+Controls nozzles of solid 
+boosters and Vulcain 
+cryogenic engine 
+Measures attitude of 
+launcher and its 
+movements in space 
+Measures attitude of 
+launcher and its 
+movements in space; 
+Takes over if SRI unable 
+to send guidance info 
+B 
+D C 
+C 
+A 
+SRI (Inertial Reference System): 
+SRI Safety Constraint Violated: The SRI must continue to send guidance 
+information as long as it can get the necessary information from the strapdown 
+inertial platform. 
+Unsafe Behavior: At 36.75 seconds after H0, SRI detects an internal error and 
+turns itself off (as it was designed to do) after putting diagnostic information on 
+the bus (D). 
+Control Algorithm: Calculates the Horizontal Bias (an internal alignment variable 
+used as an indicator of alignment precision over time) using the horizontal 
+velocity input from the strapdown inertial platform (C). Conversion from a 64−bit 
+floating point value to a 16−bit signed integer leads to an unhandled overflow 
+exception while calculating the horizontal bias. Algorithm reused from Ariane 4 
+where horizontal bias variable does not get large enough to cause an overflow. 
+Process Model: Does not match Ariane 5 (based on Ariane 4 trajectory data);
+Assumes smaller horizontal velocity values than possible on Ariane 5.
+Backup SRI (Inertial Reference System): 
+SRI Safety Constraint Violated: The backup SRI must continue to send guidance 
+information as long as it can get the necessary information from the strapdown 
+inertial platform. 
+Unsafe Behavior: At 36.75 seconds after H0, backup SRI detects an internal error 
+and turns itself off (as it was designed to do). 
+Control Algorithm: Calculates the Horizontal Bias (an internal alignment variable 
+used as an indicator of alignment precision over time) using the horizontal 
+velocity input from the strapdown inertial platform (C). Conversion from a 64−bit 
+floating point value to a 16−bit signed integer leads to an unhandled overflow 
+exception while calculating the horizontal bias. Algorithm reused from Ariane 4 
+where horizontal bias variable does not get large enough to cause an overflow. 
+Because the algorithm was the same in both SRI computers, the overflow 
+results in the same behavior, i.e., shutting itself off. 
+Process Model: Does not match Ariane 5 (based on Ariane 4 trajectory data);
+Assumes smaller horizontal velocity values than possible on Ariane 5.
+
+
+    
+DEVELOPMENT
+      ¡  ¢ £ ¡ ¥ ¦ § ¦ ¨ © ª «    ¬ ® £ ¬ ¢  ¢ ¡ ª ¬  ¡ « ± ² ¢  ± ª £ ¢ ¬ £ ¨ 
+³ ´ ¶ · ¹ ´ » ½ » ¿ À Á Â
+Ã ± ±  £ Å  ¬ Æ Ç « © ¬   « £ ± ¢ £ ¬ £ £ ¡ ¢  ª Å ¬ È £ ©  É ²  ¬ Ê   ¡ « ± ² ¢  ¢
+¥ ¦ § ¦ É ²  ¬ Ê  ¨  © Å ª © É  ¢ ª ¡ ¬ ®  £  Ç Å ± ª È ¡  Æ  ¬  É
+Ì ¿ Í Î · Ï ³ ´ ¶ Á · ¹ ¿ Ð ¶ · Â
+Ò   ¢ ¢  Å £ ² ± ¬ Ó £ ± ²   Å ª © ¬   ¬  ¡    ª Å ¬ È £ ©   É ¨ ±  É  ¡ ¬ £ ¬  ª ¡
+¦ £ ±  ¢ £ ¬  ¢ ¢      ¡ « ª ¡  ¬ £ ¡ ¬ Ê ² ¬ ¡ ª ¬ £ « ¬ ² £ ± « ª ¡  ¬ £ ¡ ¬
+Õ   ² ¡ ¢  ©  ¬ £  ¡ ¢  ¡   ª Å ± ª £ ¢ ¬ £ ¨  « ©  £ ¬  ª ¡ ¨ © ª «   
+Õ   ² ¡ ¢  ©  ¬ £ ¡ ¢  ¡   £ Ê ª ² ¬ È ® £ ¬ « ª ² ± ¢ Ê  ¬   ¬  ¢
+Ö
+Î ¶ · ¿ »
+Ö
+´ × Î » ½ » ¿ À Á Â
+Titan 4/Centaur/Milstar OPERATIONS
+LMA
+Analex Denver
+Engineering
+IV&V of flight software
+Honeywell
+Aerospace
+development and test
+Monitor software
+LMA Quality 
+Flight Control Software
+Software Design 
+and Development
+IMS software
+LMA System
+Assurance
+Ø Ù Ú Û Ü Ý Þ ß à ß
+á â ã â ä å æ ç è é êc
+operations management)
+(Responsible for ground
+Third Space Launch 
+Squadron (3SLS)
+of LMA contract)
+(Responsible for administration 
+Center Launch Directorate (SMC)
+Space and Missile Systems
+oversee the process
+contract administration
+software surveillance
+Management Command
+Defense Contract
+c
+verify design
+Analex−Cleveland
+IV&V
+Analex
+construction of flight control system)
+(Responsible for design and
+Prime Contractor (LMA)
+System test of INU
+LMA FAST Lab
+Titan/Centaur/Milstar
+(CCAS)
+Ground Operations
+
+    
+    
+ë ì í ì î ï ð ñ ò ó
+ô õ ö
+â ÷ ä
+õ ø ù ú
+â ä
+û ü ý þ ÿ �  � ý þ 
+   
+    þ ü 
+ ý 
+ 
+ú
+å ÷  æ â ÷ â ä   
+õ ú ø
+â
+õ
+ä  ÷ â
+ø
+â æ
+ö
+
+å ä
+ù
+
+ö õ ú
+÷ â
+ù
+å ÷
+ö
+ä   æ
+ù
+
+ö 
+÷ å
+ø ø
+â  
+
+õ ú
+
+å
+ø ø
+ æ 
+ö 
+
+ ã  ä å ÷  â ä 
+ô õ
+÷ æ  æ  ä
+
+å
+ø ù ú õ
+ æ
+ö
+ä
+ô õ ö
+â ÷
+Shallow location
+Heavy rains
+Porous bedrock
+Minimal overburden
+   !
+No chlorinator
+Design flaw:
+# $ % % '
+Design flaw:
+# $ % % )
+
+å æ
+ö õ ø
+ æ
+õ
+æ
+ö
+ä
+û ü ý þ ÿ �  � ý þ 
+÷ â +  â ä
+ö
+ä
+
+å ÷  æ
+
+å
+. .
+..
+-
+ò . 0 ð í 1 0 í ï
+3
+   â
+ú
+ æ â ä
+4 5 7 9 9 ò 1 1 ì î î ì ò í 0 ð î
+ô õ ö
+â ÷
+Shallow location
+Heavy rains
+Porous bedrock
+Minimal overburden
+   !
+No chlorinator
+Design flaw:
+# $ % % '
+Design flaw:
+# $ % % )
+
+å æ
+ö õ ø
+ æ
+õ
+æ
+ö
+ä
+=    â
+ö
+Dynamic Structure
+?
+ã â ÷ ä  
+
+ö
+
+å
+ú
+
+
+ â ä
+ æ ä
+ù
+â
+
+ö
+ å æ
+õ
+æ  å
+ö
+
+â ÷ ÷ â
+ù
+å ÷
+ö
+ä
+÷ â
+ù
+å ÷
+ö
+ä
+ô õ ö
+â ÷ ä
+õ ø ù ú
+â ä
+÷ â
+ù
+å ÷
+ö
+ä @
+0 î ï ì í B C D E
+÷ â
+ù
+å ÷
+ö
+ä
+÷ â  
+ú õ ö
+ å æ ä
+÷ â
+ù
+å ÷
+ö
+ä
+ ? F
+ æ ä
+ù
+â
+
+ö
+ å æ
+?
+ù
+â ÷
+õ ö
+å ÷
+
+â ÷
+ö
+
+
+
+
+õ ö
+ å æ
+G  æ
+õ
+æ
+
+
+õ ú H
+æ
+
+å J
+û ü ý þ ÿ �  � ý þ 
+K
+- L M
+ë 0 N ì O D P
+÷ â +  â ä
+ö
+ä
+÷ â
+ù
+å ÷
+ö
+ä
+ö õ ö
+ ä
+÷ â
+ù
+å ÷
+ö
+ä
+Q    â
+ö
+ä 
+ú õ ô
+ä
+Q    â
+ö
+ä 
+ú õ ô
+ä
+Q    â
+ö
+ä 
+ú õ ô
+ä
+÷ â
+ù
+å ÷
+ö
+ä
+    â
+ú
+ æ â ä
+G â  â ÷
+õ ú
+5 ð ò . ì í O ì D P
+÷ â
+ù
+å ÷
+ö
+ä
+R 0 D P ï S T 0 V ï W ò ó R 0 D P ï S
+   
+    þ ü 
+ ý 
+ 
+ú
+å ÷  æ
+õ ö
+ å æ
+ë ì í ì î ï ð ñ ò ó
+? Y Z ?
+ \
+
+ú
+å ÷  æ
+õ ö
+ å æ = 
+ú ú
+â
+ö
+ æ
+\ â ÷
+ö
+
+
+
+
+õ ö
+â ä å
+
+
+ù ù
+÷ å ã
+õ ú
+Z
+â
+ú ú
+ä â
+ú
+â
+
+ö
+ å æ
+ò V 0 ð D ï ì ò í î
+4 D P ] 0 ð ï ò í 5 7 9
+õ
+æ 
+^ 9 _
+M
+
+å æ
+ö õ ø
+ æ
+õ
+æ
+ö
+ä
+÷ â  
+ú õ ö
+å ÷
+ ù
+å
+ú
+
+
+
+÷ â  
+ú õ ö
+å ÷
+ ù
+å
+ú
+
+
+
+4 5 7 9 9 ò 1 1 ì î î ì ò í 0 ð î
+
+ ã  ä å ÷  â ä 
+ô õ
+÷ æ  æ  ä
+
+å ä
+ù
+
+ö õ ú
+÷ â
+ù
+å ÷
+ö
+ä   æ
+ù
+
+ö 
+÷ å
+ø ø
+â  
+
+õ ú
+
+å
+ø ø
+ æ 
+ö 
+ 
+ú
+å ÷  æ â ÷ â ä   
+õ ú ø
+â
+õ
+ä  ÷ â
+ø
+â æ
+ö
+   
+    þ ü 
+ ý 
+û ü ý þ ÿ �  � ý þ 
+ô õ ö
+â ÷ ä
+õ ø ù ú
+â ä
+ë ì í ì î ï ð ñ ò ó
+R 0 D P ï S
+-
+ò . 0 ð í 1 0 í ï
+÷ â
+ù
+å ÷
+ö
+ä
+5 ð ò . ì í O ì D P
+G â  â ÷
+õ ú
+System Hazard: 
+5 a E P ì O ì î 0 c V ò î 0 N ï ò 0 W O ò P ì ò ð ò ï S 0 ð S 0 D P ï S d ð 0 P D ï 0 N O ò í ï D 1 ì í D í ï î ï S ð ò a B S N ð ì í ] ì í B e D ï 0 ð W
+System Safety Constraints: f g h
+4 D ï 0 ð i a D P ì ï ñ 1 a î ï í ò ï E 0 O ò 1 V ð ò 1 ì î 0 N W
+f l h
+5 a E P ì O S 0 D P ï S 1 0 D î a ð 0 î 1 a î ï ð 0 N a O 0 ð ì î ] ò ó 0 c V ò î a ð 0 ì ó e D ï 0 ð i a D P ì ï ñ ì î O ò 1 V ð ò 1 ì î 0 N
+f
+0 W B W m í ò ï ì ó ì O D ï ì ò í D í N V ð ò O 0 N a ð 0 î ï ò ó ò P P ò e
+h
+@
+S 0 î D ó 0 ï ñ O ò í ï ð ò P î ï ð a O ï a ð 0 1 a î ï V ð 0 . 0 í ï 0 c V ò î a ð 0 ò ó ï S 0 V a E P ì O ï ò O ò í ï D 1 ì í D ï 0 N e D ï 0 ð W
+. .
+?
+ù
+â ÷
+õ ö
+å ÷
+
+â ÷
+ö
+
+
+
+
+õ ö
+ å æ
+\ â ÷
+ö
+
+
+
+
+õ ö
+â ä å
+
+
+ù ù
+÷ å ã
+õ ú
+÷ â
+ù
+å ÷
+ö
+ä
+
+å
+ú
+
+
+ â ä
+Z
+â
+ú ú
+ä â
+ú
+â
+
+ö
+ å æ
+÷ â
+ù
+å ÷
+ö
+ä
+÷ â
+ù
+å ÷
+ö
+ä
+ò V 0 ð D ï ì ò í î
+ä
+ö õ ö
+ ä
+÷ â
+ù
+å ÷
+ö
+÷ â +  â ä
+ö
+ä
+K
+- L M
+ë 0 N ì O D P
+4 D P ] 0 ð ï ò í 5 7 9
+T 0 V ï W ò ó R 0 D P ï S
+÷ â
+ù
+å ÷
+ö
+ä
+?
+ã â ÷ ä  
+
+ö
+õ
+æ 
+÷ â  
+ú õ ö
+ å æ ä
+ ? F
+ æ ä
+ù
+â
+
+ö
+ å æ
+÷ â
+ù
+å ÷
+ö
+ä
+^ 9 _
+M
+
+å æ
+ö õ ø
+ æ
+õ
+æ
+ö
+ä
+ æ ä
+ù
+â
+
+ö
+ å æ
+õ
+æ  å
+ö
+
+â ÷ ÷ â
+ù
+å ÷
+ö
+ä
+÷ â  
+ú õ ö
+å ÷
+ ù
+å
+ú
+
+
+
+÷ â  
+ú õ ö
+å ÷
+ ù
+å
+ú
+
+
+
+ô õ ö
+â ÷ ä
+õ ø ù ú
+â ä
+? Y Z ?
+ \
+
+ú
+å ÷  æ
+õ ö
+ å æ = 
+ú ú
+â
+ö
+ æ
+Q    â
+ö
+ä 
+ú õ ô
+ä
+Q    â
+ö
+ä 
+ú õ ô
+ä
+@
+0 î ï ì í B C D E
+   
+    þ ü 
+ ý 
+ 
+ú
+å ÷  æ
+õ ö
+ å æ
+Q    â
+ö
+ä 
+ú õ ô
+ä
+ë ì í ì î ï ð ñ ò ó
+÷ â
+ù
+å ÷
+ö
+ä
+    â
+ú
+ æ â ä
+á â ã â ä å æ ç è é n
+á â ã â ä å æ ç è é é
+c
+c
+c
+5 ð ì . D ï 0
+c
+-
+ò . 0 ð í 1 0 í ï
+o 0 î ì N 0 í ï î
+4 D P ] 0 ð ï ò í
+o 0 î ì N 0 í ï î
+ï S 0 _ í . ì ð ò í 1 0 í ï
+@
+0 î ï ì í B C D E
+4 D P ] 0 ð ï ò í
+-
+ò . 0 ð í 1 0 í ï
+o a ð D P ^ ó ó D ì ð î
+q ò ò N m D í N
+^ B ð ì O a P ï a ð 0 m
+ë ì í ì î ï ð ñ ò ó
+ï S 0 _ í . ì ð ò í 1 0 í ï
+o a ð D P ^ ó ó D ì ð î
+q ò ò N m D í N
+^ B ð ì O a P ï a ð 0 m
+ë ì í ì î ï ð ñ ò ó
+
+r s t u w
+Modeling Behavioral Dynamics
+y z { | } ~
+ }  }       
+u  
+u  
+u
+z         ~ 
+
+ }   ~  
+y 
+ r
+u   
+ }    |  ~
+
+  ~    
+
+  
+
+    }  
+
+  
+w
+            ~ 
+w
+ }   z  } ~ 
+
+z ~ y z { | } ~
+c
+
+ 
+
+ { }   }
+
+ 
+}  ~   }  }   
+
+t
+z ~    ~  
+r
+ z ~ {   
+r
+  ~ }  
+ }    ~ } {   z    ~ 
+
+
+r
+    } { ¡  ~ } 
+
+ }   ~  
+
+   } ~ }   }
+   £ 
+
+
+
+
+  
+¤ 
+
+}  ~   
+w
+ }  }   } 
+
+r
+ z ~ {   
+r
+  ~ } 
+ } ¥ z   }  }  ~ 
+
+ 
+¦    ~        ~ }
+
+
+¤ 
+
+}  ~   
+
+ 
+}  ~   }  }   
+
+y 
+ r t
+{       } 
+t
+   }  }  
+w
+z ¨   
+
+ }   ~  
+c
+
+ 
+}  ~   }  }   
+
+
+  ~    
+
+  
+
+    }  
+y } ~  } } 
+u
+z         ~   y 
+ r
+w
+ }  }   } 
+
+  ¨  }    ~   |
+© }     ~  
+
+
+ }   ~  
+w
+  ¨  }   }    ~   |
+   £ 
+
+
+  ~      ~    
+
+«    £   | ¡  ~ } 
+  z    ~ 
+
+  ~   
+r
+  ~ } 
+
+z    
+
+  ~     } { ¡  ~ } 
+
+ 
+}  ~   }  }   
+
+
+ 
+}  ~   }  }   
+
+r
+      |
+  ~ } 
+
+¤    }   }
+
+ }    |  ~
+
+ 
+}  ~   }  }   
+
+y } ~  } }    ¨     ~ 
+
+ }   ~  
+
+        }
+
+
+w
+z      }  ~
+
+ }   ~   ¦ }  
+  ~   } {
+s
+  }
+t
+       }
+
+
+w
+   }  
+u
+}  ~  
+u
+ { } 
+
+
+w
+   }  
+u
+}  ~  
+u
+ { } 
+
+
+w
+   }  
+u
+}  ~  
+u
+ { } 
+
+
+w
+   }  
+u
+}  ~  
+u
+ { } 
+
+
+w
+   }  
+u
+}  ~  
+u
+ { } 
+u
+z         ~ 
+
+
+
+  ~      ~       £
+  ~ } 
+
+    }   } 
+
+¤ 
+
+}  ~       £
+w
+}      
+t
+¨    ~  } 
+
+ 
+}  ~   }  }   
+
+
+¥ z    }  ~
+u
+   ~ }     }
+w
+} 
+
+      } 
+
+
+       ~   
+¨  y 
+ r
+ }   z   } 
+t
+     ¨  }
+­  } 
+
+u  
+
+ }    |  ~
+  z    ~  
+
+s
+      |
+  z    ~  
+
+¡ }  
+
+cc á â ã â ä å æ ç è é Î 
+     
+A (Partial) System Dynamics Model 
+of the Columbia Accident 
+Ë °
+¹
+¾ À
+Â » Í ·
+À
+Â ¹ 
+Budget
+cuts
+Budget cuts
+directed toward
+safety
+Safety 
+System Rate of 
+safety safety increase 
+effortsPriority of
+safety programs 
+³ ´
+¼ ½ ¾ ¿ À
+º
+± 
+» Á Â Ã º
+³ µ 
+¿
+º º Ä Å
+° Æ
+º Ç 
+¯ ° ± ° ²
+» 
+² ¾
+¶ · ¹ ¹ º » » 
+Complacency
+External
+ Rate of increasePressure in complacency
+Performance
+Pressure
+È µ 
+Expectations 
+Perceived 
+safety Risk 
+¼ 
+· » Á
+°
+Ä Ê 
+²
+Á º 
+¯ ° ± ° ² 
+³ µ 
+Launch Rate Success 
+Success Rate 
+Accident Rate 
+
+    
+    
+Coordination flaws
+1. Identify 
+Mental model flaws
+Change those factors if possible
+Dynamic processes in effect that led to changes
+Changes to static safety control structure over time
+2. Model dynamic aspects of accident:
+Steps in a STAMP analysis:
+Examines interrelationships rather than linear cause−effect chains
+Looks at the processes behind the events
+Includes entire socio−economic system
+Includes behavioral dynamics (changes over time)
+Want to not just react to accidents and impose controls 
+for a while, but understand why controls drift toward 
+ineffectiveness over time and
+Context in which decisions made
+3. Create the overall explanation for the accident
+STAMP vs. Traditional Accident Models
+Detect the drift before accidents occur
+System hazards
+System safety constraints and requirements
+Control structure in place to enforce constraints
+Control flaws (e.g., missing feedback loops)
+Inadequate control actions and decisions
+á â ã â ä å æ ç è Ï Ñ
+á â ã â ä å æ ç è Ï è
+c
+c
+c
+c
+
+STAMP−Based Hazard Analysis (STPA)
+executable and analyzable
+Assists in designing safety into system from the beginning
+design, development, manufacturing, and operations
+Used to eliminate, reduce, and control hazards in system
+Not just after−the−fact analysis
+violated.
+Can use a concrete model of control (SpecTRM−RL) that is
+regulatory authorities
+Includes software, operators, system accidents, management, 
+    
+    
+Provides information about how safety constraints could be
+Risk Assessment
+Safety Metrics and Performance Auditing
+Hazard Analysis
+Using STAMP to Prevent Accidents
+á â ã â ä å æ ç è Ï ê
+á â ã â ä å æ ç è Ï Ò
+c
+c
+c
+c
+
+cc á â ã â ä å æ ç è Ï Ó
+STPA − Step1: Identify hazards and translate into high−level 
+     
+requirements and constraints on behavior 
+TCAS Hazards 
+1. A near mid−air collision (NMAC) 
+(a pair of controlled aircraft violate minimum separation 
+standards) 
+2. A controlled maneuver into the ground 
+3. Loss of control of aircraft 
+4. Interference with other safety−related aircraft systems 
+5. Interference with ground−based ATC system 
+6. Interference with ATC safety−related advisory 
+Operating 
+Aural Alerts 
+Displays 
+Pilot 
+Aural Alerts 
+Displays 
+Radar 
+Advisories 
+Radio 
+PilotAdvisories 
+Controller 
+Air Traffic 
+FAA 
+Mode 
+STPA − Step 2: Define basic control structure 
+Aircraft 
+Aircraft 
+Aircraft Information 
+Own and Other 
+Aircraft Information 
+Own and Other 
+TCAS 
+Operating 
+Mode TCAS 
+Ops 
+Airline 
+Mgmt. 
+Ops 
+Airline 
+Flight Data 
+Processor 
+Mgmt. 
+Ops 
+ATC 
+Local 
+Mgmt. 
+cc á â ã â ä å æ ç è Ï n 
+     
+
+    
+STPA − Step 3:  Identify potential inadequate control actions that
+could lead to hazardous process state
+4.  A correct control action is stopped too soon
+provided too late (at the wrong time)
+3.  A potentially correct or inadequate control action is
+2.  An incorrect or unsafe control action is provided.
+1.  A required control action is not provided
+In general:
+3.  The pilot applies the RA but too late to avoid the NMAC
+2.  The pilot incorrectly executes the TCAS resolution advisory.
+by TCAS (does not respond to the RA)
+Pilot:
+1.  The pilot does not follow the resolution advisory provided
+4.  The pilot stops the RA maneuver too soon.
+    
+For the NMAC hazard:
+1.  The aircraft are on a near collision course and TCAS does 
+not provide an RA
+TCAS:
+2.  The aircraft are in close proximity and TCAS provides an
+RA that degrades vertical separation
+3.  The aircraft are on a near collision course and TCAS provides
+an RA too late to avoid an NMAC
+4.  TCAS removes an RA too soon.
+á â ã â ä å æ ç è Ï é
+á â ã â ä å æ ç è Ï Ïc
+cc
+c
+
+Eliminate from design or control or mitigate in 
+design or operations
+STPA − Step 4:  Determine how potentially hazardous control
+Guided by set of generic control loop flaws
+Where human or organization involved must evaluate:
+Behavior−shaping mechanisms (influences)
+Context in which decisions made
+Step 4a:  Augment control structure with process models for each
+control component
+Step 4b:  For each of inadequate control actions, examine parts of
+control loop to see if could cause it.
+actions could occur.
+Can use a concrete model in SpecTRM−RL
+    
+In general:
+    
+Step 4c:  Consider how designed controls could degrade over time
+Assists with communication and completeness of analysis
+Provides a continuous simulation and analysis environment
+to evaluate impact of faults and effectiveness of mitigation
+features.
+á â ã â ä å æ ç è Ï Ô
+á â ã â ä å æ ç è Ï Îc
+cc
+c
+
+INPUTS FROM OWN AIRCRAFT 
+Úcc Û Ü Û Ý Þ ß à á â ã 
+Radio Altitude 
+Radio Altitude Status Aircraft Altitude Limit Õ Ö × Ø Ù 
+Barometric Altitude Config Climb Inhibit 
+Barometric Altimeter Status Own MOde S address 
+Air Status Altitude Climb Inhibit 
+Altitude Rate Increase Climb Inhibit Discrete 
+Prox Traffic Display Traffic Display Permitted 
+Classification 
+Current RA Level 
+Current RA Sense 
+Other Aircraft (1..30) Model 
+Reversal 
+Crossing 
+StatusStatus 
+RA Strength 
+Altitude Reporting 
+Sensivity Level 
+On 
+Fault Detected 
+System Start 
+1 
+TCAS 
+RA Sense 
+Own Aircraft Model 
+Increase Climb InhibitClimb Inhibit 
+Descent Inhibit Increase Descent Inhibit 
+Altitude Layer 
+Non−Crossing 
+Int−Crossing 
+Own−Cross 
+Unknown 
+Descend 
+Climb 
+None 
+None 
+Unknown 
+Unknown 
+Lost 
+No 
+YesOn ground 
+Airborne 
+Unknown 
+Proximate Traffic 
+Threat 
+Unknown 
+Other Traffic 
+Potential Threat 
+2 
+Unknown 
+3 
+4 
+5 
+6 
+7 
+Not Inhibited 
+Inhibited 
+Unknown 
+Layer 1 
+Layer 2 
+Layer 3 
+Layer 4 
+Unknown 
+VSL 0 
+VSL 500 
+VSL 1000 
+VSL 2000 
+Increase 2500 
+Nominal 1500 
+Unknown 
+Not Selected 
+Reversed 
+Not Reversed 
+None 
+Not Inhibited 
+Climb 
+Descend 
+None 
+VSL 0 
+VSL 500 
+VSL 1000 
+VSL 2000 
+Unknown 
+Inhibited 
+Unknown 
+Unknown 
+Unknown 
+Not Inhibited 
+Inhibited 
+Inhibited 
+Unknown 
+Not Inhibited 
+Other Bearing 
+Other Bearing Valid 
+Other Altitude 
+Other Altitude Valid 
+Range 
+Mode S Address 
+Sensitivity Level 
+Equippage 
+INPUTS FROM OTHER AIRCRAFT 
+cc Ú Û Ü Û Ý Þ ß à á â á 
+Measured 
+Õ Ö × Ø Ù 
+Disturbances 
+Displays 
+Controls 
+Process 
+inputs 
+Controlled 
+Process 
+Actuators 
+Sensors 
+Model of 
+outputs 
+Process 
+Controlled 
+variables 
+Model of 
+Process 
+Model of 
+Automation 
+Model of 
+Process Interfaces 
+Automated ControllerHuman Supervisor (Controller) 
+variables 
+
+inadequate control actions
+Design of control algorithm (process) does not enforce constraints
+Process models inconsistent, incomplete, or incorrect (lack of linkup)
+Communication flaw 
+Flaw(s) in creation or updating process 
+Inadequate or missing feedback
+Not provided in system design 
+Inadequate sensor operation (incorrect or no information provided)
+Time lags and measurement inaccuracies not accounted for
+Inadequate coordination among controllers and decision−makers
+(boundary and overlap areas)
+STPA − Step 4b:  Examine control loop for potential to cause
+Inadequate Execution of Control Action
+Communication flaw
+Time lag
+Inadequate "actuator" operation
+Inadequate Control Actions (enforcement of constraints) 
+Õ Ö × Ø Ù
+Õ Ö × Ø Ù
+e.g. operational procedures
+Use information to design protection against changes:
+over time.
+E.g., specified procedures ==> effective procedures
+controls over changes and maintenance activities
+Use system dynamics models?
+STPA − Step4c:  Consider how designed controls could degrade
+management feedback channels to detect unsafe changes
+auditing procedures and performance metrics
+Ú Û Ü Û Ý Þ ß à á â ä
+Ú Û Ü Û Ý Þ ß à á â åc
+cc
+c
+
+STPA results more comprehensive
+Top−down (vs. bottom−up like FMECA)
+Includes HAZOP model but more general
+caused by deviations in system variables
+HAZOP guidewords based on model of accidents being
+General model of inadequate control 
+Compared with TCAS II Fault Tree (MITRE)
+Not physical structure (HAZOP) but control (functional) structure
+Concrete model (not just in head)
+Handles dysfunctional interactions, software, management, etc.
+Guidance in doing analysis (vs. FTA)
+Considers more than just component failures and failure events
+Comparisons with Traditional HA Techniques
+Õ Ö × Ø Ù
+Ú Û Ü Û Ý Þ ß à á â æcc

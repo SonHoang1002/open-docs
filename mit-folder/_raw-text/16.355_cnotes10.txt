@@ -1,0 +1,202 @@
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+A Model of Team Development 
+Stage 1: Forming 
+Stage 2: Storming 
+Stage 3: Norming 
+Stage 4: Performing 
+Frequently an iterative process, phases often overlap 
+� 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stage 1: Forming 
+Team members begin to discover what behaviors are 
+acceptable. 
+Usually highly unstructured environment 
+Attempt to identify tasks, how to accomplish them 
+Decisions on what information is needed 
+Hesitant participation 
+Test behavioral assumptions, how to handle each other 
+Intellectualizing 
+Complaints about organizational issues 
+Suspicions, fear, anxiety about new situation 
+Minimal work accomplished 
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stage 2: Storming 
+Some members become overzealous or hostile as a way 
+to express individuality, resist group formation. 
+Often infighting, defensiveness, competition 
+Often establish unrealistic goals
+Often disunity, tension, jealousy over others roles
+Polarization of team members
+Concerns over excessive work
+Establish pecking order
+Recognize the extent of task requirements, often
+emotional responses from team. 
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stage 3: Norming 
+Members accept team, team norms, their own roles, 
+each others idiosyncracies. 
+Attempts to patch up previously conflicting relationships. 
+Team leader attempts to take charge.
+Anxieties about task outcome and products.
+Confusion over team priorities, usually temporary
+Excessive meetings
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stage 3: Norming (2) 
+Distrust and blaming by some; higher level of sharing 
+and confiding by others. 
+Jockeying for position 
+Stress reactions.
+Sense of team spirit and common goals emerge.
+Moderate work accomplished.
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stage 4: Performing 
+Members experience insight into personal and 
+interpersonal processes.
+Constructive self-change occurs.
+Great deal of work accomplished.
+Team becomes capable of diagnosing and 
+solving problems.
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stress and Programmers 
+Fujigaki: 
+Found high levels of stress among Japanese programmers 
+Blamed on current tendency to manage programmers with 
+techniques from manufacturing industry: 
+"The software process is not the manufacturing process. 
+The time management system that developed in 
+manufacturing should not be applied to the software 
+process without modificaions. 
+Suggests that the software process is a learning and 
+communication process. Management’s role is to 
+facilitate this learning and communication. 
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stress and Programmers (2) 
+Furuyama, Arai, Iio: 
+Measured effects of stress. 
+Programmers working under stress make far more mistakes 
+37% of mistakes would have been avoided "by appropriate 
+scheduling and placing no stress on the developers." 
+Design particularly vulnerable to stress-caused errors. 
+Found 42% of all design faults directly attributable to 
+programmer stress. 
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Stress and Programmers 
+Zawacki: conducted studies on programmers 1979-1993 
+Compared with rest of society, programmers had high 
+need to succeed, low need to socialize with other people. 
+Alarming drop in job satisfaction from 1979 to 1993. 
+Need management better prepared to deal with changing 
+needs of programmers in the 90’s: 
+Find ways to improve motivation of programmers. 
+Improve feedback between managers and programmers. 
+Add more people to mix with higher social needs (to 
+match more team-oriented, user-focused approaches 
+of the 90s). 
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Extroversion (E) and Introversion (I) 
+E:	 Other people is source of energy
+Sociability charges batteries
+Finds breadth more appealing
+Multiplicity of relationships
+I:	 Private spaces both mentally and physically
+Being alone charges batteries
+Likes to work alone or small group
+Finds depth more appealing
+Limited relationships
+ 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Intuition (N) and Sensation (S) 
+(Differences place widest gulf between people) 
+N:	 Innovative, likes metaphor, futurist 
+Head may seem to be in the clouds, but able to 
+take very complex ideas and see them as a whole. 
+Usually entrepreneurial, ingenious 
+S:	 Wants facts and data, believes in experience
+Usually observant about details
+Realistic, practical, down-to-earth
+� 	 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Thinking (T) and Feeling (F) 
+T:	 Usually prefer impersonal choice when making decisions 
+Objective, principles, follow laws and policies 
+Usually hides feelings; may be thought of as cold or 
+unemotional (not necessarily true, just able to cover up) 
+F:	 Personal basis and experience used when making decisions 
+Subjective, extenuating circumstances 
+Persuasive, social values 
+Often expressive of emotions 
+� � 
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Judging (J) and Perceiving (P) 
+J:	 Choose closure over keeping options open 
+May experience a sense of urgency pending a decision 
+Establishes deadlines and takes them seriously 
+Strong work ethic; plans ahead, decisive, 
+"get the show on the road" 
+P:	 Likes to gather more data, decisions frequently left pending 
+Likes to adapt as they go, keep life open 
+Don’t think deadlines should be hard 
+Takes a "wait and see" and "something will turn up" attitude 
+�  
+
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+Metzger: Managing Programming People, 1987 
+(Prentice-Hall) 
+A team made up of individuals, each with own personal goals. 
+Project management task is to make team out of individuals 
+whereby individual goals reconciled into one goal for project 
+as whole. 
+Important to identify project goals at early stage and 
+communicate them to project members. 
+Ought to know what is expected of them. 
+If uncertainty, will determine their own goals. 
+Diverging goals may lead to severe problems. 
+Debra Tannen: You Just Don’t Understand
+Differences between male and female communication styles
+�  

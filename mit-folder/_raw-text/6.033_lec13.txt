@@ -1,0 +1,173 @@
+6.033 Spring 2018
+Lecture #13 
+• New Technologies on the Internet
+• File-sharing (BitTorrent, DHTs)
+• VoIP (Skype)
+• Video Streaming
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+Internet of Problems 
+How do we route (and address) 
+scalably, while dealing with 
+issues of policy and economy? 
+How do we transport data 
+scalably, while dealing with 
+varying application demands? 
+How do we adapt new 
+applications and technologies
+to an inﬂexible architecture? 
+BGP 
+TCP,
+in-network 
+resource management 
+P2P Networks,
+CDNs 
+(and more) 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+File-sharing Techniques 
+client-server CDNs P2P 
+scalability increases
+(in theory) 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+problem: how do we incentivize 
+peers in a P2P network to upload? 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+Discovering the P2P Network
+(the “swarm”) 
+peer tracker 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+Discovering the P2P Network
+(the “swarm”) 
+130.136.254.21 
+130.136.254.22 
+171.66.3.182peer tracker
+128.31.1.11 
+128.83.122.180 
+128.232.103.202 
+155.98.35.4 
+... 
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+Discovering the P2P Network
+(the “swarm”) 
+peer
+neighbors
+seeders
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+Incentivizing Peers to Upload 
+round t round t+1 
+13
+10
+4
+12
+7
+9
+15
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+problem: the tracker is a central 
+point of failure 
+peer tracker 
+in practice, most BitTorrent clients are trackerless. 
+The list of peers is stored (and replicated) across 
+multiple machines in a distributed data structure 
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+VoIP 
+(Voice over IP) 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+ A src:	A dst:	? N1 N2 S 
+problem: S’s IP is private 
+(can’t route to it, and can’t ﬁgure 
+out that it’s “behind” N2) 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+ 
+N1 will keep some state
+mapping a connection
+on this port back to A 
+A src:	A dst:	N2 src:	N1dst:	N2 N2 SN1
+skype provides a directory,
+so assume we can get N2’s IP 
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+   
+N1 will keep some state
+mapping a connection
+on this port back to A 
+A SN1 N2
+src:	A 
+dst:	N2
+src:	N1
+dst:	N2
+src:	N1
+dst:	? 
+problem: N2 has no idea who 
+this packet is meant for 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+P 
+A S 
+solution: A and S route their communication through P 
+(who has a public IP) 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+File-sharing Techniques 
+client-server CDNs P2P 
+scalability increases
+(in theory) 
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+Video-streaming Techniques? 
+client-server CDNs P2P 
+scalability increases
+(in theory) 
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+• P2P Networks are, in theory, inﬁnitely scalable.  They can
+improve performance for some applications, and provide
+a way to overcome certain aspects of the Internet’s
+architecture.  Incentivizing peers to behave is an
+important problem.
+• CDNs don’t scale in the same way that P2P networks do,
+but are more appropriate for some applications, and
+provide some features that a P2P network can’t (more on
+that in Thursday’s recitation).
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+18

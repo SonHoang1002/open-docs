@@ -1,0 +1,19 @@
+{
+  "name": "restful-api-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Demo RESTful API chuẩn theo docs/api/restful-api.md (Express + Zod + OpenAPI)",
+  "scripts": {
+    "start": "node --watch src/server.ts",
+    "start:once": "node src/server.ts"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "yaml": "^2.8.1",
+    "zod": "^4.1.12"
+  }
+}

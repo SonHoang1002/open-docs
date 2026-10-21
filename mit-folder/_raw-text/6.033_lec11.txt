@@ -1,0 +1,352 @@
+6.033 Spring 2018
+Lecture #11
+• Reliable Transport
+• Window-based Congestion Control
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+How do we route (and address) 
+scalably, while dealing with 
+issues of policy and economy?
+How do we transportdata 
+scalably, while dealing with 
+varying application demands?
+How do we adapt new 
+applications and technologies 
+to an inflexible architecture?
+Internet of Problems
+BGP
+TCP
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+Reliable Transport
+Sending 
+Application
+Receiving 
+Application
+unreliable networkReliableSender Reliable Receiver
+each byte of data is 
+delivered exactly 
+once and in-order
+6.033 | spring 2018 
+3
+
+sender receiver
+timeout
+1
+ 
+ 
+ 
+ 
+ 
+2
+3
+4
+5
+6
+8
+9
+10
+11
+7
+7
+X
+1
+2
+3
+4
+5
+6
+6
+6
+6
+6
+11
+W = 5
+6.033 | spring 2018 
+4
+
+sender receiver
+timeout
+1
+ 
+ 
+ 
+ 
+ 
+2
+3
+4
+5
+6
+8
+9
+10
+11
+7
+1
+2
+3
+4
+5
+6
+8
+9
+10
+11
+11
+W = 5
+7
+X
+7
+notice that (in this 
+example) the timeout 
+expired before the 
+sender got an ACK 
+indicating that 7 had 
+been received
+6.033 | spring 2018 
+5
+
+sender receiver
+timeout
+1
+ 
+ 
+ 
+ 
+ 
+2
+3
+4
+5
+6
+8
+9
+10
+11
+7
+1
+2
+3
+4
+5
+6
+W = 5
+7
+7
+8
+9
+10
+6.033 | spring 2018 
+6
+
+question:what is the correct value for W?
+too small → underutilized network
+too large → congestion
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+question:how can a single reliable sender, using a 
+sliding-window protocol, set its window size to maximize 
+utilization — but prevent congestion and unfairness —
+given that there are many other end points using the 
+network, all with different, changing demands?
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+AIMD
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+R1
+(S1’s sending rate)
+R2
+(S2’s sending rate)
+efficiency
+(utilization)
+R1
++ R
+2 = B
+B
+B
+under
+-utilization
+congestion
+the network is fully utilized 
+when the bottleneck link is “full”
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+R1
+(S1’s sending rate)
+R2
+(S2’s sending rate)
+efficiency
+(utilization)
+R1
++ R
+2 = B
+B
+B
+the network is fully utilized 
+when the bottleneck link is “full”
+fairness
+the network is fair when S1 and 
+S2 are sending at the same rate
+R1
+= R
+2
+S1is sending more than S
+2
+S2is sending more than S
+1
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+R1
+(S1’s sending rate)
+R2
+(S2’s sending rate)
+efficiency
+(utilization)
+R1
++ R
+2 = B
+B
+B
+the network is fully utilized 
+when the bottleneck link is “full”
+fairness
+the network is fair when S1 and 
+S2 are sending at the same rate
+R1
+= R
+2
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+efficiency
+(utilization)
+R1
++ R
+2 = B
+B
+B
+the network is fully utilized 
+when the bottleneck link is “full”
+fairness
+the network is fair when S1 and 
+S2 are sending at the same rate
+R1
+= R
+2
+R1
+(S1’s sending rate)
+R2
+(S2’s sending rate)
+6.033 | spring 2018 
+13
+
+efficiency
+(utilization)
+R1
++ R
+2 = B
+B
+B
+the network is fully utilized 
+when the bottleneck link is “full”
+fairness
+the network is fair when S1 and 
+S2 are sending at the same rate
+R1
+= R
+2
+eventually, R1 and R2 will come to oscillate around the fixed point
+R1
+(S1’s sending rate)
+R2
+(S2’s sending rate)
+6.033 | spring 2018 
+14
+
+AIMD + Slow Start
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+something has 
+happened to 
+packet 7
+sender receiver
+timeout
+1
+ 
+ 
+ 
+ 
+ 
+2
+3
+4
+5
+6
+8
+9
+10
+11
+7
+7
+X
+1
+2
+3
+4
+5
+6
+6
+6
+6
+6
+11
+W = 5
+6.033 | spring 2018 
+16
+
+sender receiver
+ 
+ 
+ 
+ 
+ 
+in practice, if a single packet is lost, the three “dup” 
+ACKs will be received before the RTO for that packet 
+expires
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+AIMD + Slow Start
+retransmission due
+to timeout
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+• TCP provides reliable transport along with congestion
+control: senders increase their window additively until
+they experience loss, and then back off multiplicatively.
+Senders also use slow -start and fast-retransmit/fast -
+recovery to quickly increase the window and recover from
+loss.
+• TCP has been a massive success, but senders don’t
+react to congestion until queues are already full .  Is
+there a better way?
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+�.�����ompute����stem����i�ee�i��
+Spring 201� 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+20

@@ -1,0 +1,39 @@
+T. Speller 
+January 11, 2007 
+Scenarios as a creative practice 
+Scenarios are another creative practice increasingly being used by companies and gaining 
+favor from the success of Shell Oil with their future scenarios process (see references 
+below). We intend our system architectures to not just satisfy current requirements but 
+also be easily evolvable over time. One way of working towards evolvability is by 
+designing a product family. The family can be developed and produced all at one time, or 
+to mitigate risk may be started with one product entry followed by variants of the product 
+over time. This controlled release of new family members manages risk, can spread out 
+resource requirements and reduces the need for a high upfront capital investment. 
+Therefore, another ‘ideal’ design attribute is the system architecture’s ability to evolve. 
+How do we plan for the evolution of a product? One strategy is to make the current first 
+release version of the SA so flexible that it can be evolved quickly and at minimal cost. 
+However, typically in order to have notions of how to design in the flexibility we must 
+know the future. Scenarios, which derives its name from scriptwriting in plays, is one 
+means of thinking through possible futures. Your creative team can think of many 
+different possible futures affecting your enterprise and its products. How do you know 
+that you have explored all possible futures? You don’t know, but large fluctuations in the 
+“environment,” or disturbances, must be considered, not just the different normal, 
+possible paths out into the future. This is a ‘what if’ analysis. One must consider the 
+seemingly improbable disturbances that can, and as we have seen in 9/11 and the recent 
+tsunami, do occur. The scenarios can be done by experts, managers, futurists, your SA 
+team, yourself and … . Think about how your product may be misused or used for 
+purposes not originally intended. In this case you should consider testing it for robustness 
+in this outside usage or ‘protecting’ the product from being misused. Once these 
+scenarios are developed and discussed, their impact must be discounted to the present in 
+your SA design as much as you judge is appropriate. In this viewpoint one might consider 
+the selected present SA to be the result of all plausibly considered futures. By modularity 
+and platforming along with other SA strategies, you can achieve flexibility and its close 
+relative, extensibility, with minimal or modest added cost to your present SA design. 
+A good book by which to start being convinced of the usefulness of scenarios is 
+http://www.amazon.com/exec/obidos/tg/detail/-/1578518202/qid=1105579205/sr=1-
+32/ref=sr_1_32/002-5285815-5183236?v=glance&s=books The Living Company by Arie 
+de Geus. 
+Also, here are two websites to review on scenarios 
+ and http://www.sric-bi.com/consulting/ScenarioPlan.shtml 
+_____________________________________________________http://www.shell.com/home/content/aboutshell-en/our_strategy/shell_global_scenarios__________
+_________________________________________________/dir_global_scenarios_07112006.html. (Accessed 21 August 2007).

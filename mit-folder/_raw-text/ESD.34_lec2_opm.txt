@@ -1,0 +1,458 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+Tutorial on Object Process Modeling 
+Ed Crawley
+January11, 2007
+Rev 2.0
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Outline
+z Objects, processes and their links
+z Objects and their links
+z Processes
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+A Tutorial: Object-Process Methodology 
+(OPM)
+z OPM is a system development methodology that 
+integrates many system attributes in one model
+z In particular, explicitly represents objects, processes 
+and their links
+z Gives us a framework for rigorous qualitative system 
+thinking, and perhaps quantitative modeling and 
+analysis
+z Developed by Dr. Dov Dori, modified for System 
+Architecture
+z A way to think, not the way to think
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+Things
+z The world is composed of things (physical/ 
+informational) which consist of objects and 
+processes
+Things
+Object Processing
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+Objects
+z Defined: An object is that which has the potential of 
+stable, unconditional existence for some positive 
+duration of time
+z Can be physical: visible or tangible and stable in form
+z Can be informational: anything that can be apprehended 
+intellectually
+z Objects have states (which can be changed by 
+processes)
+z Objects are linked to nouns
+Object
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+Processes
+z Defined: A process is the pattern of transformation 
+applied to one or more objects
+z Cannot hold or touch a process - it is  fleeting
+z Generally creation, change, or destruction
+z A process relies on at least one object in the pre-
+process set
+z A process transforms at least one object in the pre-
+process set
+z A process takes place along a time line
+z A process is associated with a verb
+Processing
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+Object and its States
+z State is a situation at which the object can exist for some 
+positive duration of time (and implicitly can change). 
+z Processes change the state of a particular object(s), the 
+operand(s)
+z For simple objects, the state can be represented by a 
+rounded rectangle within the rectangle representing the 
+object
+z Examples:
+– When thinking about tranporation, a person:
+– When thinking about heating, a home
+– When thinking about assigning, an array
+Person
+Here There
+Home
+Cold Warm
+Array
+Unsorted Sorted
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Thought Exercise
+z Look at things and decide if they are objects or 
+processes - have states or change states
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+z A process is associated with a verb and stateless
+z There are a family of about 5 types of links from process to 
+object
+z A process changes the states of its operand(s) through input 
+and output links
+Process and its Links
+TransportingPerson
+Here
+There
+Transporting changes a person from here to there
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Effect Links
+z The input, output and states can be suppressed for 
+simplification to an effect link
+TransportingPerson
+Transporting affects person
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+Consumption and Result Links
+z Special cases of input and output links are consumption 
+and result
+z Consumption links connects a process with an object 
+which is consumed
+– A whole and its parts
+z Result link connects a process with an object which 
+results
+Transporting
+Entropy
+EnergyTransporting consumes energy
+Transporting yields entropy
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+Enablers
+z Defined: Enablers of a process is an object that must be 
+present for that process to occur, but does not change 
+as a result of the occurrence of the process
+z Defined: Agent is an intelligent enabler
+– A human or organization of humans
+– Autonomous devices (animals, real-time computing 
+services)
+z Defined: Instruments is a non-agent enabler
+Transporting SkateboardPerson
+Operator
+Transporting requires skateboard
+Skateboard is handled by operator
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+Conditional Link
+z Defined: Conditions are state that must be achieved 
+before a process will execute
+z Could be agent or instrument
+Purchasing occurs  if Money is enough
+PurchasingMoney
+Enough
+None
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+Invocation Links
+z While almost all process produce outputs that lead to 
+other processes (I.e. there is an object between 
+processes), sometimes it is more convenient to 
+represent a direct causal link from one process to 
+another
+z This is called an invocation link
+z Can occur between physical processes (skidding 
+invokes spinning) or informational (if command invokes 
+contained instructions
+Purchasing Transporting
+Sometimes a double headed arrow
+
+15Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM Process Links
+z P changes O (from state A to B).
+z P affects O 
+z P yields or creates O
+z P consumes or destroys O
+z O is an agent of P (agent)
+z O is and instrument of P
+z P occurs if O is in state A
+z P1 invokes P2 directly
+TransportingPerson
+Here
+There
+TransportingPerson
+TransportingEntropy
+TransportingEnergy
+TransportingOperator
+TransportingSkateboard
+PurchasingMoney
+Enough
+None
+Purchasing Transporting
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Forks in Object Process Links
+z If two links leave from 
+different point on a 
+process, it implies that 
+both paths occur
+z If two links leave from the 
+same path on the process 
+oval, it implies an 
+exclusive or, one or the 
+other path occurs
+z Similarly for inputs and 
+instruments of processes
+Transporting
+Entropy
+Revenue
+Transporting
+Net operating
+loss
+Net operating
+profit
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of a Whole Product System
+(Mechanical - Skateboard)
+z OPM Def: The whole system is the array of objects 
+necessary to deliver the externally delivered 
+process to the operand(s).
+Transporting SkateboardPerson
+Operator
+Road surface
+Energy
+Product/system boundary
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of an Information System
+(Bubble Sort)
+Sorting 
+(low to high)
+Routine:
+Bubble SortArray
+Compiler
+General Purpose 
+Computer
+Product/system boundary
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of a Fundamental Physical Process
+Energy
+conservingObject
+U1
+U2
+Heat (Q)
+reservoir
+Work (W)
+reservoir
+Generally, in detailed technical systems, equations represent 
+processes, and variable represent the state of the objects
+No product
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of a Social System
+DecidingDecision
+unmade
+made
+Information
+Leader
+Values
+Participants
+Goals
+No product
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+z Defined: A structural link is the symbol that represents a 
+binary relationship between two objects.
+z There is also a backward direction relation.
+z Usually it is only necessary to show one, and the other 
+is implicit.
+OPM Object-Object Structural Links
+
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Structural Link Examples
+Capacitor ResistorIs connected to
+Chair TableIs under
+Wheels Axelare bolted to
+Disk Bladescontacts 25
+Data ArrayIs stored in n
+Spatial
+(under)
+Topological
+(within)
+Topological
+(touching)
+Implementation
+Implementation
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Forks
+z Some times there are two or more structural links 
+with the same label, and one common end point
+z Can be replaced with a Fork
+Firmemploys employs
+Programmers Engineers
+m n
+Firm
+employs
+Programmers Engineers
+m n
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+Logical/Relational Structural Links 
+Decomposition
+z These 4 are a set of very commonly used logical/ 
+relational links, and therefore have special symbols.
+z Decomposition/Aggregation
+– A whole and its parts
+Skateboard
+Deck SuspensionAssembly
+24
+Wheel
+Assembly
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Characterization
+z Characterization/Exhibition
+– The relation between an object and its features or 
+attributes
+– Some attributes are states (which ones?)
+
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+State
+z Defined: State is a situation in which the object 
+can exist for some positive duration of time.
+z The combination of all the states describes the 
+possible configuration of the system throughout 
+the operational time.
+z The states can be shown with the object, or 
+alternatively within an attribute object.
+Skateboard Skateboard
+Stopped Rolling
+Motion
+Stopped Rolling
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+Specialization
+z Specialization/Generalization
+– The relationship between a general object and its 
+specialized forms
+
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+Instantiation
+z The relationship between a class of things and 
+instances of the class
+My
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Relational Structural Links- Summary
+z Logical/Relational links
+– “Is a” , is the same as
+– A code, surrogate, address of symbol for
+–Decomposes to, aggregates to
+–Is characterized by, exhibits
+–Specializes to, generalizes to
+–Instantiated to, belongs to the class of
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary- OPM Objects
+z An object is that which has the potential stable 
+circumstantial existence for some period
+z An object has states, which can change
+z An object can be linked to another object
+z Objects are often linked to other objects special by 
+logical/relational links:
+– Equivalence, 
+– Decomposition, 
+– Characterization, 
+– Specialization and 
+– Instantiation
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+Processes
+z Defined: A process is the pattern of transformation 
+applied to one or more objects
+z Cannot hold or touch a process - it is  fleeting
+z Generally creation, change, or destruction
+z A process relies on at least one object in the pre-
+process set
+z A process transforms at least one object in the pre-
+process set
+z A process takes place along a time line
+z A process is associated with a verb
+Processing
+
+32Massachusetts Institute of Technology  © Ed Crawley 2007
+Zooming
+•Process zooms into sub-processes
+Process zooms to sub-process#1 and sub-process #2
+Process emerges from sub-process#1 and sub-process #2
+Object-process arrows can move to sub-processes
+Sub-process #1 invokes Sub-process #2 (a rarely used symbol 
+that suppresses the intermediate object between processes)
+
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Emergence
+z A process can be zoomed into sub-processes
+z A process emerges from sub-processes
+z The process and sub-processes are not linked in any 
+explicit manner, as the object decomposes into parts
+z Emergence is a powerful feature of systems - parts and 
+sub-processes can come together to cause a process to 
+emerge
+z Emergence sometimes yields the anticipated processes, 
+sometimes does not yield the anticipated process and 
+sometimes unanticipated processes
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+Some OPM Process Notes
+z When a process is zoomed, affect, instrument and agent 
+links move from the boundary of the process to the 
+boundary of the sub-process they are actually 
+connected to (it could be more than one sub-process)
+z If one sub-process is followed by a second without any 
+explicit object between, the invocation link is used (only 
+from process to process)
+z In reverse engineering, objects may “dangle”. This 
+indicates all functions have not yet been identified.
+z Sometimes it is more convenient in an OPM to use the 
+decomposition symbol rather than the zooming “Venn 
+diagram” but if you do so, remember that this is just a 
+convenience - processes don’t decompose in any linear 
+manner
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+Objects and Processes in Natural Language
+Specific system
+Operating
+Product/
+System form
+Attribute of
+operating
+Attribute of 
+form
+Beneficial
+Attribute
+Operand
+z Objects are nouns: subjects 
+(agents and instruments) 
+and predicates (operands) 
+z Processes are verbs
+z All human languages are in 
+one of two patterns: NNV or 
+NVN
+z Read down for passive 
+voice, up for active
+Other 
+Attributes
+Engineers tend to focus on product/systems objects, and neglect the 
+associated processes and operands, and hence the link to value
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - OPM
+z OPM is a means (not the means) of representing 
+systems. It is conceptually able to represent a wide 
+range of system nature and complexity 
+z OPM represents in one graphical model the objects, the 
+processes and their interrelationships
+z Objects sum to form, and have interrelationships -
+structure
+z Processes, together with operand objects, yield 
+function, and have interrelationships - emergence 
+z Objects are related to processes through a small 
+number of types of links

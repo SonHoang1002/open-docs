@@ -1,0 +1,186 @@
+  
+ 
+  
+6.033 Spring 2018
+Lecture #20 
+• Introduction to security
+• Threat models, policy
+• Guard model
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+2
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+3
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+4
+
+            
+ 
+© Xudong Zheng. All rights reserved. This content is excluded from our Creative Commons license. For more information, 
+see https://ocw.mit.edu/help/faq-fair-use. 
+5
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+6
+
+              
+ 
+© Insider Inc. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+7
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+8
+
+               
+ 
+© Condé Nast. All rights reserved. This content is excluded from our Creative Commons license. For more 
+information, see https://ocw.mit.edu/help/faq-fair-use. 
+9
+
+    
+  
+what makes computer security
+special? 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+   
+  
+why is security difficult? 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+ 
+  
+steps towards building a
+more secure system: 
+1. be clear about goals (policy)
+2. be clear
+ about assumptions
+(threat model)
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+ 
+    
+    
+       
+      
+   
+  
+complete mediation: every request for
+resource goes through the guard 
+server 
+request 
+guard resource principal 
+(identifies client on 
+server) 
+authentication: is the principal who they claim to be? 
+authorization: does principal have access to 
+perform request on resource? 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+       
+  
+what can go wrong with the guard
+model? 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+  
+  
+sql injection demo 
+username | email | public? 
+karen | karen@fake.com | yes 
+peter | peter@fake.com | yes 
+katrina | no 
+SELECT username, email FROM users WHERE 
+username='<username>' AND public='yes' 
+Let 
+<username> = katrina' OR username=' 
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+  
+  
+sql injection demo 
+username | email | public? 
+karen | karen@fake.com | yes 
+peter | peter@fake.com | yes 
+katrina | no 
+SELECT username, email FROM users WHERE 
+username='
+katrina' OR username='' 
+AND 
+public='yes' 
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+  
+> cd /mit/bob/project
+> cat ideas.txt
+Hello world.
+...
+> mail alice@mit.edu < ideas.txt
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+       
+  
+what can go wrong with the guard
+model? 
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+     
+   
+   
+      
+ 
+ 
+   
+  
+• Adversarial attacks are different from “normal” failures.
+They’re targeted, rarely random, and rarely independent.
+Just one successful attack can bring down a system.
+• Securing a system starts by specifying our goals ( policy)
+and assumptions ( threat model).
+• The guard model provides complete mediation . Even
+though things can still go wrong, systems that use this
+model avoid common pitfalls.
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+20

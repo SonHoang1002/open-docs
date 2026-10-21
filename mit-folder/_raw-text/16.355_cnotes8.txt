@@ -1,0 +1,213 @@
+What is Testing? 
+c 
+Copyright Nancy Leveson, Sept. 1999 
+� 
+
+Basic Testing Guidelines 
+A test case has two parts: 
+1. Description of input data 
+2. Precise description of correct output for that input 
+A programmer should avoid testing his or her programs. 
+A programming organization should not test its own programs. 
+The results of each test should be thoroughly inspected (lots 
+of errors are missed). 
+Test cases must be written for invalid and unexpected as 
+well as valid and expected input conditions. 
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+ 
+
+Basic Testing Guidelines (2) 
+Examining a program to see if it does not do what it is 
+supposed to do is only half the battle. The other half is 
+seeing whether the program does what it is not supposed 
+to do (i.e., must examine for unintended function and 
+side effects. 
+Avoid throw−away test cases unless the program is a 
+throw−away program. 
+Test cases are a valuable investment −− regression 
+testing. 
+Do not plan a testing effort under the tacit assumption that 
+no errors will be found. 
+c
+Copyright Nancy Leveson, Sept. 1999
+ 
+
+Basic Testing Guidelines (3) 
+The probability of the existence of more errors in a section 
+of a program is proportional to the number of errors already 
+found in it. 
+prob.
+of
+more
+errors
+# errors already found 
+Testing is an extremely creative and challenging task. 
+Exceeds creativity required in designing program. 
+Don’t put your worst or newest people here. 
+A good test case is one that has a high probability of 
+detecting an as−yet undiscovered error. 
+Copyright Copyright
+c 
+Nancy Leveson, Sept. 1999 
+c
+Nancy Leveson, Sept. 1999
+ 
+
+Building Assurance (Confidence) 
+Dynamic Analysis
+Static Analysis
+Quality Assurance (conformance to standards)
+V&V of non−software lifecycle products (e.g., user manual)
+Acceptance (user) testing
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+ 
+
+Dynamic Analysis
+Monitoring run−time behavior
+Automated test case generation
+Coverage analysis
+Assertions
+Testing
+White Box
+Black Box
+ 
+ 	
+
+
+
+Black Box Testing
+is impractical.
+So for most programs, exhaustive input testing
+valid and invalid sequences. 
+If program has ‘‘memory’’, need to test all possible unique
+valid and invalid programs)
+Also all invalid input (e.g., testing Ada compiler requires all
+Valid inputs up to max size of machine (not astronomical)
+(since black box, only way to be sure to detect
+this is to try every input condition)
+x := y * 2
+if x = 5 then y := 3
+Need to test every possible input
+Test data derived solely from specification (i.e., 
+without knowledge of internal structure of program).
+ 
+ 
+ 
+
+
+l
+White Box Testing 
+Derive test data by examining program’s logic. 
+Exhaustic path testing: Two flaws 
+1) Number of unique paths through program is astronomical. 
+oop 20x 20 19 18 145 + 5 + 5 + ... + 5 =  10 
+= 100 trillion 
+If could develop/execute/verify one 
+test case every five minutes = 1 billion years 
+If had magic test processor that could 
+develop/execute/evaluate one test per 
+msec = 3170 years. 
+(control−flow graph) 
+ 
+
+White Box Testing (con’t) 
+2) Could test every path and program may still have errors!
+Does not guarantee program matches specification,
+i.e., wrong program.
+Missing paths: would not detect absence of necessary paths
+Could still have data−sensitivity errors.
+e.g. program has to compare two numbers for convergence 
+if (A − B) < epsilon ... 
+is wrong because should compare to abs(A − B) 
+Detection of this error dependent on values used for A 
+and B and would not necessarily be found by executing 
+every path through program. 
+ 
+
+Static Analysis 
+Syntax checks 
+Look for error−prone constructions
+(enforce standards)
+Program structure checks 
+Generate graphs and look for structural flaws 
+Module interface checks 
+Detect inconsistencies in declarations of data structures 
+and improper linkages between modules 
+Human Reviews
+Checklists (inspections)
+Walkthroughs (reviews)
+�  
+
+Static Analysis (con’t) 
+Event sequence checking 
+Compare event sequences in program with 
+specification of legal sequences 
+Symbolic execution 
+A := X + 5 B = 2 * (X + 5)
+B := 2 * A
+ if 2 * (X + 5) > 0 
+If B>0 then C := |B| − 1 then |2 * (X + 5)| − 1else C := |B| + 1 
+else |2 * (X + 5)| + 1 
+Formal verification 
+Use theorem proving methods to show equivalence of 
+code and a formal specification of required behavior. 
+� � 
+
+Formal Design Reviews 
+Associated with each of documentation phases. 
+Evaluate with respect to: 
+Customer requirements 
+Prescribed standards and practices 
+Contractual requirements 
+Tradeoff priorities 
+Results of previous phases 
+etc. 
+After review, released to configuration control and 
+becomes baseline. 
+�  
+
+Structured Walkthroughs 
+‘‘Egoless programming’’ (Weinberg,The Psychology of Computer 
+Programming) 
+Reviewee and 3−5 reviewers 
+Customers and users should be included. Managers should not. 
+Goal is to discover and note problems. Problems not resolved
+in walkthrough session.
+Followup meeting or memo to inform reviewers of actions taken.
+Major problems only.
+Successful use dependent on establishing a positive, nonthreatening
+atmosphere.
+Moderator should receive training.
+Must not be used as vehicles for employee evaluation.
+�  
+
+Benefits of Walkthroughs 
+Errors caught at earliest possible time. 
+Greatly improved software quality. 
+Project communication improved. 
+Software easier to maintain. 
+Better project control. 
+Quicker integration of new personnel. 
+Increased programmer expertise. 
+Less disruption with personnel leave. 
+Switch emphasis from individual contemplation to clear, 
+precise communication with others. 
+Enhanced employee morale: social interaction, involvemen t.
+� 
+ 
+
+Software Inspections 
+Started by IBM in 1972 (Fagan)
+Process driven by a checklist of likely errors
+Build checklists through experience and feedback. 
+Some companies consider checklists proprietary. 
+Performed after design complete and after coding complete. 
+Last about 2 hours, cover about 100 statements per hour. 
+Evaluation of walkthroughs and inspections: 
+Find about 70−80% of errors. 
+Most errors found before unit testing. 
+�  

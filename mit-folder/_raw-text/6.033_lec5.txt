@@ -1,0 +1,434 @@
+ 
+  
+6.033 Spring 2018
+Lecture #5 
+• Threads
+• Condition Variables
+• Preemption
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+       
+   
+    
+    
+     
+   
+ 
+ 
+ 
+  
+          
+ 
+ 
+  
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+(and corrupt) 
+each others’ memory
+2. programs should be able to
+communicate
+3. programs should be able to share a
+CPU withou t 
+one program halting the
+progress of the others
+virtual memory 
+bounded buffers 
+(virtualize communication links) 
+assume one program 
+per CPU 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+  
+       
+   
+    
+    
+     
+   
+ 
+ 
+  
+          
+ 
+ 
+  
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+virtual memory (and corrupt) each others’ memory
+2. programs should be able to bounded buffers communicate (virtualize communication links) 
+3. programs should be able to share a threads CPU wi thout one program halting the (virtualize processors) progress of the others
+today’s goal: use threads to allow multiple programs to share a 
+CPU 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+  
+   
+    
+ 
+  
+thread: a virtual processor 
+thread API: 
+suspend(): save state of current thread 
+to memory rest
+ore state from resume(): memory
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+  
+send(bb, message): 
+acquire(bb.lock) 
+while bb.in - bb.out == N: 
+release(bb.lock) 
+acquire(bb.lock) 
+bb.buf[bb.in mod N] <- message 
+bb.in <- bb.in + 1 
+release(bb.lock) 
+return 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+  
+send(bb, message): 
+acquire(bb.lock) 
+while bb.in - bb.out == N: 
+release(bb.lock) 
+yield() 
+acquire(bb.lock) 
+bb.buf[bb.in mod N] <
+- message 
+bb.in <- bb.in + 1 
+release(bb.lock) 
+return 
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+ 
+ 
+  
+  
+yield(): 
+acquire(t_lock) 
+id = cpus[CPU].thread 
+threads[id].state = RUNNABLE 
+threads[id].sp  = SP 
+threads[id].ptr = PTR 
+do: 
+id = (id + 1) mod N 
+while threads[id].state != RUNNABLE 
+SP = threads
+[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus
+[CPU].thread = id 
+release(t_lock) 
+Suspend 
+current thread 
+Choose new 
+thread 
+Resum
+e new 
+thread 
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+  
+send(bb, message): 
+acquire(bb.lock) 
+while bb.in - bb.out == N: 
+release(bb.lock) 
+yield() 
+acquire(bb.lock) 
+bb.buf[bb.in mod N] <
+- message 
+bb.in <- bb.in + 1 
+release(bb.lock) 
+return 
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+   
+     
+    
+    
+   
+  
+condition variables: let threads wait for 
+events, and get notified when they occur 
+condition variable API: 
+wait(cv): yield processor and wait to
+be notified of cv 
+notify(cv):
+ notify waiting threads of cv 
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+   
+   
+  
+ 
+  
+send(bb, message): 
+acquire(bb.lock) 
+while bb.in - bb.out == N: 
+release(bb.lock) 
+wait(bb.not_full) 
+acquire(bb.lock) 
+bb.buf[bb.in mod 
+N] <- message 
+bb.in <- bb.in + 1 
+(threads in receive() willrelease(bb.lock) wait on bb.not_empty andnotify(bb.not_empty) notify of bb.not_full)
+return 
+problem: lost notify 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+    
+   
+    
+  
+condition variable API: 
+wait(cv,lock): yield processor, release
+lock, wait to 
+be notified 
+of cv 
+notify(cv): notify waiting threads of cv 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+send(bb, message): 
+acquire(bb.lock) 
+while bb.in - bb.out == N: 
+wait(bb.not_full, bb.lock) 
+bb.buf[bb.in mod N] <- message 
+bb.in <- bb.in + 1 
+release(bb.lock) 
+notify(
+bb.not_empty) 
+return 
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+   
+ 
+  
+wait(cv, lock): 
+acquire(t_lock) 
+release(lock) 
+id = cpus[CPU].thread 
+threads[id].cv = cv 
+threads[id].state = WAITING will be different yield_wait() than yield()release(t_lock) 
+acquire(lock) 
+notify(cv): 
+acquire(t_lock) 
+for id = 0 to N- 1: 
+if threads[id].cv == cv && 
+threads[id].state == WAITING: 
+threads[id].state = RUNNABLE 
+release(t_lock ) 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+ 
+  
+yield_wait(): // called by wait() 
+acquire(t_lock) 
+id = cpus[CPU].thread 
+threads[id].state = RUNNABLE 
+threads[id].sp = SP 
+threads[id].ptr = PTR 
+do: 
+id = (id + 1) mod N 
+while threads[id].state != RUNNABLE 
+SP = threads[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus[CPU].thread = id 
+release(
+t_lock) 
+problem: wait() holds t_lock 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+   
+  
+yield_wait(): // called by wait() 
+id = cpus[CPU].thread 
+threads[id].state = RUNNABLE 
+threads[id].sp = SP 
+threads[id].ptr = PTR 
+do: 
+id = (id + 1) mod N 
+while threads[id].state != RUNNABLE 
+SP = threads[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus
+[CPU].thread = id 
+problem: current thread’s state shouldn’t be RUNNABLE 
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+  
+  
+yield_wait(): // called by wait() 
+id = cpus[CPU].thread 
+threads[id].sp = SP 
+threads[id].ptr = PTR 
+do: 
+id = (id + 1) mod N 
+while threads[id].state != RUNNABLE 
+SP = threads[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus[CPU].thread = id 
+problem: deadlock (wait() holds t_lock) 
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+ 
+  
+yield_wait(): // called by wait() 
+id = cpus[CPU].thread 
+threads[id].sp = SP 
+threads[id].ptr = PTR 
+do: 
+id = (id + 1) mod N 
+release(t_lock) 
+acquire(t_lock) 
+while threads[id].state != RUNNABLE 
+SP = threads
+[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus[CPU].thread = id 
+problem: stack corruption 
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+  
+yield_wait(): // called by wait() 
+id = cpus[CPU].thread 
+threads[id].sp = SP 
+threads[id].ptr = PTR 
+SP = cpus[CPU].stack 
+do: 
+id = (id + 1) mod N 
+release(t_lock) 
+acquire(t_lock) 
+while threads[id].state != RUNNABLE 
+SP = threads
+[id].sp 
+PTR = threads[id].ptr 
+threads[id].state = RUNNING 
+cpus[CPU].thread = id 
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+       
+ 
+ 
+  
+preemption: forcibly interrupt threads 
+timer_interrupt(): 
+push PC 
+push registers 
+yield() 
+pop registers 
+pop PC 
+problem: what if timer interrupt occurs while running 
+yield() or yield_wait()? 
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+ 
+  
+  
+preemption: forcibly interrupt threads 
+timer_interrupt(): 
+push PC 
+push registers 
+yield() 
+pop registers 
+pop PC 
+solution: hardware mechanism to disable interrupts 
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+   
+     
+       
+  
+          
+ 
+        
+     
+  
+  
+• Threads virtualize a processor so that we can share it
+among programs. yield() allows the kernel to suspend
+the current thread and resume another.
+• Condition Variables provide a more efficient API for
+threads, where they wait for an event and are notified
+when it occurs. wait() requires a new version of yield(),
+yield_wait() .
+• Preemption forces a thread to be interrupted so that we
+don’t have to rely on programmers correctly using yield().
+Requires a special interrupt and hardware support to
+disable other interrupts.
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+       
+   
+    
+    
+     
+   
+ 
+ 
+  
+  
+          
+ 
+ 
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+(and corrupt
+) each others’ memory
+2. programs should be able to
+communicate
+3. programs should be able to share a
+CPU witho u
+t one program halting the
+progress of the others
+virtual memory 
+bounded buffers 
+(virtualize communication links) 
+threads 
+(virtualize processors) 
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+23

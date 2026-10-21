@@ -1,0 +1,2805 @@
+1
+Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+IAP Lecture 5
+Ed Crawley
+Jan 26, 2007
+Rev 2.0
+
+2
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflection on Operations, Interfaces, etc.
+z Worked example - TCP
+z Alternative representations of Process-Object 
+architecture
+z Upstream influences - Beneficiaries, Needs 
+and Goals
+z Worked example - ServeCo
+
+3
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Reflections on Operations, 
+Interfaces, etc?
+z What are the elements the contribute to:
+– Other value processes?
+– Supporting processes?
+– Interfacing processes?
+z Suggest a level 1 modularization? Why?
+z What are important operational sequence?
+z What is an important interface?
+
+4
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts and Architectures in Information 
+Systems
+z In information and software enabled systems, concepts 
+and their development into architectures are captured in 
+different ways at various levels
+z Low level are algorithms and their implementation, e.g. 
+bubblesort
+z Application domain software are patterns, e.g. bridge
+z Higher level application domain software is more 
+classical allocation of functionality to modules and 
+procedures, and definition of interfaces
+z In network software, concepts and architectures are 
+captured in protocols, such as Transport Command 
+Protocol (TCP), and at a higher level, the entire 
+architecture of the OSI seven layer model
+
+5
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Transferring
+Solution Neutral Function and Specific 
+Concept - Network
+Layered
+7
+Network
+protocol
+z Data exchanging 
+is the solution 
+neutral function 
+z There are very 
+many ways to do 
+this, an open 
+layered network 
+protocol being 
+just one
+Exchanging
+Attribute of
+operating
+Flexibly, 
+reliably
+Location
+Data
+Data 
+“packets”
+Location
+
+6
+Massachusetts Institute of Technology  © Ed Crawley 2007 http://www.3mfuture.com/network_security/arp-guard-arp-spoofing.htm
+Layers of Form, and Associated Function (?)
+Network Process to Application
+Application
+OSI Model
+Physical
+Transport
+Network
+Data Link
+Session
+Presentation
+Network Process to Application
+Interhost Communication
+End-to-End Connections and
+MAC and LLC
+Path Determination and IP
+Data Representation and
+Encryption
+Reliability
+(Logical Addressing)
+(Physical Addressing)
+Media, Signal
+and Binary Transmission
+Data
+Data
+Data
+Data
+Segments
+Packets
+Frames
+Bits
+Layer
+[Media Layers] [Host Layers]
+Figure by MIT OCW.
+
+7
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Layer Function
+z For each layer, identify the operand, data related 
+process and control related process
+Operand Data process Control process
+Application
+Presentation
+Session
+Transport
+Network
+Data
+Physical
+
+8
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Assigning a Function to a Layer
+z To which layer are we going to assign the function of 
+“reliable” transmission:
+z The physical layer, to make sure bits are exchanged?
+z The network or transport layer, to make sure that 
+segments/packets are exchanged?
+z The application layer, to make sure data sets were 
+exchanged?
+z All?
+z None?
+
+9
+Massachusetts Institute of Technology  © Ed Crawley 2007 http://www.protocols.com/pbook/tcpip1.htm
+Whole Product, Use Context and Implied Interfaces
+Application
+Presentation
+Session
+Transport
+Network
+Data Link
+Physical
+FTP, Telnet, SMTP, POP3,
+X-Window, HTTP
+SCTP COPS
+CMOT, SNMP
+IMAP4 GDP
+SOCKS SLP WCCP
+TFTP
+NTP
+TACACS+, TACACS
+RLOGIN, RSHELL, PRINT
+REXEC, RWHO
+HTTP-s
+SSH
+RADIUS
+ISAKMP
+RTSP
+ PPTP, L2TP,
+ATMP Trailers
+ARP, RARP SLIP
+TDP, MPLS
+ICMP RSVP VRRP
+PIM DHCP BOOTP
+BGP, RIP,  EGP,
+OSPF, DVMRP
+ X.25
+TCP
+TALI
+ UDP
+Mobile IP
+DNS
+LDAP SS7 DSMCC (MPEG)
+IMGP
+ IP
+Figure by MIT OCW.
+
+10
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Reliable Service
+Best Effort Service
+Application
+Transport
+Network
+Data Link
+Physical Layer
+FTP
+Client
+TCP
+IP
+Ethernet
+Driver
+FTP
+Client
+TCP
+IP
+Ethernet
+Driver
+Figure by MIT OCW.
+
+11
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Why Layers?
+z Layered architectures have great advantages
+– Flexibility in application
+– Flexibility of dynamic connections from one layer to another
+– Ability to provide alternatives in assignment
+– Isolation of changes in one layer from others
+z Layered architectures have disadvantages as well
+– Inefficiency due to overhead of adding information at each layer
+– Interface inefficiency
+– Inefficiency due to the fact that sometimes one needs to 
+reallocate function across layers or combine
+In general, there is always a tension between 
+flexibility and optimality in architecture
+
+12
+Massachusetts Institute of Technology  © Ed Crawley 2007
+TCP Primary Operating Sequence
+z Sender 
+sends a 
+segment, 
+with a 
+number
+z Receiver 
+receives 
+and 
+acknowledg
+es that 
+segment
+Sender Receiver
+Send segment 1
+Receive segment 1
+Send ACK 1
+Receive segment 2 
+Send ACK 2
+Receive ACK 1
+Send segment 2
+Receive ACK 2
+
+13
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Fuller Operating Sequence?
+z Stand alone?
+z Contingency?
+z Emergency?
+z Commissioning?
+z Decommissioning?
+z Maintaining?
+z Is real clock time 
+important?
+Stand alone ops.
+Contingency ops.
+Emergency ops.
+Waiting in storage
+Retrieving, 
+connecting, 
+powering-up, 
+initializing
+Loading, 
+positioning
+Archiving, 
+unloading
+Terminating, 
+disconnecting,
+depowering, storing
+Inspecting, repairing,
+calibrating, updating, 
+maintaining
+
+14
+Massachusetts Institute of Technology  © Ed Crawley 2007
+TCP Connection Termination
+Send ACK y+1
+Receive FIN + ACK
+Receive ACK
+Receive FIN
+Send FIN seq=x
+Host ATime
+In the Network
+Host B
+Send ACK x+1
+Send FIN seq=y, ACK x+1
+Receive ACK
+Figure by MIT OCW.
+
+15
+Massachusetts Institute of Technology  © Ed Crawley 2007
+1 2 53 4 76 8 9 10 1311 12 1514 16 17 18 2119 20 2322 24 25 26 2927 28 31300
+0 1 2 3
+4 5 6 7
+Source Port Number
+(16 bits)
+Destination Port Number
+(16 bits)
+Sequence Number
+(32 bits)
+8 9 10 11
+Acknowledgement Number
+(32 bits)
+12 13 14 15
+Window Size
+(16 bits)
+16 17 18 19
+Window Size
+(4 bits)
+Reserved
+(6 bits)
+URG
+ACK
+PSH
+RST
+SYN
+FIN
+TCP Checksum
+(16 bits)
+Urgent Pointer
+(16 bits)
+20 21 22 23
+Options
+(variable length, padded with 0 bytes)
+Data 
+(if any)
+Bit
+20 Bytes
+TCP Header
+RFC 793 – Transmission Control Protocol
+Figure by MIT OCW.
+20 Bytes
+
+16
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Representing Object-Process Architectures
+z There are various ways to represent objects and 
+processes in a model:
+– Explicitly show objects and processes (e.g. OPM)
+– Explicitly show processes and suppress objects
+– Explicitly show objects and suppressed processes
+– Show only objects
+z Each has its advantages and disadvantages
+z Sometimes use links of various classes to label some 
+additional information
+
+17
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+
+18
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Alternative Model - Processes Model
+z Alternatives to OPM exist, but tend to hide or 
+suppress information
+z A process based model:
+– Shows the processes, and objects which are inputs 
+and outputs
+– Hides the objects which are instruments
+– Makes it difficult to identify the processes that take 
+place among the instrument objects (the supporting 
+processes), and the operational processes
+– Often used with different connector types to 
+indicate the type of object as output, but this is 
+often ambiguous
+z Good for identifying the processes on the value chain
+
+19
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Classes of Process Links
+Mas s exc hange Passes flow toMec hanical
+Force/ momentum Pushes on
+Chemical Reac ts with
+Ma tter
+Biochemical
+Biological Replica tes
+Work Carries el ectrici tyEnergy
+Thermal energy Heats
+Data Transfers fileSignal
+Commands Triggers
+Cognitive thought Exchange i deas
+Information
+Thought
+Affective thought Impart beliefs
+Process links fall into classes:
+
+20
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Power
+carrying
+Load carrying Structurallyinterfacing
+Power
+interfacing
+Refrigerator:
+Process
+Product/system boundary
+Circulating
+Force/mass
+Work/heat
+Information
+?
+?
+?
+?
+?
+
+21
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Alternative Model - Object/Suppressed Process 
+Model
+z An object based model
+– Shows inputs, outputs and instrument objects
+– Represents the processes by arrows that pass 
+among the objects
+– The arrows represent the operating process 
+topology of the system
+– Lables on the arrows indicates the process and the 
+states of the objects influenced
+– Can capture all or almost all the information in an 
+OPM, but the importance of the processes, and the 
+ability to think in process domain are reduced
+z Good for knowledge capture and communicating with 
+those who can’t read OPM’s
+
+22
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Translation OPM to Object/SP Model 
+z With care, you can translate most or all of the 
+information on an OPM to an Object Model
+z Following charts show representative interactions on an 
+OPM, and how they would appear on an Object Model
+z There are some interactions that are difficult to capture
+– Conditional instruments
+z There are actually a few things that have greater clarity 
+in an Object Model
+z If the model suppresses operational processes, it 
+becomes the sought after operational structural model
+
+23
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Suppressed Processes
+Single Operand
+A consumes
+M
+create
+M
+B
+transform
+M
+B
+A M
+M Bcreates
+is consumed
+by
+M Aconsumes
+M Atransformsthe state of
+Part Fact.
+Fact. Carbuilds
+is used up by
+Fact. Partuses up
+Paint Walltransformsthe color of
+OPM Template Example
+
+24
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Suppressed Processes
+Two Operands, Same Process
+A create
+M
+transform
+M
+B
+consume
+M
+B
+OPM Template Example
+A
+B
+A
+M
+B
+transforms
+A and thestate of
+Paint
+Air
+transforms
+Wall color of 
+M
+B
+crates
+A and
+M
+B
+consumes
+A and
+Motor
+Air
+burns
+Fuel and
+Fact.
+Truck
+builds
+Car and
+the 
+state of
+odor of
+
+25
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Suppressed Processes
+Two Operands, Different Processes
+A transform
+M
+transform
+M
+B
+transform
+M
+B
+OPM Template Example
+A
+B
+A
+M
+B
+transforms
+A (to)from
+Fact.
+Car
+builds
+Part from
+M
+B
+transforms
+A whileproducingthe state of
+M
+B
+transforms
+A whileconsuming the state of
+Truck
+Cargo
+moves
+Fuel whileconsuming (location)
+Lamp
+Light
+drains
+Batt. whileproducingthe charge of
+
+26
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Suppressed Processes
+Two Instruments
+transform
+M2
+B
+OPM Template Example
+A
+M1
+B
+transform
+A (to)from
+M1
+transform
+M
+BA
+H
+M2
+and
+H
+B
+transform
+A (to)from
+M
+and
+H
+B
+transforms
+A (to)from
+M
+Robot
+Frame
+assemble
+Parts from
+Line
+and
+Cook
+Meal
+prepare
+Food from
+Stove
+and
+operates Man
+Part
+machine
+Stock from
+Latheoperates
+Or :
+M1
+B
+transform
+A (to)from
+M2 Robot
+Frame
+assemble
+Parts from
+Lineenables enables
+
+27
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Transforming Process Object Models to 
+Objects Only
+T1
+M
+BA CT2
+N
+M
+(T1) BA CN(T2)
+M
+(T1)
+BA CN
+(T2)
+M
+(T1)
+N
+(T2)
+M N
+T1
+M
+BA CT2
+N
+M
+(T1) BA CN(T2)
+Next is nonsense
+Simple input-output More common affecting
+
+28
+Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM Whistle Architecture
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Product/system 
+boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Creating
+Operator
+Star
+Ring
+Flow
+Aligning/
+Transporting
+Deflecting/
+Accelerating
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+WhistleMaking tone
+Figure by MIT OCW.
+
+29
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Cavity
+wall
+Object Suppressed
+Internal
+Processes
+-W h i s t l e
+Bump
+Hole
+Ramp
+Step
+Channel
+Product/system 
+boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Operator
+Star
+Ring
+Flow
+Vortex
+Tone
+(internal)
+Tone
+(radiated) External
+Air
+WhistleMaking tone
+Creates
+Transports
+Deflects
+Vents
+Create
+and
+and
+Excite
+and
+Amplify
+and
+Couples
+Couple
+Figure by MIT OCW.
+
+30
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Process-Object Architectures
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow
+vortex
+tone (in)
+tone (ex)
+Plastic creating a c
+Whistle transporting I e
+deflecting I e
+venting I e
+creating I I c
+exciting I I c
+amplifying I I e
+coupling I I I c
+lungs
+throat
+tongue
+lips
+mouth
+air
+flow
+vortex
+tone (in)
+tone (ex)
+Human creating a c
+Whistle transporting a a e
+deflecting a e
+venting a e
+creating a I c
+exciting a I c
+amplifying a a e
+coupling a I I c
+Non-symmetric, causal, with full NNV structure
+A = affects, I = instrument, C = creates, E = effects
+
+31
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Creating Object - Suppressed Process 
+Models
+z Create the Process-Object matrix and 
+insert in true N-square with processes 
+and objects on both side
+z Move the post process objects (effect 
+and yield) to the lower off-diagonal block 
+transpose
+– Leave the pre process objects (consume, 
+agent, instrument) in the upper off-
+diagonal block
+z Create the product,and convert back to 
+graph 
+P
+O
+P
+P
+PP PO
+OP I
+O
+O
+P
+P
+PP PO pre
+OPpost I
+O
+O
+O POpreOPpostPP
+PO
+
+32
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Step 1 - Process Object Model
+creating
+transporting
+deflecting
+venting
+creating
+exciting
+amplifying
+coupling
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow
+vortex
+tone (in)
+tone (ex)
+Plastic creating a c
+Whistle transporting I e
+deflecting I e
+venting I e
+creating I I c
+exciting I I c
+amplifying I I e
+coupling I I I c
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow
+vortex
+tone (in)
+tone (ex)
+a - agent
+I = instrument
+c = creates
+e = effects
+z The process -
+object model 
+is created 
+and inserted 
+in a true N 
+square 
+diagram with 
+processes 
+and objects 
+on both sides
+What we had
+
+33
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Step 2 - Move OP Elements  
+z Put the post 
+process objects in 
+the lower block 
+(creates, effects)
+z Leave the pre-
+process objects in 
+the upper block 
+(consumes, 
+instrument and 
+agent)
+z Number processes 
+for convenience
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow
+vortex
+tone (in)
+tone (ex)
+creating 1 a
+transporting 2 I
+deflecting 3 I
+venting 4 I
+creating 5 I I
+exciting 6 I I
+amplifying 7 I I
+coupling 8 I I I
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow c e e e
+vortex c
+tone (in) c e
+tone (ex) c
+a - agent
+I = instrument
+c = creates
+e = effects
+Post process objects
+Pre process objects
+
+34
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Step 3 - Rearrange Matrix and Form Product
+z Form product OPpost *PP*POpre
+z This yields a causal, non-symmetric N-squared 
+representation, which you will come to know as a Design 
+System Matrix or DSM
+operator 0 0 0000000 000 0
+bump 0 0 0000000 000 0
+channel 0 0 0000000 000 0
+ramp 0 0 0000000 000 0
+step 0 0 0000000 000 0
+hole 0 0 0000000 000 0
+cavity 0 0 0000000 000 0
+star 0 0 0000000 000 0
+a i r 000000000 000 0
+flow c1a 0 e2i e3i 0 e4i 0 0 0 0 0 0 0
+vortex 0 0 0 0 c5i 0 0 0 0 c5i 0 0 0
+tone (in) 0 0 0 0 0 e6i c6i,e7i 0 0 0 c6i 0 0
+tone (ex) 0 0 0 0 0 e8i 0 0 e8i 0 0 c8i 0
+a - agent
+I = instrument
+c = creates
+e = effects
+
+35
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Matrix Object/Suppressed Operational Processes
+Operator Bump Channel Ramp Step Hole Cavity Star Air Flow Vortex Tone in Tone out
+Tone in Excite Excite/Amplify Excites
+Tone out Couple Couple Couple
+Operator
+Bump
+Channel
+Ramp
+Step
+Hole
+Cavity
+Star
+Air
+Flow Creates Transport Deflects Vents
+Vortex Creates Creates
+
+36
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+
+37
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Inside
+Air Refrigerator
+Condenser Fan
+Controller
+Shelves
+Light
+Insulated door
+Operator
+Outlet
+Floor
+Wheels
+Plug/chord
+Wiring
+illuminates
+switches
+opens and closes
+carries load among
+roll on
+carries power to
+carries power to
+grasps and moves
+When 
+open 
+mixes
+with
+when open allows mixing
+sets 
+ref. T
+carries load from
+exchanges
+heat with
+senses temp of
+switches
+circulates
+exchanges heat with
+exchanges heat with
+exchanges heat with
+exchanges heat with
+exchanges heat with
+Refrigerator:
+Suppressed
+Operational
+Processes
+Evaporator Fancirculates
+Cabinet
+
+38
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Alternative Model - Objects Only
+z Finally, the most simplified model is one which 
+removes all information on process and simply 
+shows the objects in a decompositional hierarchy
+z This is the first model people try to build
+z Having seen the others, it is obvious just how 
+little information is in this model
+
+39
+Massachusetts Institute of Technology  © Ed Crawley 2007
+FoodOutsideAir InsideAir
+Refrigerator
+Cabinet
+Condenser Fan
+Controller
+Shelves
+Light
+Insulated door
+Operator Outlet
+Frame
+Floor
+Wheels
+Plug/chord
+Wiring
+Refrigerator -
+Decompositional
+Refrigerator
+Whole Refrigerator System
+Product boundary
+This is not an 
+Architecture!
+Condenser Fan
+
+40
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Representations of Architecture
+z Architecture can be represented by matrix/list or 
+graphical representations - in principle the two are 
+interchangeable and contain the same information
+z Objects and processes can be shown explicitly
+z One of the other can be suppressed, carefully, for clarity 
+and simplicity
+z This is much easier for “goes in to, goes out of”
+architectures than for the more general case
+
+41
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Ambiguity
+z Ambiguity defined
+z Resolving ambiguity
+
+42
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Ambiguity
+Fuzziness:
+an event or state is subject to 
+multiple interpretations
+Uncertainty:
+an event is doubtful or 
+uncertain as to its outcome
+hue
+blue purple
+outcome
+HT
+O
+Fuzzy logic
+Fuzzy set theory
+Combinatorial analysis
+Statistics
+
+43
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Compounding Ambiguity
+z Unknown information: 
+– don’t have all of the information
+– Information is underdetermined
+– You may know, or not know of the 
+existence of the unknown information 
+(unknown unknowns)
+z Conflicting information:
+– have two or more conflicting pieces of 
+information
+– Information is over-determined
+z False information:
+– You think you have all the information 
+– Some of it is wrong
+– Information appears determined
+z X , , Z
+z X , Z
+z Xp,Xi , Y , Z
+z P , Y , Z
+
+44
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Examples of Ambiguity
+z Please make me a smooth cover for this phone 
+z Will it be a boy or a girl?
+z Make sure you meet your quarterly goals
+z Produce a low cost, high quality product
+z Every fourth year is a leap year
+
+45
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Ambiguity in Design Challenge 2?
+
+46
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Ambiguity in Coin Flip
+z How does an NFL game begin?
+z Flip the coin and report heads or tails
+z Both type of ambiguity are present here!!!!
+
+47
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Approaches to Resolving Ambiguity
+z Definitions and language in common [SA]
+z Frameworks for organizing thinking [products - SA, 
+processes - SE, organization - SPM, OP]
+z Standardized processes [SE, SPM]
+z Exercises to “sharpen” upstream influences [SA, 
+Marketing]
+z Defining system boundaries [SA]
+z Planning for robustness [SE, Robust Eng.]
+
+48
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Ambiguity
+z Ambiguity stems from multiple interpretations and 
+uncertainty, compounded by incomplete, conflicting or 
+incorrect information
+z The beginning of the PDP - the interface with the 
+upstream process - is a time of great ambiguity
+z The role of the architect is to resolve this ambiguity so 
+as to create the environment in which the PDP can 
+quickly and successfully meet its goals.
+
+49
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Three Themes in Architecture
+z Ambiguity:
+– Susceptible to multiple interpretation
+– Doubtful or uncertain
+z Creativity:
+– The ability or power to: cause to exist, bring into 
+being, originate
+z Complexity:
+– Consisting of interconnected or interwoven parts
+Source: American Heritage Dictionary
+
+50
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Creativity
+Complexity Ambiguity
+Ambiguity - The uncertainty
+associated with numerous
+choices, unclear objectives
+or indefinite functional
+compliance = imprecise 
+information
+Creativity - The innovative
+combination of different
+pieces of information or
+creation of new information
+required to to form a new 
+system
+Complexity - The amount
+of information required to
+fully describe a system 
+and its interfaces
+Product Development - The 
+transformation of a vector of 
+ambiguous and imprecise 
+information (upstream) into a vector 
+of precise information describing the 
+product (the information object 
+known as “the design”)
+
+51
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Creativity
+Complexity Ambiguity
+A system architect’s job is to
+use to manage and balance
+each of these aspects
+•Sys. Arch.
+•Eng. Elective
+•Optimization
+•Finance
+•Sys. and Project Mgmt.
+•Org. Processes
+•Ops. Mgmt
+•Sys. Eng.
+•ERBA
+•Sys. Arch.
+•Marketing
+•Design Elective
+
+52
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture Centric View of the PDP
+Upstream Downstream
+Think of yourself as here today
+Architecture
+Form
+FunctionConcept
+
+53
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Upstream Ambiguity in Architecting
+z What is our objective?
+z How far do our scope and responsibility range?
+z How much risk is (corporate, Washington, the board) 
+willing to take?
+z Will marketing buy it?
+z What does the customer want/need?
+z Will our requirements change with time?
+z Is that technology infusible?
+z What are applicable regulations? Are they likely to 
+change?
+Removing/Reducing/Resolving ambiguity is a main role of the 
+architect at the interface with the upstream process
+
+54
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Ambiguity in the Upstream Influences
+z No one explicitly “designs” the upstream influences, 
+rather they just occur, often with incomplete, 
+overlapping, or conflicting outcomes
+z The architect must engage these upstream influences 
+and drive the ambiguity out to create a vision and plan 
+for a successful product
+z This requires knowledge of 
+– What the upstream influences are, who has “control”
+of them, and how they are engaged
+– What the object is - a consistent, complete, 
+attainable, clear and concise set of goals for the 
+product
+– How to get from A to B
+
+55
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Dominant Upstream Influence on 
+Architecture
+Regulation
+Corporate,
+Marketing
+Strategy
+Beneficiary/
+Customers
+Competitive
+Environment
+Technology
+Architecture
+Need Goals
+Downstream 
+Strategies,
+Competence
+Form
+FunctionConcept
+
+56
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Principle Upstream Influences
+z The customers and their needs
+z The corporation, which has corporate strategy and  functional 
+strategies (marketing, etc.) which define what the company does,
+how it competes, what its values are, what the return to investors 
+will be, etc.
+z The market, with its forces and competitors
+z Regulations and similar pseudo-regulatory influences such as case 
+law, impending regulations, and standards
+z Technology, which is or will be available and infusable in your 
+system
+z The competence, team, facilities, processes which will be employed 
+downstream (planning, designing, implementing, operating and 
+evolving), but must be considered at a strategic level as an 
+upstream influence
+These things all fundamentally influence architecture
+
+57
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Product/Systems and Their Super-
+Systems
+today
+
+58
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Need - Defined
+z Need is a product attribute
+z Need is defined as:
+– a necessity
+– an overall desire or want
+– a wish for something which is lacking
+z Can also include opportunities to fill unexpressed or 
+unrecognized needs
+Need
+Beneficiary
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+59
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Needs - Described
+z Exist in the mind of the beneficiary
+z Primarily outside of the producing enterprise
+z Expressed often in fuzzy or general (i.e. ambiguous) 
+terms
+z Are interpreted (in part) by the architect
+z Who has relevant needs? 
+z Start by focusing on the needs of the direct beneficiary!
+
+60
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Questions (1)
+z What is the mission 
+of our enterprise, 
+and the outcomes
+z Who is the 
+beneficiary? 
+z What is their 
+need(s)?
+Beneficiary
+Need
+Need
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+61
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Identification - Refrigerator
+z We are a for-profit enterprise 
+in the home appliance 
+business
+z Who is the beneficiary?
+z What is the need?
+610
+Figure by MIT OCW.
+
+62
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Multiple Needs - Refrigerator
+z Focus first on the primary beneficial 
+stakeholder - the food worker
+z The food worker has multiple needs
+z Enumerate needs:
+– Spoilage
+– Access
+– Data on refrigerator contents
+Food worker
+Food
+rots
+Easy access
+What’s in 
+box?
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+63
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Needs - Who has Them?
+z The important needs are those of the beneficiary
+z In simple and consumer systems, the beneficiary is also 
+often the customer - the person or entity who is on the 
+receiving end of the transfer associated with the product
+– Notable exceptions: presents, buying for the 
+household/family
+z In more complex products, the customer is often not the 
+beneficiary
+z If the beneficiary is not the customer, the customer 
+plays a role in interpreting the needs of the beneficiary
+z User or operator (the person who operates the product) 
+also has needs that will appear through operator
+z In simple and consumer system, the user is also often 
+the customer
+
+64
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Use Context
+z A good way to understand needs is to examine the use 
+context - that set of objects and processes that make up 
+the current (or planned) environment in which the 
+product/system will operate
+z Examining usage context will often help identify value
+z Examining usage will sometimes reveal latent needs -
+needs which the beneficiary may not realize they have or 
+be able to verbalize
+
+65
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Representing Beneficiary Needs
+Need
+Beneficiary
+z Beneficiary is an object who 
+is a person (shaded generic 
+skin color to remind us its of 
+human nature)
+z Need is a characteristic of 
+the beneficiary (with a light 
+blue shading, and clouds to 
+the right, to remind us of the 
+vaporous and fleeting nature 
+of a need)
+z To identify needs, identify 
+beneficiaries, and then their 
+needs (from use case)
+
+66
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Multiple Beneficiaries - Refrigerator
+z Food worker is not the 
+only one who benefits 
+from a refrigerator
+z Identify the important 
+beneficiaries
+– Who benefits?
+Bill payer
+Low capex
+Low opex
+Food worker
+Food spoils
+etc
+Family 
+communicator
+Food acquisition
+needs
+What’s going
+on?
+Regulator
+Atmospheric
+pollution
+Child
+protection
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+67
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Needs
+z Needs exist in the heart and mind of the beneficiary
+z They exist outside the enterprise
+z They are fuzzy, ambiguous and ill stated
+z They must be identified and understood
+z A beneficiary often has more than one need to be met by 
+a product system
+z There is often more than one beneficiary
+
+68
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Goals - Defined
+• Goal is a product attribute
+• Goal is defined as
+– what it planned to be accomplished
+– what the designer hopes to achieve or obtain
+• Will include goals derived from beneficiary Needs i.e. 
+the primary external functional goals
+• Will also include goals from corporate strategy, 
+regulations, the competitive marketplace, regulation, 
+etc.
+• Define how the product will benefit the beneficiary 
+(customer), the enterprise and society
+• Expressed in (hopefully) precise terms of System 
+Development
+
+69
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Goals - Described
+z Are defined (in part) by the architect 
+z Goals exist within the enterprise, and are under the 
+control of the enterprise
+z Goals are often traded against Form and Function in 
+design
+– Therefore should be considered an independent 
+attribute
+z Embodied in a statement of goals (specifications?, 
+requirements?, constraints?) 
+z Goals drive metrics to be used in the product/system 
+success criteria
+
+70
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Identification -
+Goals on Externally Delivered Function
+z Examine the operand 
+associated with value
+z Identify the attribute of the 
+operand whose change is 
+associated with value
+z Define the transformation 
+of the attribute associated 
+with value, in solution 
+neutral form and its 
+attributes
+Solution neutral
+transforming
+Attribute of 
+transforming
+Beneficial
+Attribute
+Operand
+Other
+Attribute
+Beneficiary
+Need
+Need Intent
+This will lead you to a value focused solution 
+neutral statement of intent on function
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+71
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Questions (2) - Value Identification
+Solution neutral
+transforming
+Attribute of 
+transforming
+Beneficial
+Attribute
+Operand
+Other
+Attribute
+Beneficiary
+Need
+Need Intent
+z Who is the beneficiary?
+z What is the need?
+z What is the value related 
+operand?
+z What is the value related 
+attribute?
+z What is a solution neutral 
+statement of the value related 
+transformation?
+z What are other important 
+attributes of operand and 
+transformation?
+Identifying/
+Incorporating
+Functional
+Intent
+Value 
+Identification
+Solution neutral statement becomes the intent on function
+
+72
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Identification - Refrigerator
+z Who is the beneficiary?
+z What is the need?
+z What is the value related 
+operand?
+z What is the value related 
+attribute?
+z What is a solution neutral 
+statement of the value 
+related transformation?
+Figure by MIT OCW.
+
+73
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Identification - Refrigerator
+z Beneficiary = kitchen 
+worker
+z Need “my food rots too 
+fast”
+z Operand = food
+z Value attribute = 
+spoilage rate
+z Transformation = 
+slowing
+Slowing
+How much?
+Spoilage
+rate
+FoodKitchenworker
+Identifying/
+Incorporating
+“food rots
+too fast”
+Food spoilage
+rate slowing
+Value 
+Identification
+Decomposes to
+Specializes to
+Has attribute of
+610
+Need Intent
+
+74
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Intent
+z An Intent is
+– What the purpose is
+– What someone hopes to achieve or obtain
+z Is always defined by someone
+z The definition of intent is more limited and precise than 
+goal - it is a fragment of the total goal statement
+z Useful to create a special symbol for this information 
+object (with a darker blue, indicating firming up of an 
+understanding of need, and with an arrow to remind you 
+of where you are going)
+Intent
+
+75
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Template for Statements of Functional Goals
+Solution neutral
+transforming
+Attribute of 
+transforming
+Beneficial
+Attribute
+Operand
+Other
+Attribute
+Intent
+z Characterize the Operand
+z State the beneficial attribute in 
+the operand that will change
+z State other attributes of the 
+operand that are important
+z State the transformation
+z Stat the attributes of the 
+transformation that are important
+Functional
+Intent
+Solution neutral statement becomes the template for functional goals
+
+76
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Solution Neutral to Specific Function
+z Next identify the 
+specific operand 
+(if not the same 
+as the generic 
+operand), and its 
+specific 
+beneficial 
+attribute
+z Then choose a 
+the process part 
+of the concept
+which specializes 
+the solution 
+neutral process
+z Define attributes 
+of the process
+Solution neutral
+transforming
+Specific system
+Operating
+Attribute of
+operating
+Attribute of 
+transforming
+Beneficial
+Attribute
+Operand
+Specific
+Operand
+Beneficial
+Attribute
+Beneficiary
+Need
+Need Intent Function
+Decomposes to
+Specializes to
+Has attribute of
+610
+Functional
+intent
+
+77
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Specific system
+Operating
+Specific Function to Specific Form
+Specific
+System form
+Attribute of 
+form
+Generic
+Concept form
+z Next choose 
+the generic 
+and specific 
+form part of 
+the concept
+to execute 
+the specific 
+process 
+z Define the 
+attributes of 
+the form
+Solution neutral
+transforming
+Attribute of
+operating
+Attribute of 
+transforming
+Beneficial
+Attribute
+Operand
+Specific
+Operand
+Beneficial
+Attribute
+Beneficiary
+Need
+Need Intent Function
+Form
+Functional
+intent
+
+78
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Complete Value Template - Refrigerator
+Slowing
+Chilling
+Refrigerator
+16 ft3
+Chiller
+By 90%
+Spoilage
+rate
+Food
+Efficiently At 40˚
+Kitchen
+worker
+“food rots
+too fast”
+Need Intent Function
+Form
+Decomposes to
+Specializes to
+Has attribute of
+610
+Food spoilage
+rate slowing
+Use context
+Whole product
+system
+
+79
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value - A Formal Definition
+Value is delivered when the external process(es) acts on 
+the operand in such a way that the needs of the 
+beneficiary are satisfied at a desirable cost. 
+Specific system
+Operating
+Specific
+System form
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+The relation between the beneficiary and the operand in undefined (the 
+beneficiary could be the operand, own the operand, love/hate the operand, etc.)
+??
+Note that in 
+operations, 
+intent 
+‘vanishes’
+unless 
+recorded
+610
+
+80
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Levels of Intent - Corkscrew
+Translating
+Removing
+Cork
+Destroying
+Opening
+Bottle
+Accessing
+Wine
+Wine 
+Bottle
+System
+Breaching
+Breaking
+Breaching
+Decomposes to
+Specializes to
+Has attribute of
+Wine
+drinker
+“want to 
+enjoy wine”
+Sometimes have to reason through 
+several layers of intent  
+Functional
+intent
+Higher level
+intent
+Highest level
+intent
+
+81
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Levels of Intent - Telescope
+Focusing
+Star
+light
+Imaging
+Star
+Studying
+Star
+??
+??
+Decomposes to
+Specializes to
+Has attribute of
+Scientist
+“learn about
+stars”
+Sometimes have to reason through 
+several layers of intent  
+Functional
+intent
+Higher level
+intent
+
+82
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Intent as Operand plus Process?
+z So what are the value related operand and processes 
+associated with
+– A movie?
+– A book?
+– Styling of a laptop?
+– Driving a BMW SUV rather than a Ford of the same 
+quality and performance (i.e. brand name)?
+– Strategic planning?
+– Owning a piece of fine art?
+– Collecting coins?
+– A dress or suit?
+
+83
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Types of Goals
+Goals are a mixture of several types:
+z Intent on Function
+z Intent on instrument Object
+z Intent on the design process
+z Intent on the implementation process
+z Intent on the operation process
+z Intent on the strategic process
+z Intent on the market process
+z Intent on the regulatory process
+z Intent on the technology process
+See the pattern???
+Process
+Object
+Intent
+Intent
+Intent
+Object
+
+84
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Goals on Function, Form, …
+z Goals can be on externally delivered Function; include 
+adverb or adverbial phrase (try for solution neutral)
+– seat 400 people 
+– keep time to 1/100 second accuracy
+– move 400 people 600 miles in 3 hours
+– image quality of a copier
+– inspirational or aesthetic value
+z Goals can be on Form, either at interface or interior
+– use GE parts
+– Interface to IEEE 488 standard
+– don’t use plutonium
+z Goals can be an overall product/system, its inputs and 
+outputs, with complex connection to form & function
+– Buy from a certain supplier
+– create new paradigm for this class of products
+
+85
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Goals
+• Goal is defined as
+– what it planned to be accomplished
+– what the designer hopes to achieve or obtain
+• Expressed in the precise terms of Product Development
+• Will include goals derived from beneficiary Needs (goals 
+from beneficiaries) i.e. the functional goals
+• Will also include goals from corporate strategy, 
+regulations, competitive analysis, etc.
+• Embodied in a statement of goals (requirements ?)
+• Is defined (in part) by the architect
+• Exist within, and under the control of the enterprise, and 
+are traded against other attributes
+
+86
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Assignment for September
+For the different upstream influences which flow to goals 
+(in your enterprise) identify:
+z Who is the beneficiary?
+z How are needs codified and interpreted? By whom?
+z How are intents incorporated into system goals? By 
+Whom?
+z Where is the enterprise boundary?
+You will learn more about upstream influences in System 
+Engineering and Marketing.
+
+87
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Reverse Engineering from Form to Function 
+and Goal
+z Form is visible, measurable, etc., and can usually be 
+reproduced by good craftsmen (Stradivarius ??)
+z Functions can usually (or sometimes) be inferred by 
+experts from form by knowledge of underlying physics, 
+logic, common practice and context (operands and 
+other supporting objects)
+z Quantitative goals can rarely be inferred from form 
+without extensive modeling, and may never be 
+inferable (e.g. gross margin)
+
+88
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary: Upstream Influences
+z Needs exist in the mind of the beneficiary, and are 
+fuzzy and ambiguous and are interpreted (in part) by 
+the architect
+z Goals are established by interpreting needs, and 
+should be clear and precise. An important goal is the 
+functional intent associated with primary externally 
+delivered value, expressed as a solution neutral 
+function. The architect participates in setting goals
+z After concept selection, function is defined in the 
+design solution specific domain, ensures goals can be 
+met, and is defined by the architect
+z Form exists in the physical/informational domain, 
+delivers function, and is defined by the architect
+z Goals, Function and Form are often traded-off in 
+conceptual design
+
+89
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Holistic Framework for Product and 
+Operations
+global
+why
+the
+system
+is built
+need
+opportunity
+global
+what
+the
+system
+accomplishes
+goals
+performance
+global
+how
+the
+system
+acts
+function
+process
+global
+where
+the
+elements
+are
+form
+structure
+global
+when
+things
+occur
+timing
+dynamics
+global
+who
+does
+them
+operator
+user
+global
+how much
+does
+it cost
+cost
+expense
+
+90
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Product Attributes
+Customer
+Corporate
+Societal 
+Needs
+Product
+Operator
+Product
+Goal
+Operating
+Costs
+Product
+Form
+Product 
+Function
+Product 
+Timing
+Architecture
+
+91
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Interpreting &
+Incorporating
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Intent
+Value Delivery
+
+92
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Needs to Value to Concept
+z Who are the beneficiaries? What are their needs?
+z What is the value related operand and its states?
+z What is a solution neutral statement of the value 
+related transformation - the externally delivered 
+value related function? (solution neutral 
+function)
+z What are the solution specific functions which 
+will achieve this transformation? (the function 
+part of concept)
+z What are the solution specific abstractions of 
+form that can execute this process?(the form 
+part of concept)
+z What are potential multi-functional aspects of the 
+concept process?
+z How does value trace to the beneficiaries?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+93
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Concept In Context
+z What is the product system? 
+z What are the supporting 
+systems?
+z What is the whole product 
+system?
+z What is the use context?
+z What are the boundaries?
+z What are the interfaces? What are 
+the operands that are passed or 
+shared? Interface process? 
+Interface instrument objects?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+94
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Concept to Architecture
+z What are the principal internal 
+functions? Operands along the way?
+z How is the form decomposed into 
+elements? (decomposition of form)
+z What is the structure of the 
+elements? How are the internal 
+functions mapped to elements of 
+form?
+z How do these combine to produce 
+the emergent externally delivered 
+value related function?
+z What other value related external 
+functions are delivered?
+z Are there supporting processes and 
+objects?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+95
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Architecture to Operations
+z What is the sequence in the process 
+of delivering primary function?
+z Are their contingency, emergency or 
+stand alone processes?
+z Are there commissioning, 
+decommissioning and maintaining 
+processes?
+z Is clock time important to 
+understand in the operations?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+96
+Massachusetts Institute of Technology  © Ed Crawley 2007
+ServeCo
+z ServeCo is a 50 is person engineering design services 
+provider 
+z Typically in the civil/mechanical engineering domain
+z Typically taking on 3-5 simultaneous projects, lasting 
+about a year
+z Privately owned by key employees and a few private 
+investors
+
+97
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Questions (1)
+z What is the mission 
+of our enterprise, 
+and the outcomes
+z Who is the 
+beneficiary? 
+z What is their 
+need(s)?
+Beneficiary
+Need
+Need
+Decomposes to
+Specializes to
+Has attribute of
+610
+
+98
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Multiple Beneficiaries - ServeCo
+z These are probably key 
+beneficiaries and needs
+z There is is a template for 
+many engineering 
+enterprises
+z There are other 
+stakeholders -
+competitors, regulators, 
+suppliers, etc.
+z Focus this example only 
+on the client as a 
+beneficiary
+Project 
+Partners
+Workshare
+Good comm.
+Client
+Designs
+Employees
+Rewarding 
+employment
+Career 
+growth
+Shareholder
+Competitive
+return
+Liquidity
+Decomposes to
+Specializes to
+Has attribute of
+610
+Quality
+Fast
+
+99
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Questions (2) - Value Identification
+Obtaining
+Six months
+Complete
+Design
+Quality, 
+to code
+Client
+Quality design
+fast
+Need Intent
+z Who is the beneficiary?
+z What is the need?
+z What is the value related 
+operand?
+z What is the value related 
+attribute?
+z What is a solution neutral 
+statement of the value related 
+transformation?
+z What are other important 
+attributes of operand and 
+transformation?
+Identifying/
+Incorporating
+Providing 
+design
+Value 
+Identification
+Solution neutral statement becomes the intent on function
+
+100
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - ServeCo
+z From the perspective of 
+the beneficiary, 
+procuring from a small 
+local design service 
+provider is only one of 
+several options
+Providing
+Small local 
+firm
+Design service 
+provider
+Regional firm
+????
+Developing 
+internally
+Etc.
+???
+Selected Concept
+Decomposes to
+Specializes to
+Has attribute of
+Obtaining
+Six months
+Complete
+Design
+Quality, 
+to code
+Client
+Quality design
+fast
+
+101
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Preserving Food Concept - ServeCo
+ProvidingDesign
+Partners
+Regulators
+Small Firm
+Operand -value 
+related external 
+object that 
+changes state
+Externally delivered 
+value related 
+process
+Value related 
+instrument 
+object
+Product/system 
+boundary
+Design
+Obtaining
+Operand  and 
+solution neutral 
+transformation 
+Investors
+Suppliers
+
+102
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Context - ServeCo
+Partners? Regulators Regulators Investors ?ServeCo
+Whole Service System
+Project
+SubcontractorSite context Site Contractor
+Product/system boundary
+z What is the whole product system?
+z What is the usage context in which it fits?
+NB: a complete job would include the architecture 
+of the usage context not just the objects
+
+103
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for ServCo
+Providing
+Design
+Requirements
+Understanding
+Design
+documenting
+Alternatives
+analyzing
+Decomposes to
+Specializes to
+Has attribute of
+Providing
+Design
+Providing a  design implies understanding 
+requirements, analyzing alternatives and documenting 
+the design that emerges
+
+104
+Massachusetts Institute of Technology  © Ed Crawley 2007
+ServeCo is an engineering design service firm
+It is staffed by about 50 people in 20 roles
+Form of a Medium System - ServeCo
+NB: these aggregations are ad hoc and not “correct”
+ServeCo
+1 1 1
+4
+3
+86
+1
+7
+1
+2
+1
+3
+1
+VP
+Client Service VP Finance and 
+Administration
+Client
+Officer
+Eng B
+Staff
+Eng A
+Staff
+Eng C
+Staff
+Finance
+StaffIT StaffQualityEng
+Quality
+Manager
+IS 
+Manager
+Finance 
+Manager
+Senior
+Eng A
+Senior
+Eng B
+Senior
+Eng C
+VP Eng
+1
+Admin/Hr
+Director
+4
+1
+President  & 
+CEO
+1
+Admin/HR
+Facilities
+Staff
+4
+Project 
+Manager
+1
+prepared by Rachael Martino 2007
+
+105
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Project Executing Process - Primary 
+Function
+Project Starting
+Project Closing
+Construction
+Drawing
+Cash
+Managing
+Construction
+Drawings
+Checking
+Reviewing
+Communicating
+Subcontractor
+Managing
+Project Recording
+Alternatives
+Analyzing
+Project Executing
+Computations
+Surveys
+Geotechnical
+Work
+Equipment
+Managing
+prepared by Rachael Martino 2007
+Quality
+Engineer
+Client 
+Officer
+Project
+Manager
+Finance
+Staff
+Sen. Eng. & 
+Eng. Staff
+Knowledge
+Systems
+
+106
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Project Delivery
+ServCo System Operating
+Project
+Business
+Developing
+Contract
+Project
+Plan
+Project
+Artifacts
+Report or
+Design
+Project
+Starting
+Project
+Executing
+Project
+Closing
+Problematic Solved
+prepared by Rachael Martino 2007
+Get Ready
+Get Set
+Go
+Get Unset
+
+107
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Business Development Process Zoom
+Relationship
+Building
+Request for
+Proposal
+Data
+Gathering
+Win
+Evaluating
+Negotiating
+And Pricing
+Contract 
+Signing
+Proposal
+prepared by Rachael Martino 2007
+Project
+VP Client 
+Service
+Client 
+Officer
+Knowledge
+Systems
+Problematic
+Contract
+Client
+
+108
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Project Delivery Process Zoom
+Project Executing
+Project Closing
+Project Starting
+Quality Management
+Milestone Defining
+Software 
+Validating & 
+Licensing
+Project Management
+Plan
+Work Breakdown 
+Structure Defining
+Project file and 
+records locating
+Health & Safety 
+Reviewing
+PE Stamping &
+Sealing Defining
+Project Planning
+Marketing Info.
+Inputting
+Planning and 
+Scope Reviewing
+prepared by Rachael Martino 2007
+Quality
+Engineer
+Client 
+Officer
+Project
+Manager
+Finance
+Staff
+Sen. Eng. & 
+Eng. Staff
+Knowledge
+Systems
+
+109
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Project Closing Process Zoom
+Project Executing
+Project Starting
+Project Closing
+Records Archiving
+Market Information
+Gathering
+Lessons Learning
+Follow up
+Visits
+prepared by Rachael Martino 2007
+Quality
+Engineer
+Client 
+Officer
+Project
+Manager
+Knowledge
+Systems
+
+110
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Quality
+Assuring
+Project Delivery
+ServCo OPM
+Project
+Business
+Developing
+Contract
+Project
+Plan
+Quality
+Engineer
+Project
+Artifacts
+Report or
+Design
+VP Client 
+Service
+Project
+Starting
+Project
+Executing
+Project
+Closing
+Client 
+Officer
+Project
+Manager
+Finance
+Staff
+Sen. Eng. & 
+Eng. Staff
+Knowledge
+Systems
+Business
+Managing
+Health & Safety
+Assuring
+Info System
+Supporting
+Finance
+Managing
+Corporate
+Governing
+Human 
+Resource
+Managing
+Legal
+Counseling
+Corporate
+Communication
+Managing
+Problematic Solved
+Facilities
+Managing
+Employee
+Educating
+Admin
+Staff
+VP Eng.
+CTO
+CIO
+Quality
+Manager
+IT
+Staff
+Finance
+Manager
+HR
+Staff
+President 
+& CEO
+Admin/HR
+Director
+Property
+Manager
+CAO
+Contracted
+Counsel
+prepared by Rachael Martino 2007
+1st Tier 2nd Tier
+3rd Tier
+External
+Purple processes
+affect all employees
+
+111
+Massachusetts Institute of Technology  © Ed Crawley 2007
+Other Operating Issues?
+z Stand alone ops?
+z Contingencies?
+z Emergencies?
+z Is real clock time important?
+
+112
+Massachusetts Institute of Technology  © Ed Crawley 2007
+ServeCo
+Value
+Business
+Developing
+ServeCo Value Delivery
+Project
+Goals and 
+Concept
+Project Delivery
+Project
+Starting
+Project
+Executing
+Project
+Closing
+Project
+Problematic Solved
+Operand
+prepared by Rachael Martino 2007
+Client
+Quality design
+fast

@@ -1,0 +1,741 @@
+ 
+  
+6.033 Spring 2018
+Lecture #9 
+• Link-state Routing
+• Distance-vector Routing
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+   
+    
+    
+   
+    
+  
+   
+   
+  
+Internet of Problems 
+How do we route (and address) 
+scalably, while dealing with 
+issues of policy and economy? 
+How do we transport da ta 
+scalably, while dealing with 
+varying application demands? 
+How do we adapt new 
+applicati
+ons and technologies 
+to an inflexible architecture? 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+    
+       
+  
+  
+goal of a routing protocol: allow each switch to 
+know, for every node dst in the network, a
+minimum-cost route to dst 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+      
+  
+   
+  
+  
+goal of a routing protocol: build a routing table at 
+each switch, such that routing_table[dst]
+contains a minimum-cost route to dst 
+A 
+4 
+B 
+A’s routing table 
+routing_table[A] = self ; 0 
+routing_table[B] = A->B ; 4 2 3 
+routing_table[C] = A->C ; 2 
+routing_table[D] = A->C ; 4 
+C 2 D 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+ 
+  
+ 
+  
+ 
+ 
+  
+         
+       
+  
+Distributed Routing 
+1. Nodes learn about
+their neighb
+ors via the
+HELLO protocol
+2. Nodes learn about
+other reachable nodes
+via advertisements
+3. Nodes determine the
+minimum-cost routes (
+of
+the routes they know about)
+All of these steps happen periodically, which allows the 
+routing protocol to detect and respond to failures 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+         
+ 
+   
+       
+   
+   
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path algo
+rithm 
+A node’s advertisements contain 
+a list of it
+s neighbors and its link 
+costs to those nod
+es 
+A node eff
+ectively sends 
+advertisements to 
+every other
+node (via flooding) 
+From A: [(B,19),(C,7)] 
+From B: [(A,19),(C,11),(D,4)] 
+From C: [(A,7),(B,11),(D,15),(E,5)] 
+From D: [(B,4),(C,15),(E,13)]
+From E: [(C,5),(D,13)] 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->B, 19 
+C: A->C, 7 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->B, 19 
+C: A->C, 7 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->B, 19 
+C: A->C, 7 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->B, 19 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path algo
+rithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+         
+ 
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A: Self, 0 
+B: A->C, 18 
+C: A->C, 7 
+D: A->C, 22 
+E: A->C, 12 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+         
+ 
+   
+       
+   
+   
+     
+        
+   
+  
+Link-state Routing 
+disseminate topology information so that nodes can run a 
+shortest-path al
+gorithm 
+A node’s advertisements contain 
+a list of it
+s neighbors and its link 
+costs to those no
+des 
+A node eff
+ectively sends 
+advertisements t
+o every other
+node (via flooding) 
+Because advertisements are flooded, link-state routing 
+performs well when there are failures. However, the overhead 
+of flooding limits scale 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+ 
+     
+   
+   
+      
+     
+    
+  
+Distance-vector Routing 
+disseminate information about the current costs to each no de, 
+rather than the actual topology 
+A node’s advertisements contain From A: [(A,0),(B,19),(C,7)] 
+a list of all the nodes it knows 
+about and its current costs to 
+those node
+s 
+A: Self, 0
+B: A->B, 19 C: A->C, 7 
+A node sen
+ds advertisements only 
+to its neigh
+bors 
+19
+11 15
+4
+5
+13A
+B D
+E
+7
+C
+From A: [(A,0),(B,19),(C,7)]
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+ 
+     
+   
+  
+Distance-vector Routing 
+disseminate information about the current costs to each nod e, 
+rather than the actual topology 
+From B: [(A,19),(B,0),(C,11),(D,4)] 
+From A: [(A,0),(B,19),(C,7)] From C: [(A,7),(B,11),(C,0),(D,15),(E,5)] 
+From C: [(A,7),(B,11),(C,0),(D,15),(E,5)] From E: [(C,5),(D,13),(E,0)] 
+From D: [(B,4),(C,15),(D,0),(E,13)] 
+From B: [(A,19),(B,0),(C,11),(D,4)] 
+From C: [(A,7),(B,11),(C,0),(D,15),(E,5)] 
+From A: [(A,0),(B,19),(C,7)] 
+From B: [(A,19),(B,0),(C,11),(D,4)] From C: [(A,7),(B,11),(C,0),(D,15),(E,5)] 
+From D: [(B,4),(C,15),(D,0),(E,13)] From D: [(B,4),(C,15),(D,0),(E,13)] 
+From E: [(C,5),(D,13),(E,0)] 
+19
+7
+11 15
+4
+5
+13A
+B D
+EC
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+From B: [(A,19),(B,0),(C,11),(D,4)]
+From C: [(A,7),(B,11),(C,0),(D,15),(E,5)] 
+ 
+A 
+ 
+     
+   
+  
+Distance-vector Routing 
+disseminate information about the current costs to each nod e, 
+rather than the actual topology 
+From A: [(A,0),(B,19),(C,7)] 
+19
+11 15
+4
+5
+13A
+B D
+E
+7
+C
+From A: [(A,0),(B,19),(C,7)]
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+ 
+     
+   
+  
+Distance-vector Routing 
+disseminate information about the current costs to each no de, 
+rather than the actual topology 
+A: B->C, 18 A: D->C, 22
+B: Self, 0 B: D->B, 4
+C: B->C, 11 C: D->C, 15D: B->D, 4 D: Self, 0
+E: B->C, 16 E: D->E, 13 
+A: Self, 0
+B: A->C, 18C: A->C, 7 AD: A->C, 22
+E: A->C, 12 
+A: C->A, 7 C EB: C->B, 11 A: E->C, 12C: Self, 0 B: E->C, 16D: C->D, 15 C: E->C, 5E: C->E, 5 D: E->D, 13E: Self, 0 
+19
+7
+11 15
+4
+5
+13A
+B
+C
+D
+E
+6.033 | spring 2018 | Katrina LaCurts 
+23
+
+           
+  
+INFINITY 
+A sends advertisements at t=0, 10, 20,..; B sends advertisements at t=5, 15, 25,.. 
+CA B 
+A: Self, 0 A: B- >A, 1 
+B: A->B, 1 B: Self, 0 
+C: A->B, 2 C: B- >C, 1 
+6.033 | spring 2018 | Katrina LaCurts 
+24
+
+ 
+  
+           
+ 
+  
+ 
+  
+    
+  
+INFINITY 
+A sends advertisements at t=0, 10, 20,..; B sends advertisements at t=5, 15, 25,.. 
+A B 
+A: Self, 0 A: B->A, 1 
+B: A->B, 1 B: Self, 0 
+C: A->B, 2 C: None, inf 
+A: Self, 0 A: B->A, 1 
+B: A->B, 1 B: Self, 0 
+C: A->B, 2 C: B->A, 3 (2+1) 
+A: Self, 0 A: B->A, 1 
+B: A->B, 1 B: Self, 0 
+C: A->B, 4 C: B->A, 3 
+A: Self, 0 A: B->A, 1 
+B: A->B, 1 B: Self, 0 
+C: A->B, 4 C: B->A, 5 
+C 
+t=9: B<->C fails
+t=10: B receives the following
+advertisement from A:
+[(A,0),(B,1),(C,2)] 
+t=15: A receives the following
+advertisement f
+rom B:
+[(A,1),(B,0),(C,3)] 
+t=20: B receives the following
+advertisement f
+rom A:
+[(A,0),(B,1),(C,4)] 
+continues until both costs to C are INFINITY 
+6.033 | spring 2018 | Katrina LaCurts 
+25
+
+ 
+ 
+  
+           
+ 
+  
+    
+  
+Split Horizon 
+A sends advertisements at t=0, 10, 20,..; B sends advertisements at t=5, 15, 25,.. 
+A 
+A: Self, 0 
+B: A->B, 1 
+C: A->B, 2 
+A: Self, 0 
+B: A->B, 1 
+C: A->B, 2 
+A: Self, 0 
+B: A->B, 1 
+C: None, inf 
+B 
+A: B->A, 1 
+B: Self, 0 
+C: None, inf 
+A: B->A, 1 
+B: Self, 0 
+C: None, inf 
+A: B->A, 1 
+B: Self, 0 
+C: None, inf 
+C 
+t=9: B<->C fails
+t=10: B receives the following
+advertisement from A:
+[(A,0)] 
+t=15: A receives
+ the
+ following
+advertisement f
+rom B:
+[(B,0),(C,inf)] 
+split horizon takes care of this particular case 
+6.033 | spring 2018 | Katrina LaCurts 
+26
+
+           
+   
+ 
+   
+   
+     
+   
+   
+    
+  
+Split-horizon 
+Don’t send advertisements about a route to the node providing the route 
+AD CB 
+C: D->B, 2 C: A->B, 2 C: None, inf B<->C fails
+B’s advertisement to A 
+C: None, inf C: A->B, 2 C: None, inf gets lost 
+(so A makes no changes)
+A advertises about C to D 
+C: D->A, 3 C: A->B, 2 C: None, inf (not to B because of split
+horizon) 
+C: D->A, 3 C: A->B, 2 C: B->D, 4 D advertises about C to B 
+C: D->A, 3 C: A->B, 5 C: B->D, 4 B advertis
+es about C to A 
+continues until all costs to C are INFINITY 
+6.033 | spring 2018 | Katrina LaCurts 
+27
+
+  
+      
+  
+problem: neither distance-vector nor 
+link-state routing will scale to the size
+of the Internet 
+6.033 | spring 2018 | Katrina LaCurts 
+28
+
+    
+         
+   
+   
+          
+     
+    
+        
+    
+     
+ 
+  
+• Link-state routing works by disseminating full topology
+information to all nodes. It’s quite robust to failures, but
+the overhead of flooding limits its scale.
+• Distance-vector routing works by disseminating
+information about the cost of the actual routes. It has less
+overhead, but is not as robust to failures; the way in which
+it handles failures limits its scale.
+• Neither of these protocols is appropriate for routing
+across the entire Internet. Link -state routing works well for
+MIT-sized networks, but we still need a means to route
+outside of MIT.
+6.033 | spring 2018 | Katrina LaCurts 
+29
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+30

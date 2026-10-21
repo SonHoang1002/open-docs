@@ -1,0 +1,69 @@
+Word Introduced Defined 
+Abstraction 1 1 
+Architecture 1 1 
+Assembly 1 1 
+Atomic part 1 3 
+Benefit 1 2 
+Boundary 2 2 
+Characterize [vs. exhibit] 2 2 
+Complex/complexity [vs. simple] 1 2 
+Complicated [vs. trivial] 1 3 
+Concept 1 3 
+Context 1 2 
+Conceiving 4 4 
+Continuously connected concept 3 3 
+Cost 2 5 
+Creativity 3 3 
+Critical Thinking 1 1 
+Decompose [vs. aggregate] 1 1 
+Designing 4 4 
+Detail 2 2 
+Disjoint concept 3 3 
+Downstream 4 4 
+Element 1 1 
+Emerge/emergence 2 2 
+Evolving [vs. static] 2 2 
+Externally delivered 2 2 
+Form 1 1 
+Function 1 2 
+Goals 2 5 
+Hierarchy 3 3 
+Holistic 1 1 
+Instantiate [vs. belong to a class of] 4 4 
+Implementing 1 1 
+Integral 2 3 
+Intent 2 5 
+Interface 1 2 
+Interface control 2 3 
+Internal function 2 2 
+Large (team) [vs. small] 2 2 
+
+Method 1 1 
+Module/modular 2 2 
+Needs 5 5 
+Object 1 1 
+Operand 2 2 
+Operating 4 4 
+Part 1 3 
+Principle 1 1 
+Process 2 2 
+Product 1 2 
+Product/system 2 2 
+Product development process 1 1 
+Spatial 1 1 
+Specialize [vs. generalize] 4 4 
+Solution neutral 2 3 
+State 2 2 
+Structure 1 1 
+Supporting systems 2 2 
+System 1 2 
+Tool 1 1 
+Topological 1 1 
+Upstream 1 5 
+Use context 2 2 
+Value 1 2 
+Whole product system 2 2 
+Zoom 2 3 
+   
+   
+ 

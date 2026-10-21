@@ -1,0 +1,376 @@
+  
+6.033 Spring 2018
+Lecture #25 
+• Anonymity
+• Tor
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+  
+ 
+  
+Bitcoin and Tor 
+two technologies that deal, either directly or 
+somewhat-tangentially, with anonymity 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+  
+    
+         
+       
+  
+encryption with public keys 
+Alice’s key pair Bob’s key pai r 
+{PKA, SKA} {PKB, SKB} 
+Alice encrypts messages to Bob with his public key;
+Bob decrypts 
+the messages with his secret key 
+encrypt(PKB, m) = c decrypt(SKB, c) = m 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+   
+  
+{PKS, SKS} 
+Alice S 
+from:A 
+to:S 
+XXXXXX 
+problem: header links Alice to S 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+ 
+    
+ 
+  
+Tor’s goal 
+provide anonymity — only Alice should know 
+that she is communicating with the server S 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+ 
+    
+ 
+  
+      
+- no entity in the network can receive a 
+packet from Alice and send it directly to S
+- no entity in the network should keep state 
+that links Alice to S
+- data should not appear the same across 
+multiple packets
+  
+Tor’s goal 
+provide anonymity — only Alice should know 
+that she is communicating with the server S 
+things to avoid 
+- no packet should say “from: Alice, to: S”
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+  
+A -> S {PKS, SKS} 
+Alice P S 
+from:A 
+to:P 
+XXXXX 
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+    
+  
+A -> S {PKS, SKS} 
+Alice P S 
+from:P 
+to:S 
+XXXXX 
+problem: P knows that Alice is c ommunicating with S 
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+ 
+    
+ 
+  
+      
+   
+      
+    
+- data should not appear the same across 
+multiple packets
+  
+Tor’s goal 
+provide anonymity — only Alice should know 
+that she is communicating with the server S 
+things to avoid 
+- no packet should say “from: Alice, to: S”
+- no entity in the network should receive a
+packet from Alice and send it directly to S
+- no entity in the network should keep state
+that links Alice to S
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+ 
+ 
+  
+ 
+  
+5: P1 5: A,P2 5: P1,P3 5: P2,S 
+Alice P1 P2 P3 S 
+from:A 
+to:P1
+XXXXX 
+(the circuit ID would also
+be included and 
+encrypted, perhaps with
+some shared public key) 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+  
+5: P1 5: A,P2 5: P1,P3 5: P2,S 
+Alice P1 P2 P3 S 
+from:A 
+to:P1
+XXXXX 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+5: P1 5: A,P2 5: P1,P3 5: P2,S 
+Alice P1 P2 P3 S 
+from:P1
+to:P2
+XXXXX 
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+  
+5: P1 5: A,P2 5: P1,P3 5: P2,S 
+Alice P1 P2 P3 S 
+from:P2
+to:P3
+XXXXX 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+   
+  
+  
+5: P1 5: A,P2 5: P1,P3 5: P2,S 
+Alice P1 P2 P3 S 
+from:P3
+to:S 
+XXXXX 
+problem: an adversary wit h multiple vantage points 
+can observe the same data traveling from Alice to S 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+ 
+    
+ 
+  
+      
+   
+      
+    
+      
+ 
+  
+Tor’s goal 
+provide anonymity — only Alice should know 
+that she is communicating with the server S 
+things to avoid 
+- no packet should say “from: Alice, to: S”
+- no entity in the network should receive a
+packet from Alice and send it directly to S
+- no entity in the network should keep state
+that links Alice to S
+- data should not appear the same across
+multiple packets
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+     
+     
+ 
+   
+  
+Alice P1 P2 P3 S 
+from:A 
+to:P1
+XXX 
+(the circuit ID would
+also be included and 
+encrypted) 
+1. Alice adds layers of encryption to her packet
+= encrypted with P3’s public key, etc.
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+     
+     
+  
+Alice P1 P2 P3 S 
+from:A 
+to:P1
+XXX 
+1. Alice adds layers of encryption to her packet
+= encrypted with P3’s public key, etc.
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+      
+  
+Alice P1 P2 P3 S 
+from:A 
+to:P1
+XXX 
+2. P1 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+      
+  
+Alice P1 P2 P3 S 
+from:P1
+to:P2
+XXX 
+2. P1 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+      
+  
+Alice P1 P2 P3 S 
+from:P1
+to:P2
+XXX 
+3. P2 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+      
+  
+Alice P1 P2 P3 S 
+from:P2
+to:P3
+XXX 
+3. P2 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+      
+  
+Alice P1 P2 P3 S 
+from:P2
+to:P3
+XXX 
+4. P3 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+      
+  
+Alice P1 P2 P3 S 
+from:P3
+to:S 
+XXX 
+4. P3 strips off one layer of encryption and edits the header
+6.033 | spring 2018 | Katrina LaCurts 
+23
+
+   
+  
+Alice P1 P2 P3 S 
+from:P3
+to:S 
+XXX 
+5. P3 sends the packet to S
+6.033 | spring 2018 | Katrina LaCurts 
+24
+
+  
+     
+    
+  
+   
+       
+P2 P3
+  
+-
+-
+-
+-
+! 
+!
+! 
+! 
+things to avoid 
+no packet should say “from: Alice, to: S” 
+send i
+no entity in the network should receive a packet from Alice and 
+t d ly to S irect
+no entity 
+in the network should keep state that links Alice to S 
+data should not appear the same across multiple packets 
+Alice P1 P2 P3 S
+XXX
+from:A
+to:P1
+XXX
+from:P1
+to:P2
+XXX
+from:P3
+to:S
+XXX
+from:P2
+to:P3
+6.033 | spring 2018 | Katrina LaCurts 
+25
+
+26
+
+https://www.torproject.org/docs/faq.html.en 
+27
+
+     
+   
+        
+  
+   
+      
+      
+         
+  
+• Tor provides anonymity for users, preventing attackers
+from linking a sender to its receiver.
+• There are still ways to attack Tor, namely by correlating
+traffic from various points in the network.
+• Both Tor and Bitcoin (last lecture) deal, at least
+somewhat, with anonymity . But more importantly, they
+solve interesting technical problems and use
+cryptography (and other techniques) in clever ways.
+Understanding how they work and why they’re used will
+give you a better sense of how secure you are online.
+6.033 | spring 2018 | Katrina LaCurts 
+28
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+29

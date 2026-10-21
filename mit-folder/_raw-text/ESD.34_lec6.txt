@@ -1,0 +1,2241 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+IAP Lecture 6
+Ed Crawley
+Jan 30, 2007
+Rev 2.0
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflection on Needs, Goals for a Medium System
+z Complexity, Modules and Interfaces
+z Reflections on the PDP
+z A Holistic View and Summary 
+z The Role of the Architect
+z Summary - Learning Objectives
+z The Architecture of SDM - a Worked Example
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+Needs, Goals for Medium System
+z Who is the principal beneficiary? What are their needs?
+z Who are other beneficiaries? What are their needs?
+z What is the intent associated with the externally 
+delivered process which are traceable to customer 
+needs? Are there any intents apparent which flow from 
+regulations, corporate strategy, competition or the 
+corporate technical competence?
+z What is the suppressed object or suppressed process 
+structure of the level 1 elements?
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Needs
+z Needs exist in the heart and mind of the beneficiary
+z They exist outside the enterprise
+z They are fuzzy, ambiguous and ill stated
+z They must be identified and understood
+z A beneficiary often has more than one need to be met by 
+a product system
+z There is often more than one beneficiary
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Goals
+• Goal is defined as
+– what it planned to be accomplished
+– what the designer hopes to achieve or obtain
+• Expressed in the precise terms of Product Development
+• Will include goals derived from beneficiary Needs (goals 
+from beneficiaries) i.e. the functional goals
+• Will also include goals from corporate strategy, 
+regulations, competitive analysis, etc.
+• Embodied in a statement of goals (requirements ?)
+• Is defined (in part) by the architect
+• Exist within, and under the control of the enterprise, and 
+are traded against other attributes
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+What is Good Architecture?
+z Answer #1
+z That which meets the goals of the system
+z Which are based on the important needs of key 
+stakeholders
+z Must start with all of this upstream ambiguity and 
+resolve important needs and consistent goals
+z Constrain the problem by a the mission and outcomes 
+of the enterprise
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+Complexity and Interfaces
+z Complexity, revisited
+z Sources of complexity
+z Interfaces
+z Specifying Architecture
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Complexity
+Defined:
+z Having many interrelated, interconnected or interwoven 
+elements and interfaces
+Therefore
+z A complex system requires a great deal of information
+to specify (the really important feature of complexity)
+z Complexity is an absolute and quantifiable system 
+property (once a measure and atomic level are defined)
+z Apparent complexity is the perception that something is 
+complex.  Complicated things have high apparent 
+complexity
+It is the role of the architect to manage the evolution of complexity 
+in such a way that a complex system does not appear complicated 
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+What Makes a System Complex?
+z Requiring more functionality
+z Requiring more performance in the 
+functionality
+z Poor alignment of object structure 
+and internal processes
+z Reuse of legacy
+z Supplier relationships
+z Flexibility and platforming
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Dirt Simple Measure of Complexity
+z Number of things: Nthings
+z Number of types of things: Ntypes_of_things
+z Number of connections among things: Nconnections
+z Number of types of connections: Ntypes_of_connections
+z Simplest measure that captures all of these is the sum:
+z C = Nthings + Ntypes_of_things + Nconnections + Ntypes_of_connections
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+Delivered Functions Drive Complexity
+z Delivered function 
+for a “cork 
+translater”
+z Important 
+elements as 
+“atomic parts”, 
+not apart parts
+z Delivered 
+functions include:
+– Engage cork
+– Magnify force
+– Create force
+– Aid engagement
+– Auto 
+engagement
+– Aid 
+disengagement
+– Auto 
+disengagement
+External Functions vs. Important Details
+0
+1
+2
+3
+4
+5
+6
+7
+0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 40
+Important Details
+simple screw
+simple fork
+long screw
+red screw
+worm gear
+gas tank
+gas pump
+double lever
+automatic
+C = Nimportant details
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+What is Good Architecture?
+z Answer #2
+z That which uses appropriate and creative concepts (but 
+not too creative) to meet the statements of solution 
+neutral function while providing for minimum complexity
+z Must explore the space creatively,completely and 
+rationally
+z Must seek combinations of concepts to meet various 
+functional requirements
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+Poor Alignment of Object Structure and 
+Processes 
+z Do 2 down, 1 up on the 
+object structure
+z Map the level 2 objects to 
+internal process
+z What happens if they don’t 
+align?
+Objects
+Objects
+Objects Processes
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+Reuse of Legacy 
+z Legacy - inherited form, and 
+associated function, from a 
+previously built 
+product/system
+z Legacy elements have some 
+structure and mapping to 
+process
+z First challenge is to identify 
+this!
+z Then how to deal with the 
+fact that boundaries in the 
+legacy elements may not be 
+where you want them now
+Objects
+Objects
+Objects Processes
+
+15Massachusetts Institute of Technology  © Ed Crawley 2007
+Platforming
+z Platform - common 
+elements of form used in 
+more than one product/ 
+system
+z Try to make the common 
+elements of the platform 
+common
+z Try to fit the other 
+elements that distinguish 
+the individual products 
+around the common 
+elements
+Objects
+Objects
+Objects Processes
+Objects
+Objects
+Objects Processes
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Supplier Relations
+z Extend the object 
+structure to include, for 
+example, suppliers
+z Extend the process object 
+map to include the 
+supplying process
+z Now the supplier relations 
+do not align with either the 
+structural or object-
+process blocks! 
+Objects
+Objects
+Objects Processes
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+Modules and Parts
+z A module is a collection of (1...n) parts which are defined by 
+some intent to be a distinct system
+z The intent of the module can be one or more of use:
+– For implementation, sometimes called assemblies
+– Ease of integration
+– Product flexibility - the basis of platforms
+– For routine user operation
+– For service/ evolution/ upgrade (can sometimes be at 
+various levels - field or line replaceable, depot 
+replaceable, ...)
+z Part:
+– (An apart part) An element that you cannot take apart and then 
+reconstitute in its original form, or
+– (A functional part) An element that you cannot take apart 
+without destroying its ability to deliver function
+z An “atomic part” can be a part or an important element 
+within a part
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+Interfaces - Complexity
+z Complexity arises in a system as more is asked of it 
+(performance, functionality, robustness, etc.)
+z Complexity manifests itself as the interfaces between 
+elements or modules are defined
+z Complexity can be exploited to create platforms, etc.
+z It is the role of the architect
+– To keep the actual complexity as low as possible
+– To keep the system from becoming too complicated
+Complexity is inherently neither good nor bad, but must be managed
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+Interfaces
+z Interfaces are the points of contact between interacting 
+elements which are modules and parts
+z Interfaces are central to the definition of a system –
+“A set of elements ...” must be connected at 
+interfaces to perform “function greater than the sum 
+of the parts”
+z Interfaces have important characteristics:
+– Object and process nature (discussed earlier)
+– Complexity of the interface 
+– Stability of the interface
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+Interfaces Have Form and Function
+z The structure usually 
+indicates the existence of an 
+interface (more about this 
+next time)
+z At the interface:
+– Form has some structural 
+relationship - usually compatible
+– A function is performed - usually 
+the process is the same or the 
+complement
+– The operand is the same
+Product/system boundary
+Process
+Operand
+Interface 
+Instrument
+Interface 
+Instrument
+Compatible
+Interface
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+Number
+Sensitivity/Robustness
+Sophistication
+0 V = off
+2 V = on
+0 - 0.5 V   =  off
+1.5 - 3.0 V = on
+ID = XXX 
++/- .YYY 
+Is there any?
+ID heapstatus = 
+heapcheck();
+Complexity in Interfaces
+Important pattern here is increasing information that 
+must be specified
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Stability of the Interface
+z Some interfaces are created just for internal use, and are 
+shorter lived or ad hoc in nature
+z Other interfaces are created for internal use, but are 
+intended to be long term and stable in nature
+z Other interfaces are created for external use, which 
+define the interface of the product/system with supplier 
+modules or other elements of the whole product system 
+- these are very stable
+z Other interfaces are defined to be standards - the most 
+stable
+Define stable interfaces very carefully, they will be with 
+the system for a long time, and are hard to change!
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Why are Interfaces Important?
+z Define the “system nature” of the product
+z Are an area of great leverage
+z Are an area of great uncertainty
+z Are key to
+– assembly/integration/checkout
+– maintainability
+– product evolution and adaptability
+Interface definition and control are an area of prime 
+importance to the system architect 
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+What Informs the Definition of Interfaces?
+z Vision of:
+– assembly/integration/checkout
+– maintainability
+– product evolution and adaptability
+z Need to:
+– Build around legacy elements
+– Incorporate supply chain elements
+– Fit into product platform constraints
+– Accommodate standards 
+z The different classes of structural links inform the definition of 
+different types of modules:
+– Implementation links - implementation modules
+– Operational links - operator modules
+– Spatial/topological links - service/upgrade modules
+Much more about this in the fall 
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Specifying Elements
+z Three possible modules of how you specify an 
+element to a “supplier”
+– interfaces and functions
+– interfaces, functions and concept
+– interfaces, form [build to print]
+z Sometimes when decomposing is is desirable to 
+decompose function and/or form to get to 
+supplier product/capability - supply chain
+impact on architecture
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary: Complexity and Interfaces
+z Complexity accumulates in a system is more is asked of it, and for a 
+number of other reasons
+z Modularity is a key way of dealing with complexity, but requires the 
+definition and control of interfaces
+z Interfaces occur between parts and modules, are essential to the
+nature of a system, and are an important area of focus for the 
+architect - especially the stable ones
+z The apparent complexity of a system at any level of decomposition 
+is dependent on the definition of the interfaces
+– It establishes the number and type of modules
+– It establishes the number and type of interfaces
+z The definition of modules and interfaces is informed by function, 
+structure, suppliers, platforming, and many other factors
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+What is Good Architecture?
+z Answer #3
+z That which has a set of internal processes, and a well 
+structured set of instrument objects, so that the external 
+value related function emerges
+z That which resolves all of these possible 
+inconsistencies in the modularization
+z Must carefully decompose the system, and ensure 
+soundness of architecture
+z Must seek combinations of objects and processes to 
+meet various functional requirements
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+PDP Synthesis
+z Reference PDP
+z Alternative models
+z Key distinctions
+z Underlying Principles
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Reflections on PDP
+•How common are the various PDP’s?
+•What are the prime distinguishing features?
+•What is the origin of the distinguishing 
+features?
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+Case Study Examples
+[Several slides with examples removed due to 
+copyrighted and company-proprietary information.]
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+Identify need for product
+Product planning
+Concept Development
+Specification Development 
+and Preliminary Design
+Integration, Assembly, 
+Construction or Prototyping
+Detailed Design
+Testing and Verification
+Production Readiness
+• Develop strategic plan
+• External inputs
+•B i g  p i c t u r e
+• Platform strategy
+• Specify high level requirements
+• Gap/Market analysis
+• Feasibility
+• Identify system design specifications 
+• Overall system architecture/system 
+integration
+• Determine boundary constraints
+• Initial build
+• Product intent parts
+• Physical systems integration
+Simulation
+• Testing overall system and 
+component performance
+Refinement
+• Manufacturing capability
+• Customer support service
+• Certification or acceptance     
+testing
+Production
+• Distribution
+Customer Feedback
+• Evaluation
+•In-process development
+Generic Product 
+Development Process
+• Specification and design at 
+component level
+• Production process input
+• Interdependencies and constraint 
+identification
+Refinement
+Refinement
+• Market research
+• Technology innovation
+
+32Massachusetts Institute of Technology  © Ed Crawley 2007
+Key Differences in PDP’s
+z Number of phases (often a superficial difference)
+z Phase exit criteria (and degree of formality)
+z Requirement “enforcement”
+z Reviews
+z Prototyping
+z Testing and Validation
+z Timing for committing capital
+z Degree of “customer” selling and interference
+z Degree of explicit/implicit iteration (waterfall or not)
+z Timing of supplier involvement
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Key Drivers of Differences
+z Product
+– HW vs SW
+– Stand alone vs. platform
+– Requirements for Generic or Specialized Manufacturing
+– Production volume 1 - many
+– Capital Intensity
+– Technology Push/Market Pull/Process Intensive
+– Complexity/Size/Dynamic Nature
+– Regulatory certification or standards compliance
+z Market:
+– True customer, OEM, Small Market, Government
+– Duration of Life Cycle
+– After sale support and service, revision/upgrade process
+z Culture/Strategy
+– Management control
+– Resource allocation process
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+Waterfall and Spiral
+z Waterfall model has 
+sequential 
+(overlapped?) tasks
+z Spiral model has 
+iteration on tasks
+z In fact all processes 
+have some combination 
+of sequence, overlap 
+and iteration, this is 
+“much ado about 
+nothing”
+Time
+Task 1
+Task 2
+Task 3
+Task 4
+Task 1
+Task 2Task 3
+Task 4
+Time
+Time
+Task 1
+Task 2
+Task 3
+Task 4
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+Another View of PDP Design
+z Nature of 
+PDP design 
+depends on 
+degree of 
+system 
+complexity 
+and 
+precedent
+Complexity:
+Less complex         More complex
+Precedent:
+None
+Some:
+V
+Task 1
+Task 2
+Task 3
+Task 4
+Time
+?
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+z Business 
+Strategy
+z Functional 
+Strategy
+z Customer 
+Needs
+z Competitors
+z Program  
+plan
+z Business 
+case
+Conceive
+Mission Conceptual
+Design
+z Goals
+z Function
+z Concepts
+z Regulation
+z Technology
+z Platform plan
+z Supplier plan
+z Architecture
+z Commitment
+Generic PDP
+z Requirements 
+definition
+z Model 
+development
+z Requirements 
+flowdown
+z Detail 
+decomposition
+z Interface 
+control
+Design
+Preliminary
+Design
+Detailed
+Design
+z Design 
+elaboration
+z Goal 
+verification
+z Failure & 
+contingency 
+analysis
+z Validated 
+design
+Implement
+Element
+Creation
+Integration,
+System Test
+Operate
+Life Cycle
+Support
+Evolution
+z Sourcing 
+z Implementation 
+ramp-up
+z Element 
+implementation
+z Element
+z testing
+z Element 
+refinement
+z Product 
+integration
+z Product 
+testing
+z System 
+testing
+z Refinement
+z Certification
+z Market 
+positioning
+z Delivery
+z Sales, 
+Distribution
+z Operations 
+z Logistics
+z Customer 
+support 
+z Maintenance,
+repair, 
+overhaul
+z Upgrades
+z Product 
+improve-
+ment
+z Family 
+expansion
+z Retirement
+Envision Design Develop Deploy
+
+37Massachusetts Institute of Technology  © Ed Crawley 2007
+Themes from the Perspective of the 
+Architect
+CDI   O
+1
+Mission  concept     prelim.         detailed     chunks    integration  life-cycle    evolution
+Complexity
+Creativity
+Ambiguity
+
+38Massachusetts Institute of Technology  © Ed Crawley 2007
+What is a PDP?
+z Principle?
+z Process?
+z Tool?
+So what are underlying principles?
+
+39Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+Interpreting &
+Incorporating
+Functional
+intent
+
+40Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes, with PDP
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+Interpreting &
+Incorporating
+Competing
+Products
+Implementer Designer
+Implementing DesigningCompeting &Transferring
+Seller Marketer
+Customer
+Technology
+Inserting
+Technology
+Technologist
+Functional
+intent
+
+41Massachusetts Institute of Technology  © Ed Crawley 2007
+Costs
+z Costs are traditionally divided into:
+z Operational Costs, born by the operator
+z Development Costs, born by the developer:
+– Cost of developing or acquiring the technology
+– Cost of designing the product (non-recurring)
+– Costs of implementing (non-recurring and recurring)
+– Costs of marketing, selling
+z An of course price of sales
+Operating
+cost
+SG&A
+Costs
+COGS
+R&D
+Costs
+Price, 
+Revenue
+
+42Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes, with PDP
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+Interpreting &
+Incorporating
+Competing
+Products
+Implementer Designer
+Implementing DesigningCompeting &Transferring
+Seller Marketer
+Customer
+Technology
+Inserting
+Technology
+Technologist
+Functional
+intent
+
+43Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes, PDP and Costs
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+Interpreting &
+Incorporating
+Humans,
+Environment
+Humans &
+Competing
+Products
+Implementer Designer
+Implementing DesigningCompeting &Transferring
+Seller Marketer
+Customer
+Technology
+Inserting
+Technology
+Technologist
+SG&A
+Costs
+COGS
+Capex
+R&D
+Costs
+Price, 
+Revenue
+Employing
+Profiting
+Functional
+intent
+1
+3
+2
+4
+
+44Massachusetts Institute of Technology  © Ed Crawley 2007
+4 Main Goals of a (for profit) Enterprise
+z Delivering value to the beneficiary
+z Profiting
+z Providing meaningful and stable employment
+z Creating no unintended consequences for 
+society or the environment
+1
+2
+3
+4
+
+45Massachusetts Institute of Technology  © Ed Crawley 2007
+Types of Goals
+Goals are a mixture of several types:
+z Intent on Function
+z Intent on instrument Object
+z Intent on the design process
+z Intent on the implementation process
+z Intent on the operation process
+z Intent on the strategic process
+z Intent on the market process
+z Intent on the regulatory process
+z Intent on the technology process
+See the pattern???
+Process
+Object
+Functional
+Intent
+Intent
+Intent
+Object
+
+46Massachusetts Institute of Technology  © Ed Crawley 2007
+Product Attributes, PDP, Costs and Intents
+Note: Dynamics is implicit in 
+Process
+Delivering 
+primary 
+process
+Supporting 
+Systems
+Operator
+Operating
+Product/
+System
+Operating
+cost
+Beneficial
+Attribute
+Operand
+Need
+Beneficiary
+Value Delivery
+Interpreting &
+Incorporating
+Humans,
+Environment
+Humans &
+Competing
+Products
+Implementer Designer
+Implementing DesigningCompeting &Transferring
+Seller Marketer
+Customer
+Technology
+Inserting
+Technology
+Technologist
+SG&A
+Costs COGS R&DCostsPrice, Revenue
+Employing
+Profiting
+Functional
+intent
+
+47Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary: PDP
+A structured PDP
+z Increases value added, efficiency and competitiveness 
+(e.g. time to market) of the process
+z Provides something that can be learned and improved
+z Should be customized to product/market/culture
+z Should be based on underlying principles
+
+48Massachusetts Institute of Technology  © Ed Crawley 2007
+A Summary by “Zooming Out”
+z Value related externally delivered process
+z + other processes
+z + form = architecture
+z + other product attributes (upstream and downstream)
+z + other design and implementation attributes
+z + enterprise
+z + society
+z = a holistic view
+
+49Massachusetts Institute of Technology  © Ed Crawley 2007
+Focus First on the Value Process
+z Process associated 
+with value 
+z Delivered to the value 
+related operand
+z With utility to the 
+beneficiary
+Delivering
+Primary Process
+
+50Massachusetts Institute of Technology  © Ed Crawley 2007
+System Operating
+z Identify other 
+important 
+processes
+z Based on:
+– Supporting 
+processes (5 
+fundamental 
+process 
+types)
+– Operational 
+sequence
+Interfacing
+Waiting in storage
+Retrieving, 
+connecting, powering-up, 
+setting up, initializing
+Loading, preparing
+Stand alone ops.
+Contingency ops.
+Emergency ops.
+Archiving, unloading
+Terminating, disconnecting,
+depowering, storing
+Inspecting, repairing,
+calibrating, updating, 
+maintaining
+Delivering
+Primary Process
+System 
+Operating
+Delivering other 
+value processes
+Interfacing
+Matter supporting
+(mechanical, 
+biochemical)
+Energy supporting
+(power, heat)
+Information
+Supporting (data, 
+command, thought)
+
+51Massachusetts Institute of Technology  © Ed Crawley 2007
+The Product Architecture
+Architecture
+System
+Operating
+Instrument 
+Forms + 
+Structure
+Operands
+
+52Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Product Attributes
+Customer
+Corporate
+Societal 
+Needs
+Product
+Operator
+Product
+Goal
+Operating
+Costs
+Product
+Form
+Product 
+Function
+Product 
+Timing
+Architecture
+
+53Massachusetts Institute of Technology  © Ed Crawley 2007
+Holistic Framework for Product, Design & Implementation 
+Processes
+Why What              How          Where        When        Who        How Much
+Impl.
+Schedule
+Impl.
+Team
+Impl.
+Tools
+Process
+Flow
+Impl.
+Goals
+Customer
+Corporate
+Societal 
+Needs
+Design
+Process
+Product and
+Operations
+Implement
+Process
+Design
+Schedule
+Process
+Methods
+Design
+Goals
+NRE
+Costs
+Product
+Operator
+Product
+Goal
+Operating
+Costs
+Impl.
+Costs
+Product
+Form
+Product
+Function
+Design
+Tools
+Design
+Team
+Product 
+Timing
+
+54Massachusetts Institute of Technology  © Ed Crawley 2007
+PDP Tasks - CDIO
+Impl.
+Schedule
+Impl.
+Team
+Impl.
+Tools
+Process
+Flow
+Impl.
+Goals
+Customer
+Corporate
+Societal 
+Needs
+Design
+Schedule
+Process
+Methods
+Design
+Goals
+NRE
+Costs
+Product
+Operator
+Product
+Goal
+Operating
+Costs
+Impl.
+Costs
+Product
+Form
+Product 
+Function
+Design
+Tools
+Design
+Team
+Product 
+Timing
+Conceiving
+Designing
+Operating
+Implementing
+
+55Massachusetts Institute of Technology  © Ed Crawley 2007
+Enterprise Context
+z The PDP sits within an enterprise
+z The enterprise brings many internal strengths 
+(and weaknesses) to bear on the PDP
+z The enterprise “helps” interface with external 
+influences
+z Knowledge of how the enterprise operates is vital 
+to a successful architect
+
+56Massachusetts Institute of Technology  © Ed Crawley 2007
+GLOBAL
+ECONOMY
+CAPITAL
+SHARE  HOLDER 
+GOALS
+HUMAN 
+RESOURCES
+REGULATIONS
+CUSTOMER 
+NEEDS
+COMPETITION
+TECHNOLOGY
+SERVICES
+MANUFACTURED 
+GOODS
+RAW MATERIAL
+CORPORATE
+LEGAL
+MARKETING
+R & D
+OPERATIONS
+HUMAN
+SKILLS MANAGEMENT
+CORPORATE
+CULTURE
+INFORMATION
+SYSTEMS
+ENGINEERING
+TOOLS
+ENTERPRISE
+CORPORATE
+PUBLIC
+RELATIONS
+LEGAL
+MARKETING,
+SALES,
+DISTRIBUTION
+R&D ?
+ENVIRONMENTAL
+COMPLIANCE ?
+ECONOMIC
+IMPACT
+PROFITS
+SOCIAL
+IMPACT
+CORPORATE
+IMAGE
+INTELECTUAL
+PROPERTY
+GOODS
+SERVICES
+TECHNOLOGY
+POLLUTION
+Conceive Operate
+Design
+Implement
+Architecture
+PDP - CDIO
+POLITICAL 
+INPUTS
+POLITICAL
+IMPACT
+
+57Massachusetts Institute of Technology  © Ed Crawley 2007
+Societal Context
+• Many (most) of the influences on and of the 
+architecture also come and go across the 
+enterprise boundary with society
+• The elements beyond the enterprise are often 
+critical to the architectural success
+• These interactions are with four super-
+systems:economic, human, knowledge/artifact, 
+and natural
+
+58Massachusetts Institute of Technology  © Ed Crawley 2007
+GLOBAL
+ECONOMY
+CAPITAL
+SHARE  HOLDER 
+GOALS
+HUMAN 
+RESOURCES
+REGULATIONS
+CUSTOMER NEEDS
+COMPETITION
+TECHNOLOGY
+SERVICES
+MANUFACTURED 
+GOODS
+RAW MATERIAL
+ENTERPRISE
+ECONOMIC
+IMPACT
+PROFITS
+SOCIAL
+IMPACT
+CORPORATE
+IMAGE
+INTELECTUAL
+PROPERTY
+GOODS
+SERVICES
+TECHNOLOGY
+POLLUTION
+NATURAL
+SYSTEM
+KNOWLEDGE &
+ARTIFACT SYSTEM
+HUMAN 
+SYSTEM
+ECONOMIC
+SYSTEM
+Architecture
+PDP - CDIO
+POLITICAL
+IMPACT
+POLITICAL
+INPUTS
+
+59Massachusetts Institute of Technology  © Ed Crawley 2007
+Holism and Focus
+z These and many things are in the holistic view of a good 
+architect
+z Of all of the things in the view, on any given day or 
+week, one must FOCUS
+z Focus on the 5-7 things that are the most important or 
+urgent at any one time
+z Reevaluate the focus list routinely
+
+60Massachusetts Institute of Technology  © Ed Crawley 2007
+The Role of the Architect
+z The role of the architect 
+z Home of the architect
+z The deliverables of the architect
+z The goal of the architect - Good 
+Architecture
+
+61Massachusetts Institute of Technology  © Ed Crawley 2007
+The Role of the Architect
+z Defines the boundaries, goals,  and 
+functions
+z Creates the Concept
+z Allocates functionality and defines 
+interfaces and abstractions
+The architect is not a generalist, but a specialist in 
+simplifying complexity, resolving ambiguity and 
+focusing creativity
+
+62Massachusetts Institute of Technology  © Ed Crawley 2007
+Defines the Boundary and Functions 
+The architect defines the boundary of the “closed system”
+which constitutes the design of the system and its 
+implementation process.
+Specifically, the architect defines the goal(s) and function(s) 
+and:
+z Interprets corporate strategy
+z Interprets corporate marketing strategy and competitive  
+analysis
+z Listens to “customers” or their representative
+z Infuses technology available
+– in platforms,
+– at the company, and
+– from other sources,
+z Interprets regulatory and pre-regulatory influences
+z Is sensitive to product liability and intellectual property issues.
+
+63Massachusetts Institute of Technology  © Ed Crawley 2007
+Creates the Concept
+z Proposes and develops options
+z Identifies key metrics and drivers
+z Conducts highest level trades, and optimization
+z Thinks holistically about the entire product life cycle 
+in terms of
+– design 
+– implementation (sourcing and manufacturing)
+– operation
+– product and process
+– risk management
+– sustainability
+z Anticipates failure modes and plans for mitigation 
+and recovery
+
+64Massachusetts Institute of Technology  © Ed Crawley 2007
+Allocates Functionality and Defines 
+Interfaces and Abstractions
+z Decomposes form and function
+z Allocates functionality to elements
+z Defines interfaces between subsystems,
+z Configures the subsystems - creates the 
+structure of the system while considering:
+– Flexibility vs. optimality
+– Modularity vs. platform
+– Vertical vs. horizontal strategies, and
+– In-house vs. outsourcing design and manufacturing
+
+65Massachusetts Institute of Technology  © Ed Crawley 2007
+Specific Role of the Architect
+z The reference case in the architecture 
+of a new product or system.  The 
+architect deals with an external 
+customer, and architects a product, 
+mindful of its design, implementation 
+and operations
+z A higher level view is the architecture 
+of the product, its platform, its design 
+process, and its implementation 
+process (of a maturing system)
+z A lower level view  is the architecting 
+of a major element/module (which 
+often allows architectural innovation), 
+and often does not involve 
+interacting with an external customer
+Conceive
+Architecture
+Conceive Operate
+Design
+Implement
+Architecture
+Architecture
+
+66Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecting is Recursive 
+z Takes place at the whole product system level 
+(sometimes called “system of systems”)
+z At the product or system level
+z At the level of elements which are modules
+z At the level of elements which are parts
+
+67Massachusetts Institute of Technology  © Ed Crawley 2007
+Home of the Architect
+z It is the responsibility of the architect to interact with the 
+“manager”, “customer”, “regulator” and “competence”
+to get the system built.
+Architect
+Customer
+RegulatorManagement
+Competence
+Need
+Strategy
+Regulation
+Owner Society
+
+68Massachusetts Institute of Technology  © Ed Crawley 2007
+Organizational “Homes” of the Architect
+The Architect may be in one of several organizational forms
+A RM
+C
+C
+ø
+Traditional Co. Virtual Co.
+Civil Architect Firm
+New Product Sector
+Regulator/Arch.
+(eg. Aerospace Co.)
+Government Agency
+
+69Massachusetts Institute of Technology  © Ed Crawley 2007
+Deliverables of the Architect
+z A clear, complete, consistent and attainable (with 80% -
+90% confidence) set of goals (with emphasis on functional 
+goals)
+z A description of the broader usage context in which the 
+system sits, and the whole product context
+z A functional description of the system, with at least two 
+layers of decomposition
+z A concept for the system
+z A design for the form of the system, with at least two layers 
+of decomposition
+z A notion of the timing, operator attributes, and the 
+implementation, operation and evolution plans
+z A document or process which ensures functional 
+decomposition is followed, and the form and function at the 
+interfaces are controlled
+
+70Massachusetts Institute of Technology  © Ed Crawley 2007
+The Architect Creates Good Architecture
+z Satisfies customer needs
+z Can compete effectively in the marketplace
+z Incorporates appropriate technology
+z Meets strategic business goals
+z Meets or exceeds present and future regulations
++ Is operable, maintainable, sustainable, reliable
++ Can be evolved/modified as appropriate
+ Can be designed and implemented by envisioned team
+ Can be implemented with existing/planned capabilities
+AND IS ELEGANT
+
+71Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecting is Universal
+z Political, Organizational, Technical and 
+Artistic/Building systems are explicitly 
+architected
+z Social, Urban systems are implicitly architected
+z Natural systems?
+
+72Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Role of the Architect
+z The architect performs the most abstract, high level 
+function in product development
+z The architect has the greatest leverage on the eventual 
+success of the product
+z The architect must employ system thinking
+z The architect
+– defines the boundaries and function
+– creates the concept
+– defines the elements, interfaces and abstractions
+z The architect delivers the deliverables, and creates 
+elegant and successful architecture
+
+73Massachusetts Institute of Technology  © Ed Crawley 2007
+Students will be able to:
+Apply the principles, processes and tools of system 
+architecture to:
+- Structure and lead the early, conceptual phases 
+of the product development process
+- Support the process through development, 
+deployment, operation and evolution
+Summary - Learning Objectives
+
+74Massachusetts Institute of Technology  © Ed Crawley 2007
+y Discuss systems, 
+systems thinking, 
+products (value and 
+competitive advantage), 
+the PDP and the “role” of 
+architecting in the PDP.
+y Analyze and critique the 
+architecture of existing 
+systems, create the 
+architecture of new or 
+improved systems, and 
+produce the deliverables 
+of the architect.
+Learning Objectives
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Product/system 
+boundary
+Creating
+Operator
+Star
+Ring
+Flow
+Aligning/
+Transporting
+Deflecting/
+Accelerating
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated) External
+Air
+WhistleMaking 
+tone
+Digital Camera
+Battery
+Wrist Strap
+Memory Card
+TV/Video
+Video USB Port
+USB Port
+USB Port
+Software
+PC
+Mac
+Printer
+Card Reader
+USB interface cable
+Video cable
+Digital
+Supplied with camera
+Figure by MIT OCW.
+
+75Massachusetts Institute of Technology  © Ed Crawley 2007
+y Drive the ambiguity from the upstream process by 
+defining the context and boundaries of the system, 
+interpreting needs, setting goals and defining the 
+externally delivered functions.
+y Create the  concept for the system, consisting of internal 
+function and form, while thinking “holistically and out of 
+the box” when necessary.
+y Manage the evolution of complexity in the system so that 
+goals are met and function is delivered, while the system 
+is comprehendible to all during its design, 
+implementation, operation and evolution.
+Learning Objectives
+
+76Massachusetts Institute of Technology  © Ed Crawley 2007
+y Challenge and critically evaluate current 
+modes of architecting, and create new 
+synthesized modes.
+y Develop for themselves the guiding 
+principles for successful architecting.
+To prepare students for their first, second, 
+and third jobs after SDM.
+This is a course in how to think, not what to think
+Learning Objectives
+
+77Massachusetts Institute of Technology  © Ed Crawley 2007
+A Guide to Guiding Others
+z On the next four charts are a set of questions that could 
+be used to help others you work with understand a 
+process about architecture
+z Note they are not far from the questions that were on OS 
+4, which led to the deliverables of an architect
+z But they try not to rely on the details and formalism we 
+have discussed, but the main ideas
+z Try them and see how they work
+z I would appreciate feedback
+
+78Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Needs to Value to Concept
+z Who are the beneficiaries? What are their needs?
+z What is the value related operand and its states?
+z What is a solution neutral statement of the value 
+related transformation - the externally delivered 
+value related function? (solution neutral 
+function)
+z What are the solution specific functions which 
+will achieve this transformation? (the function 
+part of concept)
+z What are the solution specific abstractions of 
+form that can execute this process?(the form 
+part of concept)
+z What are potential multi-functional aspects of the 
+concept process?
+z How does value trace to the beneficiaries?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+79Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Concept In Context
+z What is the product system? 
+z What are the supporting 
+systems?
+z What is the whole product 
+system?
+z What is the use context?
+z What are the boundaries?
+z What are the interfaces? What are 
+the operands that are passed or 
+shared? Interface process? 
+Interface instrument objects?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+80Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Concept to Architecture
+z What are the principal internal 
+functions? Operands along the way?
+z How is the form decomposed into 
+elements? (decomposition of form)
+z What is the structure of the 
+elements? How are the internal 
+functions mapped to elements of 
+form?
+z How do these combine to produce 
+the emergent externally delivered 
+value related function?
+z What other value related external 
+functions are delivered?
+z Are there supporting processes and 
+objects?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+81Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework - Architecture to Operations
+z What is the sequence in the process 
+of delivering primary function?
+z Are their contingency, emergency or 
+stand alone processes?
+z Are there commissioning, 
+decommissioning and maintaining 
+processes?
+z Is clock time important to 
+understand in the operations?
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+82Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture of SDM
+z The SDM program was developed using the technique of 
+system development
+z About a 3 year process from the “moral” commitment to 
+the beginning of the actual program
+z Review this History in order to
+– Give an example of architecting a complex system
+– Allow you to understand the context of your experience
+
+83Massachusetts Institute of Technology  © Ed Crawley 2007
+Dominant Upstream Influence on 
+Architecture
+Regulation
+Corporate,
+Marketing
+Strategy
+Beneficiary/
+Customers
+Competitive
+Environment
+Technology
+Architecture
+Need Goals
+Downstream 
+Strategies,
+Competence
+Form
+FunctionConcept
+
+84Massachusetts Institute of Technology  © Ed Crawley 2007
+MIT’s “Corporate” Strategy
+z Leadership through developing and delivering the best 
+education polarized around science and technology
+z True interdepartmental/interschool efforts
+z Research results transferred quickly to education
+z Close relationship to industry
+z Innovation in graduate programs which migrates to 
+undergraduates
+
+85Massachusetts Institute of Technology  © Ed Crawley 2007
+Market Strategy
+z Develop a “first-in”, advanced professional degree for 
+engineering leadership (the “MBA for Engineers”)
+z Focus program on large producers of complex electro-
+mechanical, information systems
+(auto, aero, comm, computer)
+z Make available to smaller companies through individual 
+participation
+z Slowly encourage government, regulators, etc. to 
+participate
+z Eventually broaden to other industrial sectors
+
+86Massachusetts Institute of Technology  © Ed Crawley 2007
+Market Characteristics
+z Segmentation
+– on campus, 1 year
+– on campus, RA
+– on-off campus
+z Competition
+z Size
+z Price Point
+
+87Massachusetts Institute of Technology  © Ed Crawley 2007
+Regulation
+z Rules and Regulations of the MIT Faculty
+z 6 subjects = MS
+z 1 semester of residency
+z No previous distance education program for credit
+Technology
+z Picturetel is not sufficient to replace all personal contact
+
+88Massachusetts Institute of Technology  © Ed Crawley 2007
+Customer Need
+z Research and Scholarship to codify and improve best 
+practice in product development
+z Educational programs for key people
+z Corporate Impact
+derived from –
+~ 30 interviews/presentations
+~ 5 focus groups
+prototype year (95-96)
+
+89Massachusetts Institute of Technology  © Ed Crawley 2007
+Goals
+To educate future technical leaders in system 
+engineering/architecture, and the conception and 
+design of complex products and systems.  
+Students completing the program become 
+prepared for careers as the technically-grounded 
+senior managers of their enterprises
+Plus:  internally driven goals
+– jumpstart/leapfrog distance education
+– bring about closer relations with industry
+
+90Massachusetts Institute of Technology  © Ed Crawley 2007
+Functions
+To increase the knowledge, skills, and attitudes of the students in:
+System Thinking
+Management Skills
+Leadership Skills
+Technical Skills
+Big Picture Thinking
+System Engineering
+System Integration
+Risk Benefit Analysis
+System Optimization
+Modeling and Simulation
+Life Cycle Planning
+Operations
+Program Management
+Program Control
+Marketing
+Strategy
+Accounting/Finance
+Law
+Technology Assessment
+System Architecture
+System Design
+Product Development
+Technical Planning
+Technical Teams
+Organizations
+Leadership
+Disciplinary Design
+Disciplinary Expertise
+Big Picture
+Alternative Thinking
+Global Perspective
+
+91Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept
+z ~ 13 subject platform program
+z On and On-off campus variants
+z Partnership with industry to develop content
+z New distance education technology to replicate campus 
+experience at a distance
+
+92Massachusetts Institute of Technology  © Ed Crawley 2007
+Form of Program
+Plus:
+Leadership
+Big picture
+Global View
+Marketing Architecture Operations
+Eng. Elect. (2)
+Design Elect.
+ERBA
+Optimization
+SE
+Org. Behavior
+Finance/Accounting
+Mgmt. Elect.
+SPM
+
+93Massachusetts Institute of Technology  © Ed Crawley 2007
+Matrix of Function-Form
+Sys. Eng.
+Sys. Arch.
+Sys. Managem.
+ERBA
+Sys. Opt.
+Operations
+Marketing
+Acct/Finance
+Organizations
+Design Elect.
+Eng. Elect. 1
+Eng. Elect. 2
+Mgmt. Elect.
+IMPORTANCE
+Systems Eng.
+Sys. Integration
+System Opt.
+Risk-Benefit
+Modelling/Sim
+System Arch.
+System Design
+Prod. Develop
+Tech Planning
+Prog. Management
+Prog. Control
+L.C. Planning
+Operations
+Marketing
+Acct/Finance
+Strategy
+Law
+Tech. Assess
+Tech. Teams
+Organizations
+Leadership
+Disc. Design
+Disc. Expertise
+Big Picture
+Alt. Thinking
+Global Perspective
+Technical
+Skills
+Big Picture
+Thinking
+Leadership
+Skills
+Management
+Skills
+System
+Thinking
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+5
+2
+2
+5
+5
+3
+5
+3
+5
+3
+}
+}
+
+
+{
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+{
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+
+
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+
+{
+
+{
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+}
+}
+
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+{
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+{
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+}
+{
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+ 
+ 
+ 
+ 
+}
+ 
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+}
+ 
+}
+}}
+}}
+}}
+}
+}}
+
+
+ 
+  
+Matrix Key
+Strong
+Medium
+Weak
+Roof Key
+Strong Positive
+Positive
+}
+
+{
+}
+
+
+94Massachusetts Institute of Technology  © Ed Crawley 2007
+Timing: Schedule Variants
+
+95Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary of Assignments
+Until we meet again
+z Think about the architecture of your products. Is it 
+good? What is good architecture? 
+z Read about ambiguity, complexity and creativity. How 
+is it handled by architects in your enterprise? 
+z How are product goals set in your enterprise? How 
+are upstream influences identified and incorporated?
+z How are the downstream influences factored into the 
+architecting process?
+z Get to know an architect - try to develop a 
+mentor/mentee relationship
+z Search for and record architecting principles in life, 
+work, school
+z Be increasingly Globally Aware!

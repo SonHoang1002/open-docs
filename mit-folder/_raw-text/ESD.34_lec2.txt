@@ -1,0 +1,1361 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+IAP Lecture 2
+Ed Crawley
+January 11, 2007
+Rev 2.0
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Definitions - Reflections
+z Form 
+z Function
+z Reference PDP - “In the Small”
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ Reflections on Definitions?
+z System
+z Complex
+z Value 
+z Product
+z Principle/Method/Tool
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture
+z Consists of:
+– Function
+– Related by Concept
+– To Form
+Form
+Function
+Concept
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ Form - Reflections?
+z What is the form of simple systems?
+z How did you express the decompositional view?
+z How did you represent the graphical structural view?
+z How did you represent the list like structural view?
+z What do the lines in the graphical view, or 
+connections in the list view represent? Is it form?
+z Did you identify classes of structural relations?
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+Form Topics
+z Representing form and structure
+z Whole product system and use context
+z Boundaries and Interfaces
+z Attributes and states
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+Representations of Form
+Form can be represented by:
+• Words (in natural language - nouns)
+• Code
+• Illustrations, schematics, drawings
+• Each discipline has developed shorthand for 
+representing their discipline specific form
+But the form is the actual suggested 
+physical/informational embodiment.  
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Duality of Physical and Informational Form
+z Physical form can always be represented by 
+informational form (e.g. a building and a drawing of a 
+building)
+z Informational form must always be stored or encoded in 
+physical form (data in a CD, thought in neurons, poetry 
+in print)
+z So there is a duality of the physical and informational 
+world (styled after the duality of particles and waves)
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+Classes of Structural Connections
+z Connections that are strictly descriptions of 
+form:
+– Relative spatial location or topology (e.g. above, is next 
+to, is aligned with, is within, overlaps with, etc.) which 
+refers to previous arranging process
+– Information about assembly/implementation (e.g. 
+connected to, bolted to, compiled with, etc.) which 
+refers to previous assembling/implementing process
+z Connections that are description of function
+while operating (still to be discussed)
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Spatial/Topological Structure - Whistle
+Bump Cavity
+Hole
+Ramp StepChannel
+Product/system boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Touches
+Is a boundary of 
+Touches
+Is a 
+boundary of
+Touches
+Is a boundary 
+Is aligned with 
+Is a 
+boundary of
+Figure by MIT OCW.
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+z Defined: A structural link is the symbol that represents a 
+binary relationship between two objects.
+z There is also a backward direction relation.
+z Usually it is only necessary to show one, and the other 
+is implicit.
+OPM Object-Object Structural Links
+
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+Structural Link Examples
+Capacitor ResistorIs connected to
+Chair TableIs under
+Wheels Axelare bolted to
+Disk Bladescontacts 25
+Data ArrayIs stored in n
+Spatial
+(under)
+Topological
+(within)
+Topological
+(touching)
+Implementation
+Implementation
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+Spacial/Topological Structure - Whistle -
+“List”
+Bump Channel Ramp Hole Step Cavity
+Bump touches
+Channel touches touches
+Ramp touches Is bounded 
+by
+Is bounded 
+by
+touches
+Hole Is a 
+boundary of
+Is aligned 
+with
+Is a 
+boundary of
+Step Is a 
+boundary of
+Is aligned 
+with
+Is a 
+boundary of 
+Cavity touches Is bounded 
+by
+Is bounded 
+by 
+z “N-squared” matrix representation gives a list-like representation 
+of connectivity (read from left row-wise)
+z Symmetric (with transformation like “surrounds” to “within”, “is 
+a boundary of” to “is bounded by”)
+z Is non-causal - no sense of anything happening before anything 
+else
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+Implementation Structure - Whistle
+Bump Cavity
+Hole
+Ramp StepChannel
+Product/system boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Mech. 
+integral
+Mech. 
+integral
+Mech. 
+integral
+Mech. 
+integral
+Mech. 
+integral
+Figure by MIT OCW.
+
+15Massachusettsshowing one in the upp Institute of Technology  © Ed Crawley 2007 er and one in the lower diagonal
+Implementation Structure - Whistle - “List”
+Bump Channel Ramp Hole Step Cavity
+Bump Mech. 
+integral
+Channel Mech. 
+integral
+Mech. 
+integral
+Ramp Mech. 
+integral
+Mech. 
+integral
+Mech. 
+integral
+Hole 
+Step Mech. 
+integral
+Mech. 
+integral
+Mech. 
+integral
+Cavity Mech. 
+Integral
+Mech. 
+Integral
+z “N-squared” matrix representation gives a list-like representation 
+of connectivity (read from left row-wise)
+z Symmetric, non-causal - no sense of anything happening before 
+anything else
+z Spatial and implementation structure can be combined by 
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Issues Raised
+z How do you identify form independent of function?
+z How do you define the atomic part level? For hardware? 
+For software?
+z Can you “decompose” an integral part? Can a part be a 
+system? Can the features of a part be elements?
+z How do you represent the structural interconnections of 
+the elements, as opposed to their “membership” in a 
+system?
+z N occurrences of an element - count once or N times? 
+The class or each instance?
+z Connectors and interface elements - count as a separate 
+element - or combined with other elements? 
+z Are there important elements lost in implementation?
+z Are there elements important to delivering value other 
+than the product?
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+Form of Product/System - Questions
+z What is the product system? 
+z What are its principle elements? 
+z What is its formal structure (i.e. the structure of 
+form)?
+Figure by MIT OCW.
+
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+The Whole Product System
+z We usually architect form which is both a product and a system, 
+and which  we designate the product/system
+z Often for the product/system to deliver value, it must be joined and 
+supported by other supporting systems
+z Most often, one of the other objects in the supporting system is the 
+operator, the intelligent (usually human) agent who actually 
+operates the system when it is used
+z Together, the product/system, plus these other supporting systems, 
+constitute the whole product system
+?SupportingSystem 1 SupportingSystem 2 Operator SupportingSystem 3 SupportingSystem 4
+Whole Product System
+Product/system boundary
+Whole product system
+Figure by MIT OCW.
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Product/system 
+boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Operator
+Star
+Ring
+External
+Air
+Whistle
+610
+Whole Product System -
+Whistle
+Whole product system
+z The whistle only 
+requires an operator 
+and the air to work
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+Accountability for the Whole Product 
+System
+z Even though you only supply the product/system, 
+all of the other supporting systems must be present 
+and work to yield value -BEWARE!!!
+z They may fail to be present, or fail to work
+z You will find that you are:
+z Responsible for the product system - BUT
+z Accountable for the whole product system
+z What architecting approaches can you use to make sure 
+this is not a problem?
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+Use Context
+??SupportingSystem 1 SupportingSystem 2 Operator SupportingSystem 3 SupportingSystem 4
+Whole Product System
+Use Context
+Use Context
+System 4
+Use Context
+System 1
+Use Context
+System 2
+Use Context
+System 3
+Product/system boundary
+Whole product system
+Use context
+z The whole product system fits within a use context, which included 
+the objects normally present when the whole product operates, but 
+not necessary for it to deliver value
+z The product/system usually interfaces with all of the objects in the 
+whole product system, but not with the objects in the use context
+z The whole product system is usually use independent, while the 
+use context is context dependent
+z The use context informs the function of the product/system
+Figure by MIT OCW.
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Use Context Informs Design
+z The use context informs the requirements for and the 
+design of the product/system
+z For example:
+– Whistle use context: sporting event, toys, Olympic stadium?
+– Op amp use context: lab bench, consumer audio, spacecraft?
+The architect must have a view of three layers of the form: 
+The product/system, the whole product and use context
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Boundaries and Interfaces
+z The product/system is separated from other supporting 
+systems and the operand by a boundary
+z The boundary is vital to the definition of architecture, 
+because it defines:
+– What you architect, eventually deliver and are 
+responsible for
+– What is “fixed” or “constrained” at the boundaries
+z Everything that crosses a boundary must be facilitated 
+by an interface
+z It is good practice to draw the system boundary clearly 
+on any product/system representation, and identify 
+interfaces explicitly
+Figure by MIT OCW.
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+Camera - Whole Product & Boundaries
+zWhat are the boundaries?
+zWhat are the interfaces?
+zWhat is the whole product system
+zWhat is the use context?
+Digital Camera
+Battery
+Wrist Strap
+Memory Card
+TV/Video
+Video USB Port
+USB Port
+USB Port
+Software
+PC
+Mac
+Printer
+Card Reader
+USB interface cable
+Video cable
+Digital
+Supplied with camera
+Figure by MIT OCW.
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Op Amp - Whole Product System 
+Amp
+Ground
+InterfaceR2R1Op Amp
+-5 V
+Interface
+- input
+Interface
++ Input 
+Interface
++ 5 V
+Interface
+Output 
+circuitGround Input circuitPowersupply
+Whole 
+Amp System
+Product/system boundary
+Whole product system
+z There will be an interface to other elements of the whole product system
+z Therefore knowledge of these elements informs interface control
+Output
+Interface
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+Amp - Whole Product and Boundaries
+Ground
+R2
+R1
+-5  V  
+interface
+Output 
+interface
+- Input 
+interface
++ 5 V 
+interface
+Power
+supply
+Input 
+circuit
+Output 
+circuit
+Product/system boundary
+zWhat are the boundaries?
+zWhat are the interfaces?
+Ground
+Interface
+Vout
+R1
+R2-5  
+V 
++5 
+V 
+Vin
+-+
++ Input 
+interface
+Op Amp
+zWhat is the whole product system
+zWhat is the use context?
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+Amp - Whole 
+Product System 
+Boundary and 
+Interfaces
+lower diagonal spacial/topological, upper implementation
+resitor 1
+resistor 2
+op amp
++input interface
+-input interface
+output interface
+ground interface
+-5 V interface
++5 V interface
+input circuit
+output circuit
+power supply
+ground
+resitor 1 x e e
+resistor 2 x e e
+op amp x ei ei ei ei ei
++input interface t x e
+-input interface t t t x
+output interface t t x e
+ground interface t x e
+-5 V interface t x e
++5 V interface t x e
+input circuit t x e
+output circuit t x e
+power supply t t x e
+ground t t t t x
+t = touching, tangent
+b = boundary
+w = within, s = surrounding
+ov = overlapping
+da = at a specified distance or angular allignment
+m = mechanical connected (pressing, bolted, bonded, etc.)
+e = electrical connected (soldered, etc.)
+c = compilation with
+no second symbol implies connector of some sort
+i as second symbol implies integral
+Implementation
+Interfaces
+Spatial 
+Interfaces
+z In the matrix 
+representation, 
+the boundary 
+is between 
+rows and 
+columns
+z Interfaces are 
+clearly 
+identified in the 
+block off 
+diagonals
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+Software - Boundaries and Interfaces
+z The act of trying to draw a boundary will often reveal a 
+poorly controlled or ambiguous interface
+Product/system boundary Product/system boundary
+Interface?
+Interface?
+Procedure exchange_contents(List array, 
+number j)
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+return array
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Whole Product System - Code Bubblesort
+Procedure bubblesort (List array, number length_of_array)
+for i=1 to length_of_array
+for j=1 to length_of_array - i
+if array[ j ] > array [ j+1 ] then
+exchange_contents (array, j)
+end if
+end of j loop
+end of i loop
+return array
+End of procedure
+Procedure exchange_contents(List array, 
+number j)
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+return array
+Product/system boundary
+zWhat are the boundaries?
+zWhat are the interfaces?
+zWhat is the whole product system
+zWhat is the use context?
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+z The structural 
+interfaces in 
+software determine 
+sequence and 
+nesting, and 
+compilation
+z Example assumes that 
+procedure 
+exchange_contents is 
+separately compiled and 
+called
+Bubblesort -
+Whole Product 
+Boundary and 
+Interfaces
+lower diagonal spacial/topological
+upper implementation
+proc state
+I loop inst
+j loop inst
+if inst
+temp inst
+a(j+1) inst
+a(j) inst
+return state
+proc state x c c c c
+I loop inst f x c c c
+j loop inst fw x c c
+if inst fw x c
+temp inst fw x c c
+a(j+1) inst w f x c
+a(j) inst w f x
+return state f x
+t = touching, tangent
+b = boundary
+w = within, s = surrounding
+ov = overlapping
+da = at a specified distance or angular allignment
+f = follows in sequence, l = leads in sequence
+m = mechanical connected (pressing, bolted, bonded, etc.)
+e = electrical connected (soldered, etc.)
+c = compilation with
+no second symbol implies connector of some sort
+i as second symbol implies integral
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+Static Graphical User 
+Interface - Whole 
+Product?
+zWhat are the boundaries?
+zWhat are the interfaces?
+zWhat is the whole product system
+zWhat is the use context?
+Courtesy of ENPHO. Used with permission.
+
+Form of Whole Product - Questions
+z What is the product system? Its elements? Its formal 
+structure?
+z What are the supporting systems?
+z What is the whole product system?
+z What is the use context?
+z What are the boundaries?
+z What are the interfaces?
+Figure by MIT OCW.
+
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Characterization
+z Characterization/Exhibition
+– The relation between an object 
+and its features or attributes
+– Some attributes are states
+O
+A
+Decomposes to
+Has attribute of
+O
+A
+characterizes
+exhibits
+Skateboard
+Brand Length Velocity
+Figure by MIT OCW.
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+State
+z Defined: State is a situation in which the object 
+can exist for some positive duration of time (and 
+implicitly can or will change)
+z The combination of all the states describes the 
+possible configuration of the system throughout 
+the operational time.
+z The states can be shown with the object, or 
+alternatively within an attribute object.
+Skateboard Skateboard
+Stopped Rolling
+Velocity
+Stopped Rolling
+Figure by MIT OCW.
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Form
+z The physical/informational embodiment which exists, or 
+has the potential to exist
+z Objects + Structure (of form)
+z Is a system attribute, created by the architect
+z Product/system form combines with other supporting 
+systems (with which it interfaces at the boundary) to 
+form the whole product system that creates value
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture
+z Consists of:
+– Function
+– Related by Concept
+– To Form
+Form
+Function
+Concept
+
+37Massachusetts Institute of Technology  © Ed Crawley 2007
+Function Topics
+z Function
+z Emergence
+z Process + Operand
+z External function
+z Internal function
+
+38Massachusetts Institute of Technology  © Ed Crawley 2007
+Function -D e f i n e d
+z The activities, operations and transformations
+that cause, create or contribute to performance 
+(i.e. meeting goals)
+z The actions for which a thing exists or is 
+employed
+z Is a product/system attribute
+Figure by MIT OCW.
+
+39Massachusetts Institute of Technology  © Ed Crawley 2007
+Function - Described
+z Is conceived by the architect
+z Must be conceived so that goals can be achieved
+z Is what the system eventually does, the activities 
+and transformations which emerge as sub-
+function aggregate
+z Should initially be stated in solution neutral
+language
+
+40Massachusetts Institute of Technology  © Ed Crawley 2007
+Function - Other views:
+z Function is what the system does 
+Form is what the system is [Otto]
+z Function is the relationship between inputs and 
+outputs, independent of form [Otto]
+z Process is a transformation (creation or change) 
+applied to one or more objects in the system 
+[Dori]
+
+41Massachusetts Institute of Technology  © Ed Crawley 2007
+Function is Associate with Form
+z Change voltage proportional to current
+z Change voltage proportional to charge
+z React translation forces
+z Carry moment and shear
+z Conditionally transfer control
+z Assign a value
+if array[ j ] > array [ j+1 ] then
+temporary = array [ j+1 ]
+
+42Massachusetts Institute of Technology  © Ed Crawley 2007
+Emergence
+z As elements of form are brought together, new function 
+emerges
+z Unlike form, which simply aggregates, functions do not 
+combine in any “linear” way - it is often difficult or 
+impossible, a priori, to predict the emergent function
+z In design, the expected function may appear, may fail to 
+appear, or an unintended function may appear
+z It is exactly this property of emergence that gives 
+systems their “power”- definition of ‘system’:
+– A set of interrelated elements that perform a function, 
+whose functionality is greater than the sum of the 
+parts
+Figure by MIT OCW.
+
+43Massachusetts Institute of Technology  © Ed Crawley 2007
+Function Emerges as Form Assembles
+z Attenuate high frequency
+z Increase force
+z Amplify low frequency signal
+z Regulate shaft speed
+Vin Vout
+Fin Fout
+Vin
+Vout
+Emergent function depends on 
+elements and structure
+
+44Massachusetts Institute of Technology  © Ed Crawley 2007
+Function Emerges as Form Assembles
+Procedure bubblesort (List array, number length_of_array)
+for i=1 to length_of_array
+for j=1 to length_of_array - i
+if array[ j ] > array [ j+1 ] then
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+end if
+end of j loop
+end of i loop
+return array
+End of procedure
+Exchange 
+Contents
+Conditionally
+Exchange 
+Contents
+Sort from 
+small to 
+large
+
+45Massachusetts Institute of Technology  © Ed Crawley 2007
+Form - Function Sequence
+Reverse 
+engineering,
+Bottom up 
+design,
+Design 
+knowledge 
+capture
+Mapping
+Form 
+definition
+Function 
+definition
+Mapping
+Conceptual 
+design
+
+46Massachusetts Institute of Technology  © Ed Crawley 2007
+Design vs. Reverse Engineering
+z In (conventional, top down) design, you know the 
+functions (and presumably the goals) and try to 
+create the form to deliver the function
+z In reverse engineering, you know the form, and 
+are trying to infer the function (and presumably 
+eventually the goals)
+z In bottom up design, you build elements and 
+discover what emerges as they come together
+z In design knowledge capture, you record the 
+function along with the design of form
+
+47Massachusetts Institute of Technology  © Ed Crawley 2007
+Exercise:  Reverse Engineering of Function
+z This is an exercise to demonstrate reverse engineering 
+of function of objects with which you are not personally 
+familiar
+z What is the function of:
+– A notebook?
+– A pen?
+– A glass?
+– A set of instructions?
+– An object I give you?
+z Examine the object, and describe its form
+z Try to discern and describe its function
+Function and form are completely separate attributes.
+Even when form is evident, function is not easily inferred without 
+a working knowledge of operation, operand and whole product system.
+
+48Massachusetts Institute of Technology  © Ed Crawley 2007
+Function = Process + Operand
+z Note that function consists of the action or  
+transformation + the operand, an object which is acted 
+on, or transformed:
+– Change voltage
+– React force
+– Amplify signal
+– Regulate shaft speed
+– Contain liquid
+– Lay down ink
+– Stop an operator
+– Count circles
+z The action is called a process
+z The object that is acted upon is called the operand
+Figure by MIT OCW.
+
+49Massachusetts Institute of Technology  © Ed Crawley 2007
+Processes
+z Defined: A process is the pattern of transformation 
+applied to one or more objects
+z Cannot hold or touch a process - it is  fleeting
+z Generally creation, change, or destruction
+z A process relies on at least one object in the pre-
+process set
+z A process transforms at least one object in the pre-
+process set
+z A process takes place along a time line
+z A process is associated with a verb
+Processing
+
+50Massachusetts Institute of Technology  © Ed Crawley 2007
+About Processes
+z Processes are pure activity or transformation:
+– Transporting 
+– Transporting 
+– Powering
+– Supporting
+– Sorting
+z Time dependent, they are there and gone
+z What a system does, vs. what it is (the form)
+z Imagine a process that has been important to you -
+can you recreate it?
+z Try to draw a picture of a process
+
+51Massachusetts Institute of Technology  © Ed Crawley 2007
+The Operand
+z Operand is the object which is acted upon by the 
+process, which may be created, destroyed, or altered:
+– Image is captured
+– Signal is amplified
+– Array is sorted
+z You often do not supply the operand, and there may be 
+more than one operand to consider
+z The double arrow is the generic link, called “effecting”
+z A single headed arrow can be used to represent 
+“producing” or “consuming”
+ProcessingOperand
+Function
+
+52Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Related Operand
+z The product/system always operates on one or 
+several operands
+z It is the change in an attribute of one of an operands 
+that is associated with the delivered value of the 
+product system 
+z Because of its importance to value, it is useful to 
+specially designate this value related operand
+Value related
+Operand
+Whole product System
+Product/
+System
+Supporting 
+Systems
+Other
+Operands
+610
+
+53Massachusetts Institute of Technology  © Ed Crawley 2007
+Camera - Value Related Operand?
+What’s the value related operand?
+Figure by MIT OCW.
+Product/system boundary
+
+54Massachusetts Institute of Technology  © Ed Crawley 2007
+External Function Produces Benefit
+z The system function which emerges at the highest level 
+is the externally delivered function = process + value 
+related operand
+– Amplify low frequency signal
+– Regulate shaft speed
+– Sort Array
+– Ensure safety of passenger
+– Provide shelter to homeowner
+z It is the external function that delivers benefit, and 
+therefore value, of the product system
+z The form generally is an instrument of delivering benefit, 
+but is not unique to the benefit delivery
+– If a competitor delivers the same function with another object 
+which is superior, they will displace you
+610
+Figure by MIT OCW.
+
+55Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered Function
+z External function is 
+delivered across a 
+boundary - the value 
+related operand is 
+external to the 
+product/system
+z External function is 
+linked to the 
+delivery of benefit
+610
+zWhat is the externally 
+delivered function?
+zWhat is the value related operand?
+zWhat are the value related states?
+Figure by MIT OCW.
+External function at the 
+interface: supporting +
+vehicle
+product/system boundary
+
+56Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered Function
+610
+Figure by MIT OCW.
+Product/system boundary
+External function at the
+interface: produce +
+digital image
+External function at the
+interface: produce +
+analog image
+
+57Massachusetts Institute of Technology  © Ed Crawley 2007
+Form Enables Process
+z Enablers of a process is an object that must be present 
+for that process to occur, but does not change as a 
+result of the occurrence of the process
+z Examples:
+– Capturing by a digital camera
+– Amplifying with an operational amplifier
+– Sorting with bubblesort routine
+z The “arrow” with the circular end represents and 
+enabler, which can be an instrument (non-human) or an 
+agent (human)
+Processing Instrument Object
+
+58Massachusetts Institute of Technology  © Ed Crawley 2007
+Three Core Ideas
+z Operand - an element of form external to the product 
+system, whose change is related to benefit and therefore 
+value
+z Process - the transformation or change in the operand
+z Form - the instrument that executes the transformation 
+(and attracts cost!) and consists of elements plus 
+structure
+z Wouldn’t it be nice if we had a semantically exact way of 
+representing these 3 core ideas
+z How can we do with conventional representations?
+610
+
+59Massachusetts Institute of Technology  © Ed Crawley 2007
+Semantically Exact Representation with OPM
+z Architecture is made up of operands + processes 
+(functions) plus instrument object (form)
+z Examples:
+– Image is captured by digital camera
+– Low frequency signal is amplified with an operational amplifier
+– Tone is created by whistle
+– Array is sorted by bublesort routine
+Processing Instrument ObjectOperand
+Function Form
+610
+
+60Massachusetts Institute of Technology  © Ed Crawley 2007
+Value Related State Representation with 
+OPM
+z Architecture delivers value when the externally delivered 
+operand changes its state through the action of the 
+processes enabled by instrument object (form)
+z Examples:
+– Image (none to existing) is captured by digital camera
+– Low frequency signal (low amplitude to higher amplitude) is 
+amplified with an operational amplifier
+– Tone (none to existing) is created by whistle
+– Array (unsorted to sorted) is sorted by bubblesort routine
+Processing Instrument Object
+Operand
+Value Related Function Form
+Value states
+Existing Desired
+
+61Massachusetts Institute of Technology  © Ed Crawley 2007
+A Tool - Object Process Modeling
+z Object: that which has the potential 
+of stable, unconditional existence for 
+some positive duration of time. 
+z Form is the sum of objects and their 
+structure
+z Process: the pattern of 
+transformation applied to one or 
+more objects. Processes change an 
+object or its attribute.
+z Function emerges from processes 
+acting on operands
+z All links between objects and 
+processes have precise semantics
+Objects
+Processes
+
+62Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM Process Links
+z P changes O (from state A to B).
+z P affects O 
+z P yields or creates O
+z P consumes or destroys O
+z O is an agent of P (agent)
+z O is and instrument of P
+z P occurs if O is in state A
+z P1 invokes P2 directly
+TransportingPerson
+Here
+There
+TransportingPerson
+TransportingEntropy
+TransportingEnergy
+TransportingOperator
+TransportingSkateboard
+PurchasingMoney
+Enough
+None
+Purchasing Transporting
+
+63Massachusetts Institute of Technology  © Ed Crawley 2007
+Value
+z Value is benefit at cost
+– Simple metrics are benefit/cost, benefit - cost, etc.
+– Sometimes more complex metrics
+z Benefit is worth, importance, utility as judged by a 
+subjective observer (the beneficiary)
+z Another view: 
+– Value: “how various stakeholders find particular 
+worth, utility, benefit, or reward in exchange for their 
+respective contributions to the enterprise” [Murman, 
+et al. LEV p178]
+Figure by MIT OCW.
+
+64Massachusetts Institute of Technology  © Ed Crawley 2007
+Value and Architecture
+z Value is benefit at cost
+z Benefit is driven by function 
+externally delivered across the 
+interface
+z Cost is driven by the design of the 
+form - “parts attract cost”
+z The relationship of function to form is 
+therefore the relationship of benefit to 
+cost
+A good architecture delivers benefit at competitive cost
+Form
+FunctionConcept
+Benefit
+Cost
+
+65Massachusetts Institute of Technology  © Ed Crawley 2007
+Value - Questions?
+z What is the value related operand?
+z What are the value related states that change?
+z What is the externally delivered function?
+Figure by MIT OCW.
+
+
+66Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered Function Emerges from 
+Internal Function
+z System function which emerges at the highest level is 
+the externally delivered function which usually acts on 
+the operand
+– Example: amplify low frequency signal
+z Systems have internal functions, which combine to 
+produce the emergent externally delivered function
+– Example: amplify …, change voltage ...
+
+67Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered and Internal Function
+z External function is External function at the 
+ interface: supporting +vehicle Carrying +
+Product/system boundary tension
+delivered across a
+boundary - the 
+operand is external 
+to the 
+product/system
+z External function 
+emerges from 
+internal function, 
+which is executed 
+by form
+610
+Interfacing + Reacting + Carrying +
+Bridge and loads compression
+ramp Figure by MIT OCW.
+
+68Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered and Internal Function
+610
+Figure by MIT OCW.
+Product/system boundary
+Restrain + Capture + Store + digital image External function at the
+camera digital image interface: produce +
+digital image
+Power + Interface + External function at the
+camera Camera and interface: produce +
+computer analog image
+
+69Massachusetts Institute of Technology  © Ed Crawley 2007
+Externally Delivered and Internal Function
+External function is External function at the 
+delivered across a interface: supporting +vehicle Carrying +
+z 
+boundary - the Pr
+operand is external 
+to the 
+product/system
+z External function 
+emerges from 
+i on, 
+w uted 
+b
+nternal functi
+hich is exec
+y form
+oduct/system boundary tension
+610
+Carrying +Interfacing + Reacting + 
+Bridge and loads compression
+ramp Figure by MIT OCW.
+
+70Massachusetts Institute of Technology  © Ed Crawley 2007
+Delivered and Internal Function - Whistle
+Bump Cavity
+Hole
+Ramp StepChannel
+Product/system boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Touches
+Is a boundary of 
+Touches
+Is a 
+boundary of
+Touches
+Is a boundary 
+Is aligned with 
+Is a 
+boundary of
+z What is the value related operand and 
+states?
+z What is the externally delivered function?
+z What are the internal 
+functions?
+z How are they mapped to form?
+Figure by MIT OCW.
+
+71Massachusetts Institute of Technology  © Ed Crawley 2007
+Ground
+R2
+R1
+-5  V  
+interface
+Output 
+interface
+- Input 
+interface
++ 5 V 
+interface
+Power
+supply
+Input 
+circuit
+Output 
+circuit
+Product/system boundary
+Ground
+Interface
+Vout
+R1
+R2-5  
+V 
++5 
+V 
+Vin
+-+
++ Input 
+interface
+Op Amp
+Delivered and Internal Function - Amp
+z What is the value related operand and 
+states?
+z What is the externally delivered function?
+z What are the internal 
+functions?
+z How are they mapped to form?
+
+72Massachusetts Institute of Technology  © Ed Crawley 2007
+Procedure bubblesort (List array, number length_of_array)
+for i=1 to length_of_array;
+for j=1 to length_of_array - i;
+if array[ j ] > array [ j+1 ] then
+exchange_content (array[ j ], array [ j+1 ])
+end if
+end of j loop
+end of i loop
+return array
+End of procedure
+Procedure exchange_contents(List array, 
+number i, number j)
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+return array
+Product/system boundary
+Delivered and Internal Function - Bubblesort
+z What is the value related operand and 
+states?
+z What is the externally delivered function?
+z What are the internal 
+functions?
+z How are they mapped to form?
+
+73Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Function
+z Function is the activity, operations, transformations that 
+create or contribute to performance - it is operand + 
+process
+z Function is enabled by form, and emerges as form is 
+assembled
+z Externally function delivered to the operand is linked to 
+the benefit of a product/system
+z Function is a system attribute, conceived by the 
+architect
+
+74Massachusetts Institute of Technology  © Ed Crawley 2007
+Reference PDP
+z PDP of Ulrich and Eppinger gives an “in the box”
+reference
+z Starting point for Identify/Develop/Compare/Synthesize 
+process
+z Usable method for small groups (what are the 
+principles?)
+
+75Massachusetts Institute of Technology  © Ed Crawley 2007
+¿Reference PDP?
+z Why would you have a formalized PDP?
+z What are the essential features of the Ulrich and 
+Eppinger model?
+z What are the key limiting assumptions?
+z How does this compare with the PDP in your enterprise?
+
+76Massachusetts Institute of Technology  © Ed Crawley 2007
+Goals of a Structured PDP
+z Customer-focused products
+z Competitive product designs
+z Team coordination
+z Reduce time to introduction
+z Reduce cost of the design
+z Facilitate group consensus
+z Explicit decision process
+z Create archival record
+z Customizable methods
+Ref: Ulrich and Eppinger
+
+77Massachusetts Institute of Technology  © Ed Crawley 2007
+Key Assumptions of U&E PDP
+z In the “small”
+z Technology in hand
+z Not a corporate stretch
+z Relatively simple (probably physical) form
+z Build/Bust developmental approach
+z Focused on “the PDP proper”, not upstream + life cycle
+
+78Massachusetts Institute of Technology  © Ed Crawley 2007
+PDP
+In the SMALL v. In the LARGE
+SIMPLE
+Countable interfaces
+Parts identifiable
+STATIC
+Goals & resources 
+constant
+SMALL
+Team at a table
+COMPLEX
+Very many interfaces
+Parts abstracted
+EVOLVING
+Goals & resources
+changing
+LARGE
+Big team
+v.
+v.
+v.
+Product:
+Process:
+Organization:
+Other Factors: clean slate vs. reuse of legacy components; single 
+product vs. platform; collocated vs. distributed team; team in 
+enterprise vs. supplier involvement  
+Org
+Product
+Process
+
+79Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Reference PDP
+z A useful reference for in-the-small consumer focused 
+mechanically based products
+z A tool to reduce ambiguity by defining roles and 
+processes
+z Adaptable to a variety of contexts, staying within the key 
+assumptions
+
+80Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary to Date
+Architecture?
+Form = Elements + Structure
+Function = Process + Operand
+Form in the instrument of function
+Processing
+Instrument 
+Form
+Operand

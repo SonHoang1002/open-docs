@@ -1,0 +1,629 @@
+ 
+ 
+ 
+  
+6.033 Spring 2018
+Lecture #17 
+• Isolation
+• Conflict serializability
+• Conflict graphs
+• Two-phase locking
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+  
+ 
+  
+  
+    
+    
+ 
+    
+  
+goal: build reliable systems from unreliable components 
+the abstraction that makes that easier is 
+transactions, which provide atomicity and 
+isolation, while not hindering performance 
+shadow copies (simple, poor 
+performance) or logs (better atomicity 
+performance, a bit more complex) 
+?isolation 
+eventually, we also want transaction-based syst ems to 
+be distributed: to run across multiple machines 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+  
+ 
+  
+  
+    
+ 
+    
+ 
+    
+  
+goal: build reliable systems from unreliable components 
+the abstraction that makes that easier is 
+transactions, which provide atomicity and 
+isolation, while not hindering performance 
+shadow copies (simple, poor 
+performance) or logs (better atomicity 
+performance, a bit more complex) 
+two-phase locking isolation 
+eventually, we also want transaction-based syst ems to 
+be distributed: to run across multiple machines 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+    
+     
+    
+   
+  
+goal: run transactions T1, T2, .., TN concurrently, and
+have it “appear” as if they ran sequentially 
+T1 T2 
+begin begin 
+read(x) write(x, 20) 
+tmp = read(y) write(y, 30) 
+write(y, tmp+10) commit 
+commit 
+naive approach: actually run them sequentially, via 
+(perhaps) a single global lock 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+    
+     
+    
+  
+goal: run transactions T1, T2, .., TN concurrently, and
+have it “appear” as if they ran sequentially 
+what does this even mean? 
+T1 T2 
+begin begin 
+read(x) write(x, 20) 
+tmp = read(y) write(y, 30) 
+write(y, tmp+10) commit 
+commit 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+  
+  
+  
+T1 T2 
+begin begin 
+read(x) write(x, 20) 
+tmp = read(y) write(y, 30) 
+write(y, tmp+10) commit 
+commit 
+T2: write(x, 20) 
+T1: read(x) 
+T2: write(y, 30) 
+T1: tmp = read(y) 
+T1: write(y, tmp+10) 
+at end: 
+x=20, y=40 
+possible sequential schedules 
+T1 -> T2: x=20, y=30 
+T2 -> T1: x=20, y=40 
+T1: read(x) 
+T2: write(x, 20) 
+T1: tmp = read(y) 
+T2: write(y, 30) 
+T1: write(y, tmp+10) 
+at end: 
+x=20, y=10
+(assume x, y initialized to zero) 
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+  
+  
+  
+T1 T2 
+begin begin 
+read(x) write(x, 20) 
+tmp = read(y) write(y, 30) 
+write(y, tmp+10) commit 
+commit 
+T2: write(x, 20) 
+T1: read(x) 
+T2: write(y, 30) 
+T1: tmp = read(y) 
+T1: write(y, tmp+10) 
+at end: 
+x=20, y=40 
+possible sequential schedules 
+T1 -> T2: x=20, y=30 
+T2 -> T1: x=20, y=40 
+T1: read(x) 
+T2: write(x, 20) 
+T2: write(y, 30) 
+T1: tmp = read(y) 
+T1: write(y, tmp+10) 
+at end: 
+x=20, y=40 
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+  
+  
+  
+      
+  
+  
+T1 T2 
+begin begin possible sequential schedules 
+read(x) write(x, 20) T1 -> T2: x=20, y=30tmp = read(y) write(y, 30) T2 -> T1: x=20, y=40write(y, tmp+10) commit 
+commit 
+T2: write(x, 20) T1: read(x) // x=0 
+T1: read(x) T2: write(x, 20) 
+T2: write(y, 30) T2: write(y, 30) 
+T1: tmp = read(y) T1: tmp = read(y) // y=30 
+T1: write(y, tmp+10) T1: write(y, tmp+10) 
+at end: at end: 
+x=20, y=40 x=20, y=40 
+In the second schedule, T1 reads x=0 and y=30; those  two
+reads together aren’t possible in a sequential schedule. 
+is that okay? 
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+ 
+        
+ 
+  
+it depends. 
+there are many ways for multiple transactions to 
+“appear” to have been run in sequence; we say 
+there are different notions of serializability. what 
+type of serializability you want depends on what your 
+application needs. 
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+ 
+       
+  
+conflicts 
+two operations conflict if they operate on the same 
+object and at least one of them is a write. 
+T1 T2 
+begin begin
+T1.1 read(x) T2.1 write(x, 20)
+T1.2 tmp = read(y) T2.2 write(y, 30)
+T1.3 write(y, tmp+10) commit 
+commit 
+conflicts 
+T1.1 read(x) and T2.1 write(x, 20)
+T1.2 tmp = read(y) and T2.2 write(y, 30)
+T1.3 write(y, and T2.2 write(y, 30) 
+tmp+10) 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+ 
+       
+         
+         
+        
+  
+  
+conflicts 
+two operations conflict if they operate on the same 
+object and at least one of them is a write. 
+in any schedule, two conflicting operations A and B will 
+have an order: ei
+ther A is executed before B, or B is 
+executed before A. we’ll call this the order of the conflict 
+(in that schedule). 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+T1 T2 
+begin begin
+T1.1 read(x) T2.1 write(x, 20)
+T1.2 tmp = read(y) T2.2 write(y, 30)
+T1.3 write(y, tmp+10) commit 
+commit 
+conflicts 
+T1.1 read(x) and T2.1 write(x, 20)
+T1.2 tmp = read(y) and T2.2 write(y, 30)
+T1.3 write(y, and T2.2 write(y, 30) 
+tmp+10) 
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+     
+  
+  
+T1 T2 
+begin begin
+T1.1 read(x) T2.1 write(x, 20)
+T1.2 tmp = read(y) T2.2 write(y, 30)
+T1.3 write(y, tmp+10) commit 
+commit 
+conflicts 
+T1.1 read(x) -> T2.1 write(x, 20)
+T1.2 tmp = read(y) -> T2.2 write(y, 30)
+T1.3 write(y, -> T2.2 write(y, 30) 
+tmp+10) 
+if we execute T1 before T2, within any conflict, T1’s
+operation will occur first 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+     
+  
+  
+T1 T2 
+begin begin
+T1.1 read(x) T2.1 write(x, 20)
+T1.2 tmp = read(y) T2.2 write(y, 30)
+T1.3 write(y, tmp+10) commit 
+commit 
+conflicts 
+T1.1 read(x) <- T2.1 write(x, 20)
+T1.2 tmp = read(y) <- T2.2 write(y, 30)
+T1.3 write(y, <- T2.2 write(y, 30) 
+tmp+10) 
+if we execute T2 before T1, within any conflict, T2’s
+operation will occur first 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+ 
+       
+ 
+        
+      
+ 
+  
+conflicts 
+two operations conflict if they operate on the same 
+object and at least one of them is a write. 
+conflict serializability 
+a schedule is conflict serializable if the order of all of its 
+conflicts is the same as the order of the conflicts in some 
+sequential schedule. 
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+      
+            
+ 
+    
+  
+  
+conflicts a schedule is conflict serializable if the order of all of 
+its conflicts is the same as the order of the conflicts in 
+T1.1, T2.1 some sequential schedule. T1.2, T2.2 
+(here, that means we will see one transaction’s — T1’s or T2’s —T1.3, T2.2 operation occurring first in each conflict) 
+T2.1: write(x, 20) T1.1: read(x) 
+T1.1: read(x) T2.1: write(x, 20) 
+T2.2: write(y, 30) T2.2: write(y, 30) 
+T1.2: tmp = read(y) T1.2: tmp = read(y) 
+T1.3: write(y, tmp+10) T1.3: write(y, tmp+10) 
+T2.1 -> T1.1 T1.1 -> T2.1 
+T2.2 -> T1.2 T2.2 -> T1.2 
+T2.2 -> T1.3 T2.2 -> T1.3 
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+     
+ 
+ 
+  
+conflict graph 
+edge from Ti to Tj iff Ti and Tj have a conflict between
+them and the first step in the conflict occurs in Ti
+T2: write(x, 20) 
+T1: read(x) 
+T2: write(y, 30) 
+T1: tmp = read(y) 
+T1: write(y, tmp+10) 
+T2.1 -> T1.1 
+T2.2 -> T1.2 
+T2.2 -
+> T1.3 
+T1: read(x) 
+T2: write(x, 20) 
+T2: write(y, 30) 
+T1: tmp = read(y) 
+T1
+: write(y, tmp+10) 
+T1.1 -> T2.1 
+T2.2 -> T1.2 
+T2.2 -
+> T1.3 
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+     
+ 
+ 
+    
+ 
+  
+conflict graph 
+edge from Ti to Tj iff Ti and Tj have a conflict between
+them and the first step in the conflict occurs in Ti
+T2: write(x, 20) T1: read(x) 
+T1: read(x) T2: write(x, 20) 
+T2: write(y, 30) T2: write(y, 30) 
+T1: tmp = read(y) T1: tmp = read(y) 
+T1: write(y, tmp+10) T1: write(y, tmp+10) 
+T2 T1 T2 T1 
+a schedule is conflict serializable iff it has an acyclic 
+conflict graph 
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+   
+    
+   
+  
+problem: how do we generate schedules that are 
+conflict serializable? generate all possible 
+schedules and check their conflict graphs? 
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+ 
+  
+  
+ 
+ 
+   
+    
+         
+    
+  
+solution: two-phase locking (2PL) 
+1. each shared variable has a lock
+2. before any operation on a v ariable,
+the transaction must acquire the
+corresponding lock
+3. after a transaction releases a lock,
+it may not acquire any 
+other locks
+we will usually release locks after commit or abort, 
+which is tec
+hnically strict two-phase locking 
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+ 
+       
+        
+   
+      
+   
+       
+      
+  
+2PL produces a conflict-serializable schedule
+(equivalently, 2PL produces a conflict graph without a cycle) 
+proof: suppose not. then a cycle exists in the conflict graph 
+T1
+x1
+T2
+x2
+T3
+x3
+… 
+xk-1 
+Tk
+to cause the conflict, each pair of 
+conflicting trans
+actions must have some 
+shared variable that they conflict on 
+xk
+T1 acquires 
+T2 acquires 
+x1.lock 
+x1.lock 
+in the schedule, each pair of transaction s 
+needs 
+to acquire a lock on their shared 
+variable 
+T2 acquires 
+T3 acquires 
+x2.lock 
+x2.lock in order for the schedule to progress, T1 must have released its lock on x1
+… before T2 acquired it
+Tk acquires x k.lock 
+T1 acquires x k.lock 
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+ 
+       
+        
+   
+      
+   
+       
+      
+ 
+  
+2PL produces a conflict-serializable schedule
+(equivalently, 2PL produces a conflict graph without a cycle) 
+proof: suppose not. then a cycle exists in the conflict graph 
+T1
+x1
+T2
+x2
+T3
+x3
+… 
+xk-1 
+Tk
+to cause the conflict, each pair of 
+conflicting trans
+actions must have some 
+shared variable that they conflict on 
+xk
+T1 acquires 
+T1 releases 
+T2 acquires 
+T2 acquires 
+T3 acquires 
+x1.lock 
+x1.lock 
+x1.lock 
+x2.lock 
+x2.lock 
+in the schedule, each pair of transaction s 
+needs 
+to acquire a lock on their shared 
+variable 
+in order for the schedule to progress, 
+T1 must have released its lock on x1
+before T2 acquired it
+… 
+Tk acquires 
+T1 acquires 
+xk.lock 
+xk.lock 
+contradiction: this is not a  v alid 2PL 
+schedule 
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+             
+        
+        
+ 
+  
+T1 
+acquire(x.lock) 
+read(x) 
+acquire(y.lock) 
+read(y) 
+release(y.lock) 
+release(x.lock) 
+T2 
+acquire(y.lock) 
+read(y) 
+acquire(x.lock) 
+read(x) 
+release(x.lock) 
+release(y.lock) 
+problem: 2PL can result in deadlock 
+6.033 | spring 2018 | Katrina LaCurts 
+23
+
+             
+        
+        
+  
+  
+T1 
+acquire(x.lock) 
+read(x) 
+acquire(y.lock) 
+read(y) 
+release(y.lock) 
+release(x.lock) 
+“solution”: global 
+T2 
+acquire(y.lock) 
+read(y) 
+acquire(x.lock) 
+read(x) 
+release(x.lock) 
+release(y.lock) 
+ordering on locks 
+6.033 | spring 2018 | Katrina LaCurts 
+24
+
+             
+        
+        
+ 
+    
+  
+T1 
+acquire(x.lock) 
+read(x) 
+acquire(y.lock) 
+read(y) 
+release(y.lock) 
+release(x.lock) 
+T2 
+acquire(y.lock) 
+read(y) 
+acquire(x.lock) 
+read(x) 
+release(x.lock) 
+release(y.lock) 
+better solution: take advantage of 
+atomicity and abort one of the transactions! 
+6.033 | spring 2018 | Katrina LaCurts 
+25
+
+                      
+  
+                 
+  
+                
+  
+  
+   
+   
+          
+      
+     
+  
+performance improvement: allow concurrent 
+reads with reader- and writer-locks 
+T1 T2 
+acquire(x.reader_lock) acquire(x .reader_lock) 
+read(x) read(x) 
+acquire(y.writer_lock) acquire( y.writer_lock) 
+write(
+y) write(y) 
+release(y.writer_lock) release( y.writer_lock) 
+release(
+x.reader_lock) release(x .reader_lock) 
+multipl
+e transactions can hold reader locks for the same variable 
+at once. a transacti on 
+can only hold a writer lock for a variable if 
+there are no other locks held for that variable 
+6.033 | spring 2018 | Katrina LaCurts 
+26
+
+    
+         
+     
+  
+  
+     
+  
+• Different types of serializability allow us to specify
+precisely what we want when we run transactions in
+parallel. Conflict-serializability is common in practice.
+• Two-phase locking allows us to generate conflict
+serializable schedules. We can improve its performance
+by allowing concurrent reads via reader - and writer-locks.
+6.033 | spring 2018 | Katrina LaCurts 
+27
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+28

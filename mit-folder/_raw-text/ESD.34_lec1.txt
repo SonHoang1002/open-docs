@@ -1,0 +1,1130 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+Introduction to
+System Architecture
+Architecture to Value
+Ed Crawley
+January 5, 2007
+Rev 2.0
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Objectives, Expectations and Administration
+z Key Ideas
+– Architecture
+– Architecting
+– the Product Development Process (PDP)
+z Form of Systems
+z Intro to Upstream Processes
+– Technology infusion
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+The Opportunity
+z We conceive, design, implement 
+and operate complex and 
+sometimes unprecedented 
+systems
+z Do they meet stakeholder 
+needs?
+z Do they integrate easily, evolve 
+flexibly, operate simply and 
+reliably?
+z Well architected systems do!
+– Link benefit to cost
+– High leverage as early design 
+process
+– Source of competitive advantage
+Source: NASA
+Source: NOAA
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+Students will be able to:
+Apply the principles, processes and tools of system 
+architecture to:
+- Structure and lead the early, conceptual phases 
+of the product development process
+- Support the process through development, 
+deployment, operation and evolution
+Overall Learning Objectives
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+y Discuss systems, systems thinking, 
+products (value and competitive advantage), 
+the PDP and the “role” of architecting in the 
+PDP.
+y Analyze and critique the architecture of 
+existing systems, create the architecture of 
+new or improved systems, and produce the 
+deliverables of the architect.
+Learning Objectives
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+y Drive the ambiguity from the upstream 
+process by defining the context and 
+boundaries of the system, interpreting 
+needs, setting goals and defining the 
+externally delivered functions.
+y Create the  concept for the system, 
+consisting of internal function and form, 
+while thinking “holistically and out of the 
+box” when necessary.
+y Manage the evolution of complexity in the 
+system so that goals are met and function is 
+delivered, while the system is 
+comprehendible to all during its design, 
+implementation, operation and evolution.
+Learning Objectives
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+y Challenge and critically evaluate current 
+modes of architecting, and create new 
+synthesized modes.
+y Develop for themselves the guiding 
+principles for successful architecting.
+To prepare students for their first, second, 
+and third jobs after SDM.
+This is a course in how to think, not what to think
+Learning Objectives
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Implicit Subject Objectives
+z To be synthetic
+– Scale up existing knowledge
+– Tie together SDM Curriculum
+z To encourage a global view
+z To learn from best practice in architecture (search)
+z To learn from new thought in architecture (re-search)
+z To leave you with a set of personalized tools for 
+architecting
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+Expectations
+z Act professionally
+z Think creatively
+z Work in a scholarly manner
+z Speak and write clearly and concisely
+z Respond punctually
+z Whine little
+z Have fun
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture - Pedagogy
+Principles
+Methods & 
+Tools
+ThemesCasesFrameworksRoles &Definitions
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+Master Schedule
+Jan: “Architecture 400”
+Vocabulary
+Architecture
+Analysis of architecture - what is architecture?
+Sept - Nov: “Architecture 401”
+Upstream processes (leading to the product case)
+Downstream processes
+Cases and critique or architecture
+Synthesis of Architecture - how to make good architecture
+Dec: “Architecture 537”
+Advanced (but important) topics
+– Supply chains
+– Platforms and product families
+– Reuse of legacy elements
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+Schedule, etc.
+z IAP vs. Second “Half”
+z Detailed IAP schedule
+z Syllabus Package
+z Opportunity Sets
+– 1, 2, 3, 4 in assigned groups
+– 5 (Technology Search) in organic groups of 
+like interest (3±1)
+z Texts
+z Grading
+z Dissemination
+z Academic Integrity
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+¿What is Architecture?
+z What do you think?
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture
+z The structure, arrangements or configuration of system elements 
+and their internal relationships necessary to satisfy constraints and 
+requirements.  (Frey)
+z The arrangement of the functional elements into physical blocks.
+(Ulrich & Eppinger)
+z An abstract description of the entities of a system and the 
+relationship between those entities (Crawley et al.)
+z The embodiment of concept, and the allocation of 
+physical/informational function to elements of form, and definition 
+of interfaces among the elements and with the surrounding context.  
+(Crawley)
+
+15Massachusetts Institute of Technology  © Ed Crawley 2007
+Definitions - Analysis and Synthesis
+z What do the definitions have in common?
+z What distinguishes them?  What is the underlying cause 
+for this distinction?
+z Synthesize a definition that works for you, in your job 
+context.
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Consensus Definition: Architecture1
+z The embodiment of concept, and the allocation of 
+physical/informational function to elements of form, and 
+definition of interfaces among the elements and with the 
+surrounding context.  (Crawley)
+z Consists of:
+– Function
+– Related by Concept
+– To Form
+Form
+FunctionConcept
+1 - when I introduce a term and define it, I will underline 
+on the chart and include it in the glossary
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture – Civil
+Source - www.coolhouseplans.com
+Concept?
+Function?
+Form?
+Interfaces?
+Context?
+Several diagrams removed due to copyright restrictions.
+Comparing plans for beach house and “Florida” house, from 
+http://www.coolhouseplans.com
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture – Mechanical
+Cable-stayed bridge
+Suspension Bridge
+Concept?
+Function?
+Form?
+Interfaces?
+Context?
+Courtesy of Rich Niewiroski Jr. 
+(http://www.projectrich.com/gallery)
+Figure by MIT OCW.
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture -
+Communications Network
+Concept?
+Function?
+Form?
+Interfaces?
+Context?
+Digital Camera
+Battery
+Wrist Strap
+Memory Card
+TV/Video
+Video USB Port
+USB Port
+USB Port
+Software
+PC
+Mac
+Printer
+Card Reader
+USB interface cable
+Video cable
+Digital
+Supplied with camera
+Figure by MIT OCW.
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept?
+Function?
+Form?
+Interfaces?
+Context?
+Courtesy of ENPHO. Used with permission.
+Architectural - Instructional
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture - Thought Assignment
+z What is the architecture of common things? What is the 
+concept, function, form, interfaces and context?
+z What is the architect trying to achieve?
+z What makes an architecture “good”?
+Try to internalize what constitutes “an architecture.”
+This will appear on OS 2 and 4.
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecting
+z An architect works by applying:
+– Relevant modes of thought, including creative and 
+critical thinking
+– The approaches of architecting, including holism, 
+focus, etc.
+– The principles, processes and tools of architecting
+– And a lot of wisdom and experience!
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Suggested Process for Critical 
+Thinking
+z Opportunity, challenge, or reference example 
+identified in context
+z Thinker develops an approach option
+z Thinker surveys other approach options, then 
+compares the “surveyed” options with each other 
+and the “developed” approach option
+z Thinker synthesizes a context-appropriate “best”
+option
+Figure by MIT OCW.
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+Example: Critical Thinking
+z We just did this when talking about architecture:
+– We identified the opportunity when I asked you for 
+your definition of architecture
+– You developed your own definition
+– We listed several others and compared them
+– I asked that you synthesize one that works for you in 
+your context, and I offered one as the working 
+definition for the class
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Holism
+z Of the Whole
+To think holistically is to encompass all aspects of the 
+task at hand, taking into account the influences and 
+consequences of anything that might interact with the 
+task.
+Figure by MIT OCW.
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ Example: What is the Whole?
+(while architecting a product or system)
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+Holism – Assignment (for life)
+z Become a holistic thinker!
+z Read - Talk - Think - Listen
+z Holistic thinking exercise
+– Be ready for each class
+– Be ready for each day of your life!
+– Focus on Global Forces in business environment
+z What should the foci be this month?
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+Principles, Methods, Tools
+z Principles are the underlying and long enduring 
+fundamentals that are always (or almost always) valid.
+z Methods are the organization of approaches and tasks 
+to achieve a concrete end, which should be solidly 
+grounded on principles, and which are usually or often 
+applicable.
+z Tools are the contemporary ways to facilitate process, 
+and sometimes applicable.
+Figure by MIT OCW.
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Examples: Principles, Methods, Tools
+Time Scale Science Engineering
+Science
+Principle
+Method
+Tool
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+Examples: Principles, Methods, Tools
+Architecture
+Of Products
+Product
+Development
+Processes
+Product
+Organizations
+Principle
+Method
+Tool
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+A Principles – Example
+z Every system operates as an element of a larger system 
+and is itself composed of smaller systems
+N+1 System
+N-1 System
+N System
+How could you improve this principle?
+
+32Massachusetts Institute of Technology  © Ed Crawley 2007
+Principles – Assignment
+z A Journal of Architecting Principles should be 
+completed by each student
+– Capture ideas from all SDM subjects, other readings 
+and from life experience
+– As a target, codify 8 - 15 principles of system
+architecture (i.e. truths that are fundamental and 
+almost always valid)
+– Due at the end of the subject (in Dec.)
+– Should contain
+– The principle (descriptive and prescriptive)
+– Attribution
+– Short description or application
+z Principle No. 1 should be: What is good architecture.
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Principle Submission
+z “Tag Line Version”
+z Descriptive version
+z Prescriptive version
+z Text which explains the principle, how it would apply to 
+your enterprise
+z Citation where it came from
+z So “every systems operates as a part of a larger system, 
+…” is what: descriptive or prescriptive? What would the 
+other one be?
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+The Product Development Process
+z The inclusive process of creating a new or modified 
+product, bringing it to “market” and supporting its life-
+cycle
+z It is important to understand the role of architecting in 
+the PDP, and the commonality of good practice in our 
+professions
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+PDP - Assignment (#3)
+Determine what is common to all PDP’s, and what causes 
+them to be different:
+z Compare each of the PDP’s that you benchmark and 
+identify the elemental “steps” (there may be 20 to 40 of 
+these).  Identify the steps that are common to all or most 
+of your PDP. Also examine the sequence of these steps.
+z Synthesize the common PDP steps into one reference 
+process.
+z Examine the differences between the reference process 
+and the original benchmark examples.  Try to explain 
+why the differences occur.  
+z Identify the contribution of architecting to the PDP, and 
+the influence of the other parts of the PDP on 
+architecting. 
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+Other Definitions – Assignment (#1)
+Cite 1-3 references and your synthesized definition.
+Give an illustrative example.
+z Without clear definitions, statements like “architecting 
+complex product/systems to deliver value” will just be 
+stratego-babble
+z Your group should develop a consensus definition of:
+– System
+– Complex
+– Value
+– Product
+z Principle/Method/Tool (give examples, not definitions)
+
+37Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture
+z Consists of:
+– Function
+– Related by Concept
+– To Form
+Form
+Function
+Concept
+
+38Massachusetts Institute of Technology  © Ed Crawley 2007
+Form -D e f i n e d
+z The physical/informational embodiment which 
+exists, or has the potential to exist
+z Is what the system “is”
+z The sum of the elements, which are segments (of 
+the whole of) the form
+z The structure of form - the formal relationships 
+among the elements
+z Is a system/product attribute
+Form is Elements + Structure
+
+39Massachusetts Institute of Technology  © Ed Crawley 2007
+Form - Described
+z Is created by the architect
+z Is in a solution specific domain
+z Can be decomposed into physical/informational 
+elements - the decompositional view
+z Elements are connected at interfaces. The 
+interfaces define the structure - the structural view
+z Is the thing that executes function
+z Is the thing that is eventually implemented (built, 
+written, composed, manufactured, etc.) 
+z Is the thing that is eventually operated (run, 
+repaired, updated, retired, etc.)
+
+40Massachusetts Institute of Technology  © Ed Crawley 2007
+Objects
+z Defined: An object is that which has the potential of 
+stable, unconditional existence for some positive 
+duration of time
+z Can be physical: visible or tangible and stable in form
+z Can be informational: anything that can be apprehended 
+intellectually
+z Objects have states (which can be changed by 
+processes)
+z Objects are linked to nouns
+Object
+
+41Massachusetts Institute of Technology  © Ed Crawley 2007
+Decomposition of a System
+z Decomposition is the division into smaller constituents 
+z The system object at level 0 decomposes to the element 
+objects at level 1
+z The element objects at level 1 aggregate to the system
+z This is the whole - part relationship, so common that it 
+has its own symbol
+Level
+0
+1 (down)
+SYSTEM
+Element 1 Element 2
+...
+Figure by MIT OCW.
+
+42Massachusetts Institute of Technology  © Ed Crawley 2007
+Op Amp - Decompositional View 
+Vin
+Vout
+R1
+R2-5  
+V 
+5 
+V 
+Could you build and amp from such information?
+Could you understand how it is laid out?
+Could you understand how it works?
+Not much real information in the decompositional view!
+Plus connectors? Ground?
+Amp
+Ground
+InterfaceR2R1Op Amp
+-5 V
+Interface
+Output
+Interface
+Input 
+Interface
++ 5 V
+Interface
+
+43Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ What is the Form of Simple Systems?
+z Each group should examine one of the examples, 
+and describe the form of the system
+z Describe the elements objects that make up the 
+system object
+
+44Massachusetts Institute of Technology  © Ed Crawley 2007
+Example Systems:
+z Paper coffee cup
+z Pen (ball point or felt tip)
+z Notebook or pad of paper
+z Stop sign
+z Simple code
+
+
+45Massachusetts Institute of Technology  © Ed Crawley 2007
+“Software” Code
+n=0
+start at first Ø
+while Ø remains without an X
+print X at location of Ø
+n=n+1
+end_of_while
+write n
+
+46Massachusetts Institute of Technology  © Ed Crawley 2007
+Elements of Form
+z For simple physical systems, the elements for form can 
+be broken down until the smallest useful “atomic unit” is 
+reached: paper cone, plastic tube, sheet of paper
+z For simple information systems, the elements of form 
+are a bit more abstract, but it is most useful to stop 
+when a coherent instruction is reached
+z For instructional systems, the instruction is an element 
+of form - what the instruction does is its function, and 
+will be discussed in the next lecture
+– n = n+1
+– STOP
+Courtesy of ENPHO. Used with permission.
+
+
+47Massachusetts Institute of Technology  © Ed Crawley 2007
+Abstraction
+z Abstraction defined as:
+– expression of quality apart from the object
+– having only the intrinsic nature rather than the form
+z Abstraction can be used in both function and form
+z Abstraction can be used to characterize and hide more 
+detailed structure and behavior within them, allowing 
+simpler representation of the “surface”
+z Examples: cup, pen, routine_name
+Figure by MIT OCW.
+
+48Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompositional View of a
+Simple System
+z Theoretically 5-9 elements (7+/- 2), actually 2 to about 9-12
+z At level 1 we encounter real or atomic parts (a matter of somewhat 
+arbitrary definitions)
+z Tree structure is symbolic of the decompositional view, and suggests 
+what element aggregate to which higher lever element 
+z Does not represent the actual structural connectivity of the elements 
+(the structure)
+Level
+0
+1 (down)
+SYSTEM
+Part 1 Part 2
+...
+
+49Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompositional View of a
+Simple System - Example
+z At level 1 we encounter real or atomic parts (a matter of 
+somewhat arbitrary definitions)
+Level
+0
+1 (down)
+Pad of Paper
+Paper
+sheets Covers
+n1  or 2
+Spiral 
+wire
+
+50Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompositional view of a
+Medium System
+Level
+0
+1 (down)
+2 (down)
+SYSTEM
+Sub-System 1 Sub-System 2
+…
+Part 1.1
+…...
+Part 1.2 Part 2.1 Part 2.1
+
+51Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompositional View of a
+Medium System
+z Theoretically 25-81 elements (7+/-2)2 , actually about 
+9-12 to about 60-90
+z At level 2, we encounter atomic parts
+z Least ambiguous objects are defined at levels are 0 
+and 2
+z Intervening level 1 might be real subsystems 
+modules, abstractions, or both
+z Actual structural connectivity can occur at either 
+level 1 or 2
+
+52Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompositional View of a 
+More Complex System
+z Theoretically 125+ elements (7-2)3 , actually about 60-
+90+ 
+z Same drawing as a medium system - except level 2 
+is no longer made up of atomic parts, but rather 
+further abstractions or modules
+z There may be many layers below level 2, which an 
+observer at level 0 barely understands
+z Actual structural connectivity can occur at any level
+
+53Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ What is the Structure of Form of 
+Simple Systems?
+z Each group should examine one of the examples, 
+and describe the form of the system
+z Describe the structure among the element objects 
+that make up the system object
+
+54Massachusetts Institute of Technology  © Ed Crawley 2007
+Example Systems:
+z Paper coffee cup
+z Pen (ball point or felt tip)
+z Notebook or pad of paper
+z Stop sign
+z Simple code
+
+
+55Massachusetts Institute of Technology  © Ed Crawley 2007
+Classes of Structural Connections
+z Connections that are strictly descriptions of 
+form:
+– Some notion of spatial location, proximity or topology 
+(e.g. is next to)
+– Some notion of previous assembly/implementation 
+process (e.g. “connected to” means long ago a 
+connecting process took place)
+z Connections that are description of function
+while operating
+
+56Massachusetts Institute of Technology  © Ed Crawley 2007
+Spatial/Topological Structural Connections
+– Is contained in, surrounded 
+by, encompasses, encircles
+– Overlaps with, shares part of
+– Is adjacent to, touches
+– Is separate from (near, far, 
+no apparent relation at all)
+z Issues of Form, representing 
+positioning that has taken 
+place in the past
+This information is conventionally in a schematic or layout drawing
+z One kind of information that can be encoded in 
+structural links is relative spatial location (above, 
+below, to the right of, aligned with, etc.) plus topology:
+
+57Massachusetts Institute of Technology  © Ed Crawley 2007
+Assembly/Implementation Structural 
+Connections
+– Is bonded to, welded to, 
+soldered to, glued to
+– Is bolted, fastened
+– Pressed against, inserted
+– Is compiled with
+z Issues of form, represent 
+implementation that has taken 
+place in the past
+This information is conventionally in an assembly drawing
+z Another kind of information that can be encoded in 
+structural links is information about how the objects 
+were assembled, manufactured, coded, written, etc.:
+
+58Massachusetts Institute of Technology  © Ed Crawley 2007
+Whistle - Objects as 
+Elements of Form
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Star
+Ring
+Whistle
+Can also be 
+represented as a list
+610
+Figure by MIT OCW.
+
+59Massachusetts Institute of Technology  © Ed Crawley 2007
+Structure of Elements - Whistle
+Bump Cavity
+Hole
+Ramp StepChannel
+Product/system boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+What do these lines mean?? 
+Figure by MIT OCW.
+
+60Massachusetts Institute of Technology  © Ed Crawley 2007
+Op Amp - Decompositional - List 
+Plus connectors? Ground?
+Amp:  
+Op Amp
+R1
+R2
+Ground Int.
+Input Int.
+Output Int.
+-5 V Int.
++5 V Int.
+Connectors?
+Gound?
+Alternative to graphical representation of the 
+decompositional view is the list representation
+Amp
+Ground
+InterfaceR2R1Op Amp
+-5 V
+Interface
+Output
+Interface
+Input 
+Interface
++ 5 V
+Interface
+
+61Massachusetts Institute of Technology  © Ed Crawley 2007
+Op Amp - Structural View - Graphical
+What do these lines mean? 
+Is this structure describing form?
+Vin
+Vout
+R1
+R2-5  
+V 
+5 
+V 
+Ground
+R2
+R1
+-5  V  
+interface
+Output 
+interface
+Input 
+interface
++ 5 V 
+interface
+Ground
+Interface
+Op Amp
+
+62Massachusetts Institute of Technology  © Ed Crawley 2007
+Op Amp - Structural View - List?
+What is an appropriate way to represent structural 
+information shown in graphic representation in a list 
+representation? 
+Amp:  ?????????
+Op Amp
+R1
+R2
+Ground interface
+Ground?
+Input Int.
+Output Int.
+-5 V Int.
++5 V Int.
+Connectors?
+Ground
+R2
+R1
+-5  V  
+interface
+Output 
+interface
+Input 
+interface
++ 5 V 
+interface
+Ground
+Interface
+Op Amp
+
+63Massachusetts Institute of Technology  © Ed Crawley 2007
+Software Code - Decompositional View
+if array[ j ] > array [ j+1 ] then
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+end if
+Software is often already in a list representation.
+However for more complex code, something like a 
+decompositional view is often all that is easily available 
+Procedure
+Conditional_exchange
+if array[ j ] > array [ j+1 ] then
+end_if
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+
+64Massachusetts Institute of Technology  © Ed Crawley 2007
+Software Code - Structural View
+if array[ j ] > array [ j+1 ] then
+end_if
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+if array[ j ] > array [ j+1 ] then
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+end if
+For software what is the appropriate way to represent 
+structure of form in the list and graphical 
+representations? 
+
+65Massachusetts Institute of Technology  © Ed Crawley 2007
+Issues Raised
+z How do you identify form independent of function?
+z How do you define the atomic part level? For hardware? 
+For software?
+z Can you “decompose” an integral part?
+z How do you represent the structural interconnections of 
+the elements, as opposed to their “membership” in a 
+system?
+z N occurrences of an element - count once or N times?
+z Connectors and interface elements - count as a separate 
+element - or combined with other elements?
+Disciplines have their own tradition of representing form 
+(decomposition and structure), what is it in your discipline?
+
+66Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Form
+z The physical/informational embodiment which exists, or 
+has the potential to exist
+z The sum of elements (objects) related through structure
+z Is a system/product attribute created by the architect
+z Is what executes function
+z Is implemented and operated 
+z Is decomposed (potentially in layers), the number of 
+which determine: simple -to- complicated
+z Is decomposed until the atomic part in encountered (a 
+matter of definition)
+Complete description of form requires definition
+of both elements and structure
+
+67Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary to Date
+Architecture?
+Form
+Form = Elements + Structure
+
+68Massachusetts Institute of Technology  © Ed Crawley 2007
+Upstream Processes
+z General
+z Technology Infusion
+– Finding
+– Forecasting
+– Transferring
+– Infusing
+
+69Massachusetts Institute of Technology  © Ed Crawley 2007
+Where Does an Architect Find Upstream
+Wisdom?
+z Customer
+market need or opportunity
+z Technology
+what’s available or might be
+z The Company
+corporate strategy, competency
+z Business Environment
+competition, global economic, international
+markets, worldwide suppliers, etc.
+
+70Massachusetts Institute of Technology  © Ed Crawley 2007
+Upstream Wisdom From SDM
+z Customer - a bit this month, marketing subject, and 
+system engineering subject
+z Technology - some this month, 2 design electives, 
+informal network, Management of Technology elective
+z The Company - some in this subject, System Project 
+Management, leadership exercises, corporate strategy 
+elective
+z Business Environment - marketing subject, your self 
+education!
+
+71Massachusetts Institute of Technology  © Ed Crawley 2007
+Three Questions Central to Technology 
+Assessment and Infusion
+z What is the forecast for the technology?
+– Where is it? What can it do?
+– What is its readiness?
+– When will it be “ready”?
+z Does it address a customer need?
+– Will it infuse value in the product?
+z Can our company exploit the technology?
+– Is it within our competence and its extensions?
+– Does our organizational strategy support it?
+
+72Massachusetts Institute of Technology  © Ed Crawley 2007
+Finding and Infusing Technology
+z Finding Technology
+z Understanding, Assessing and 
+Forecasting
+z Transferring
+z Infusing
+
+73Massachusetts Institute of Technology  © Ed Crawley 2007
+Where Do You Find Technology?
+z You invent it
+z Your existing products
+z Competitors’ products
+z Your corporate R&D
+z Competitors’ corporate R&D
+z Universities
+z Foreign sources
+z Government labs
+z Suppliers
+z Small companies
+z Where else?
+
+74Massachusetts Institute of Technology  © Ed Crawley 2007
+How Do You Find Technology?
+z Thinking, reading
+z Visits
+z Papers, articles, reports
+z Conferences, shows
+z Personal contacts, networks
+z Seminars
+z How else?
+
+75Massachusetts Institute of Technology  © Ed Crawley 2007
+Understanding Assessing, Forecasting
+z What is it, how does it work?
+– New “physics”, manufacturing
+– Clever design or combination
+z What might it do?
+z How does it relate to alternatives?
+z How mature is it?
+– What combinations of time, money are required
+– How much further can existing team take it?
+z What is Intellectual Property (IP) status?
+z What else?
+
+76Massachusetts Institute of Technology  © Ed Crawley 2007
+Technology Maturation Model
+z Single technology 
+the “S” curve
+z Platform 
+technology
+time
+maturity
+time
+patent
+activity
+time
+maturity
+Net
+
+77Massachusetts Institute of Technology  © Ed Crawley 2007
+Technology Readiness Levels (TRLs)
+Actual system “flight proven” through successful 
+mission operations
+Actual system completed and “flight qualified”
+through test and demonstration (Ground or 
+Flight)
+System prototype demonstration in a space 
+environment
+System/subsystem model or prototype 
+demonstration in a relevant environment (Ground 
+or Space)
+Component and/or breadboard validation in 
+relevant environment
+Component and/or breadboard validation in 
+laboratory environment
+Analytical and experimental critical function 
+and/or characteristic proof-of-concept
+Technology concept and/or application 
+formulated
+Basic principles observed and reported
+System Test, Launch 
+& Operations
+ TRL 9
+TRL 8
+TRL 7
+TRL 6TRL 6
+TRL 5TRL 5
+TRL 4
+TRL 3
+TRL 2
+TRL 1
+System/Subsystem 
+Development
+Technology 
+Demonstration
+Technology 
+Development
+Research to Prove 
+Feasibility
+Basic Technology 
+Research
+Courtesy of NASA.
+
+78Massachusetts Institute of Technology  © Ed Crawley 2007
+Transferring Technology
+z Corporate alliances and partnerships
+z Corporate acquisitions
+z Hiring
+z Inclusion in supply chain
+z Small company as intermediary
+z How else?
+People are best
+
+79Massachusetts Institute of Technology  © Ed Crawley 2007
+Infusing Technology
+z Into future product thinking - to create new
+markets
+z Into new platforms - to service new products
+z Into new products
+z Into existing products
+
+80Massachusetts Institute of Technology  © Ed Crawley 2007
+Infusion of Non-robust Technology
+New 
+Technology
+Selected 
+for 
+Product 2
+Developed 
+for 
+Product 3
+Developed 
+for 
+Product 1
+Selected 
+for 
+Product 3
+Selected 
+for 
+Product 1
+Developed 
+for 
+Product 2
+
+81Massachusetts Institute of Technology  © Ed Crawley 2007
+Flexible Infusion of Robust Technology
+Robustness 
+Optimization
+Selected 
+for 
+Product 2
+Selected 
+for 
+Product 3
+Selected 
+for 
+Product 1
+Only 
+Minor 
+Adjustments
+Needed
+New 
+Technology
+
+82Massachusetts Institute of Technology  © Ed Crawley 2007
+Technology Search - Assignment #1
+z Form organic groups of 3±1 members of similar 
+technical interests
+z Conduct search for 3 technologies
+z Select one, and analyze it relative to existing technology
+z Make a recommendation
+z Write a memo that can be submitted to your real boss!
+
+83Massachusetts Institute of Technology  © Ed Crawley 2007
+Assignments for Next Time:
+z Opportunity Set 1: Definitions
+z Opportunity Set 2a: Form of simple systems
+z Holistic thinking: Be prepared to discuss current global 
+topics in technical/scientific/economic/political spheres, 
+and their impact on your enterprise
+z Thought exercise: what is architecture, what is the 
+architecture of common things, what is good 
+architecture?
+z Preparation for next class: read readings and be 
+prepared to come and discuss critically (like in movies 
+about law and business schools!)

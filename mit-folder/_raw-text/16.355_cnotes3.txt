@@ -1,0 +1,915 @@
+Requirements Specification: 
+A structured document that sets out the services 
+the system is expected to provide.
+Should be precise so that it can act as a contract 
+between the system procurer and software developer. 
+Needs to be understandable by both. 
+Describes what the system will do but not how it will 
+do it (objectives but not how objectives will be achieved. 
+Design Specification: 
+An abstract description of the software that serves as a 
+basis for (or describes) detailed design and implementation 
+Describes how the requirements will be achieved. 
+Primary readers will be software designers and 
+implementers rather than users or management.
+Goals and constraints specified in requirements document 
+should be traceable to the design specification (and from 
+there to the code. 
+� 
+
+Contents of Requirements Documents 
+Introduction: Describes the need for the system and places it 
+in context, briefly describing its functions and presenting a 
+rationale for the software. Describes how the system fits into 
+the overall business or strategic objectives of the organization 
+commissioning the software. 
+System Model: Shows the relationships between the system 
+components and the system and its environment. An abstrac t 
+data model should also be described if appropriate to the type 
+of system. 
+System Evolution: Fundamental assumptions on which the
+system is based and anticipated changes due to hardware
+evolution, changing user needs, etc.
+Functional Requirements: The services provided for the user. 
+This includes timing and accuracy requirements. 
+ 
+
+Contents of Requirements Documents (2) 
+Constraints: Constraints on how the goals can be achieved 
+(restrictions on behavior of software and freedom of designer), 
+e.g., safety, hardware, programming languages, standards 
+that must be followed. Includes quality requirements such as 
+maintainability, availability, etc. 
+Priorities: Guides tradeoffs and design decisions if all 
+requirements and constraints cannot be completely achieved. 
+Interfaces to the Environment: Input or output interfaces and 
+relevant assumptions about environmental components with 
+which the software will be interacting. 
+Glossary: Definitions of technical terms used in the document. 
+Indexes: Various types of indexes may be provided. 
+ 
+
+Attributes of a good requirements document: 
+Readable and understandable by customers, users, and
+designers.
+Specifies only external system behavior (black box)
+Structured to be easy to change.
+Specifies both goals and constraints.
+Able to serves as a reference for system maintainers.
+Consistent, complete, unambiguous, realistic, and testable
+Specified acceptable responses to undesired events.
+Specifies what should not do as well as what should do.
+Specified incremental subsets if desried or minimum and
+maximum functionality
+Specifies changes anticipated in the future (for both
+environment and software)
+ 
+
+Requirements must be testable 
+An untestable requirement: 
+The system shall be easy to use by experienced 
+controllers and shall be organized in such a way 
+that user errors are minimized. 
+A testable requirement: 
+Experienced controllers shall be able to use all 
+the system functions after a total of two hours 
+training. After this training, the average numbe r 
+of errors made by experienced users shall not 
+exceed two per day. 
+ 
+
+Ensuring a Successful Product
+Right Product 
+Appropriate and 
+Validated RequirementsProducibility 
+Constraints 
+Production 
+Requirements 
+In-service 
+Experience 
+Resolution 
+Issue 
+Lessons 
+Learned 
+Accidents 
+Incidents 
+and 
+Technology 
+Changes 
+Requirements 
+Airline 
+Industry 
+Trends 
+Requirements 
+Customer Public 
+Perceptions 
+Regulatory 
+RequirementsPolitical World 
+Airports and 
+Groundside 
+Requirements 
+Airspace 
+and ATC 
+Requirements 
+Infrastructure 
+Requirements 
+Boeing 
+Market Driven 
+Allocated 
+Requirements 
+FHA Trees 
+Fault 
+FMEA 
+Preliminary 
+Validate 
+Analyze and 
+Compliance 
+Requirements 
+Testing 
+Verification 
+Certification 
+Product 
+Successful 
+Design 
+Detailed 
+Safety Reliability 
+Availability 
+Maintainability 
+Supportability 
+Analyses 
+Physical and 
+Preliminary 
+Functional Def. 
+Product Right 
+ 
+
+Types of Specifications 
+Informal
+Free form, natural language
+Ambiguity and lack of organization can lead to 
+incompleteness, inconsistency, and misunderstandings 
+Formatted
+Standardized syntax (e.g., UML)
+Basic consistency and completeness checks
+Imprecise semantics implies other sources of error 
+may still be present. 
+c 
+Copyright Nancy Leveson, Sept. 1999 
+ 
+
+Types of Specifications (2) 
+Formal
+Syntax and semantics rigorously defined.
+Precise form, perhaps mathematical.
+Eliminate imprecision and ambiguity.
+Provide basis for mathematically verifying equivalence
+between specification and implementation.
+May be hard to read without training.
+Semantic distance too great?
+c 
+Copyright Nancy Leveson, Sept. 1999 
+ 
+
+INPUT SPACE OUTPUT SPACE 
+F(I) = O
+A program is a mathematical object
+A programming language is a mathematical language.
+Therefore, we can prove properties about the program.
+I OF 
+e.g. does it do what it is supposed to do
+does it not do anything harmful 
+Building a model like engineers do, but need discrete rather than 
+continuous mathematics. 
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+ 
+
+Input−Output Assertions 
+S {P} Q 
+If S holds before execution of S, then Q holds afterward. 
+Examples: n 
+1. sum = 0 { for i=1 to n do sum:=sum+a(i) } sum = a 
+j=1 j 
+2. proc search(A,n,x) int; 
+pre 
+post 
+n 0 
+(result = 0 
+(result = i 
+i {1,...,i−1} : A[i] = x) 
+{1,...,n} : A[i] = x)i 
+1 i n A[i] = x 
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+� 	 
+
+Abstract Model Specifications 
+Build an abstract model of required software behavior using 
+mathematically defined (perhaps using axioms) types (e.g., 
+sets, relations). 
+Define operations by showing effects of that operation on the 
+model. 
+Specification includes: 
+Model
+Invariant properties of model
+For each operation:
+name
+parameters
+return values
+Pre and post conditions on the operations 
+c 
+Copyright Nancy Leveson, Sept. 1999 
+� � 
+
+Z (pronounced Zed) 
+Z specifications are made up of "schemas" 
+A schema is a named, relatively short piece of specification 
+with two parts: 
+Above the line: the definition of the data entities 
+Below the line: the definition of invariants that hold 
+on those data entities 
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+�  
+
+Z : Defining the Abstract Model
+Library 
+books: P BOOK
+status: BOOK 
+ STATUS 
+books = dom status 
+Declaration says library has two visible parts of its state: 
+books is a set of BOOKS, which are atomic elements.
+status is a partial function that maps a BOOK into a STATUS
+(which is another atomic element that can take values In or Out)
+The invariant says the set of books is precisely the same as 
+the domain of the function status.
+Says every book in the Library has exactly one status
+Two books may have the same status.
+Example of a legal state for Library is:
+books = {Principia Mathematica, Safeware}
+status = (Principia Mathematica
+ In,
+Safeware
+ Out} 
+c 
+Copyright Nancy Leveson, Sept. 1999 
+�  
+
+Z : Defining Operations
+book? is the input 
+A prime indicates the value after the operation 
+Library declaration says operation modifies state of Library 
+the book to be borrowed must be currently checked in. 
+The first invariant defines a pre−condition on the operation, i.e., 
+The second invariant defines the semantics of borrowing, i.e., 
+Borrow 
+book?: BOOK 
+Library 
+status’ = status (book? 
+status (book?) = In 
+Out) 
+it overwrites the entry in the status function for the borrowed book. 
+c 
+Copyright Nancy Leveson, Sept. 1999 
+� 
+ 
+
+Z : Proving Properties 
+Example: 	 After a borrow operation, the set of books in the
+library remains unchanged.
+books’ = books 
+books’ = dom status’ [from invariant of Library] 
+= dom (status {book? Out}) [from post−condition of Borrow] 
+= dom 
+Follow from mathematics= dom 
+= book 
+= book [true because first invariant of Borrow implies 
+(status 
+status dom ({book? 
+book? 
+Out}) 
+{book? Out}) 
+that book? is an element of books] 
+Copyright 
+c 
+Nancy Leveson, Sept. 1999 
+�  
+
+Example of a State Machine Model 
+Water 
+Reading at set point / level 
+Close drain pipe high 
+Reading at setpoint / WaterTurn off pump level at High reading / 
+setpoint Open drain pipe 
+Water Low reading /
+level Activate pump
+low
+�  
+
+cruise control
+turned on / 
+initialize cc Cruise
+Cruise Control On and inControl Standby increase speed commanded /Off cruise control Mode send command to throttle turned off to increase at X rate 
+brake depressed Increasing
+or accelerator Speeddepressed / 
+discontinue 
+cruise control 
+set point reached / reduce 
+throttle 
+Speed 
+Maintaining 
+read wheel turning rate / 
+adjust throttle 
+� 
+ 
+
+SpecTRM
+Complete traceability 
+Documentation of design rationale 
+Based on 
+System engineering tools for software−intensive systems 
+environment 
+Integrates hazard analysis into engineering decision−making 
+A "CATIA" for the logical parts of the system 
+Requirements errors found early while cheaper to fix
+Goal of enhancing communication and expert review
+Information available when needed and in form that has 
+maximum impact on decisions. 
+For verification and validation
+To support change and upgrade process
+Cognitive engineering research on how experts solve problems 
+Basic principles of system engineering 
+�  
+
+                 ! # %   &   ( * , & . ,     1  2 3     % 5
+ 7    2  &    8 3   5
+ * < %  , &   8 3   5
+ ! # %   & 1  2 3     3  2 8 3   5
+ * , & . ,     D  % 3 2    8 3   5
+ * , & . ,      & . G  &      8 3   5
+ I .     3 ,  % 8 3   5
+Part−Whole
+Intent
+Environment Validation
+Verification
+Operator System
+Level 1: System
+Architecture
+Level 3: System
+Operations
+Level 6: System
+Refinement
+Level 5: Physical
+Representation
+Representation
+Level 4: Design
+Design Principles
+Level 2: System
+Purpose
+Management
+Level 0: Program
+� 
+
+K L N O Q O S T V
+X Y Z \
+T O ] _ `
+K a b S c e f T e `
+\ j
+e f
+\
+c e f T
+\
+T O ] _ ` O l T n O
+o
+T l p
+q r
+Z \
+T O ] _ ` u
+l
+j
+Q O ] n e v n a ` S f a v O
+\
+T O ] _ `
+K a b S c e f T n a
+\
+T u
+j
+e f
+\
+c e f T
+e O O T V N v Q ] ` O S f L n S ] a ` O
+y
+L
+\
+] S
+l f a n T
+\
+L f T O z
+l T f e S a f V e ` L e v O
+|
+e ] ` S T ` e ` n T
+X
+e ~ e f
+\ y
+` e v Q O ] O
+X Y Z
+V a
+\
+T v O
+
+v e n  N a  b L ` n S ] a ` e v
+Z
+` S T f b e n T O l T n ] b ] n e S ] a ` O
+Y
+a ` O S f e ] ` S O
+y
+O O L V l S ] a ` O
+o
+T  ] T c O
+
+e v ]
+\
+e S ] a ` l v e `
+e `
+\
+f T O L v S O u
+y
+` e v Q O ] O l v e ` O
+e `
+\
+f T O L v S O u
+n a ` S f a v v e c O u
+
+a _ ] n l f ] ` n ] l v T O u
+K Q O S T V
+X
+e ~ e f
+\
+y
+` e v Q O ] O
+
+f e ] ` ] ` _ V e S T f ] e v O
+     
+     
+     
+
+f a _ p
+|
+_ V S p
+X
+e ~ e f
+\ y
+` e v Q O ] O u
+
+f T v ] V ] ` e f Q
+K Q O S T V
+
+L f l a O T
+
+f ] ` n ] l v T O
+K Q O S T V
+     
+K Q O S T V
+y
+f n
+j
+] S T n S L f T
+
+T O ] _ `
+     
+
+f f a f f T l a f S O u n
+j
+e ` _ T
+f T  L T O S O u T S n p
+
+T O S l v e ` O
+e `
+\
+f T O L v S O
+
+T O S l v e ` O
+e `
+\
+f T O L v S O
+
+T f b a f V e ` n T
+V a ` ] S a f ] ` _
+e `
+\
+e L
+\
+] S O
+o
+T l p
+z
+l T f e S ] a ` O
+     
+
+j
+Q O ] n e v
+     
+V a
+\
+T v O
+z
+l T f e S a f
+
+e O 
+K Q O S T V _ a e v O u
+j
+] _
+j 
+v T  T v
+f T  L ] f T V T ` S O u
+\
+T O ] _ `
+n a ` O S f e ] ` S O u v ] V ] S e S ] a ` O
+
+ S T f ` e v
+] ` S T f b e n T O
+Z  
+f T  L ] f T V T ` S O
+
+e O  e ` e v Q O T O
+o
+T  L ] f T V T ` S O
+
+e O  e v v a n e S ] a `
+b L ` n S ] a ` e v
+\
+T n a V l a O ] S ] a `
+e `
+\
+e v v a n e S ] a `
+
+f a  T n S V e ` e _ T V T ` S l v e ` O u O S e S L O ] ` b a f V e S ] a ` u O e b T S Q l v e ` u T S n p
+
+`  ] f a ` V T ` S
+V a
+\
+T v O
+V a
+\
+T v O
+o
+T O l a ` O ] N ] v ] S ] T O
+Y
+a ` S f a v O u
+\
+] O l v e Q O
+   
+¡ ¢ £ ¤
+ ¥ ¦ ¨ © ª « ¥ ¬ « ¨  ¨
+¤ £­
+¬  ® ¦
+¤
+« ®° ¨  ± ® « ¨ ¥  ¨
+¤
+ 	
+
+Level 1: Environment 
+Description of environment in which interacts 
+Assumptions about environment 
+EA−1: Altitude information is available from intruders with 
+minimum precision of 100 feet 
+EA−2: All aircraft will have legal identification numbers 
+Level 1: Operator 
+Pilot Responsibilities and Tasks 
+Operator requirements 
+OP−5: 	 TCAS advisories shall be executed in such a 
+way as to minimize the aircraft’s deviation from 
+it’s ATC clearance 
+Human−Machine Interface Requirements 
+HMI−3: A red visual alert shall be provided in the primary field of 
+view for each pilot for resolution advisories. 
+ � 
+
+Level 1 Functional Goals: 
+G1: Provide affordable and compatible collision avoidance system 
+options for a broad spectrum of National Airspace users. 
+Level 1 Functional Requirements 
+FR−1: TCAS shall provide collision avoidance protection for any 
+two aircraft closing horizontally at any rate up to 1200 knots 
+and vertically up to 10,000 feet per minute. 
+Assumption: Commercial aircraft can operate up to 600 knots 
+and 5000 fpm during vertical climb or controlled descent and 
+therefore the planes can close horizontally up to 1200 knots 
+and vertically up to 10,000 pfm. 
+  
+
+RA beyond CPA> 
+<Intruder maneuver causes logic to delay 
+... 
+Altitude reports put threat outside corrective RA position 
+to be calculated> 
+<Process/display connectors fail> 
+<Display hardware fails> 
+<Display is preempted by other functions> 
+Surveillance does not pass adequate track to the logic 
+Surveillance puts threat outside corrective RA position. 
+TCAS unit is not providing RAs. 
+No RA is generated by the logic 
+Inputs do not satisfy RA criteria 
+Altitude errors put threat in non−threat position. 
+<Surveillance error causes incorrect range or range rate 
+1.23.1 
+2.22SC4.8 
+2.35SC4.2 
+1.23.1 
+1.23.1 
+2.19 
+L.5 
+1.23.1 
+No RA inputs are provided to the display. 
+TCAS does not display a resolution advisory. 
+<Threat is non−Mode C aircraft> 
+<Intruder altitude error> 
+<Own Mode C altitude error> 
+<Own radar altimeter error> 
+<Uneven terrain> 
+<Surveillance failure> 
+... 
+Altitude errors put threat on ground 
+Sensitivity level set such that no RAs are displayed. 
+<Self−monitor shuts down TCAS unit> 
+... 
+  
+
+TCAS displays a resolution advisory that the pilot does not follow. 
+Pilot does not execute RA at all.
+Crew does not perceive RA alarm. 
+<Inadequate alarm design> 1.4 to 1.14 2.74, 2.7 6 
+<Crew is preoccupied>
+<Crew does not believe RA is correct.> OP.1
+... 
+Pilot executes the RA but inadequately
+<Pilot stops before RA is removed> OP.10 
+<Pilot continues beyond point RA is removed> 
+<Pilot delays execution beyond time allowed> 
+³ ´ 
+OP.4 
+OP.10 
+
+Level 1: System Limitations 
+L−5: TCAS provides no protection against aircraft with 
+non−operational or non−Mode C transponders [FTA−370] 
+³ µ 
+
+Level−1 Safety Constraints and Requirements 
+SC−5: The system must not disrupt the pilot and ATC operations 
+during critical phases of flight nor disrupt aircraft operation. 
+[H3]
+SC−5.1: The pilot of a TCAS−equipped aircraft must have the 
+option to switch to the Traffic−Advisory mode where traffic 
+advisories are displayed but display of resolution advisories 
+is prohibited [2.37]
+Assumption: This feature will be used only during final 
+approach to parallel runways when two aircraft are 
+projected to come close to each other and TCAS would 
+call for an evasive maneuver [6.17]
+³ ¶ 
+
+SC−7: TCAS must not create near misses (result in a hazardous 
+level of vertical separation that would not have occurred 
+had the aircraft not carried TCAS) [H1]
+SC−7.1: Crossing maneuvers must be avoided if possible. 
+[2.36, 2.38, 2.48, 2.49.2] 
+SC−7.2: The reversal of a displayed advisory must be extremely 
+rare [2.51, 2.56.3, 2.65.3, 2.66] 
+SC−7.3: TCAS must not reverse an advisory if the pilot will have 
+insufficient time to respond to the RA before the closest point 
+of approach (four seconds or less) or if own and intruder 
+aircraft are separated by less then 200 feet vertically when 
+ten seconds or less remain to closest point of approach [2.52]
+³ · 
+
+Example Level−2 System Design for TCAS
+Reversal−Provides−More−Separation m−301SENSE REVERSALS 
+2.51 	 In most encounter situations, the resolution advisory sense will be 
+maintained for the duration of an encounter with a threat aircraft. 
+[ SC−7.2 ]
+However, under certain circumstances, it may be necessary for 
+that sense to be reversed. For example, a conflict between two 
+TCAS−equipped aircraft will, with very high probability, result in 
+selection of complementary advisory senses because of the 
+coordination protocol between the two aircraft. However, if 
+coordination communications between the two aircraft are 
+disrupted at a critical time of sense selection, both aircraft may 
+choose their advisories independently. 
+[ FTA−1300 ]
+This could possibly result in selection of incompatible senses. 
+[ FTA−395 ]
+2.51.1 [Information about how incompatibilities are handled] 
+³ ¸ 
+
+Level 3 Specification (modeling) language goals 
+Specify allocation of functionality to components
+Readable and reviewable
+Minimize semantic distance 
+Minimal: blackbox behavior only (transfer function) 
+Easy to learn 
+Unambiguous and simple semantics 
+Visualization tools 
+Complete (can specify everything need to specify 
+Analyzable (formal, mathematical foundation) 
+Executable (acts as a prototype) 
+Animation and simulation 
+Tools to check completeness, consistency, nondeterminism 
+Includes human (operator) procedures and analysis 
+Extensible (e.g., connecting to MATLAB, Simulink) 
+API, built on Eclipse 
+³ ¹ 
+
+SpecTRM−RL 
+Combined requirements specification and modeling language 
+A state machine with a domain−specific notation on top of it. 
+Includes a task modeling language 
+Can add other notations and visualizations of state machine 
+Enforces or includes most of completeness criteria 
+Supports specifying systems in terms of modes
+Control modes
+Operational modes
+Supervisory modes
+Display modes
+º » 
+
+Measured Variable 2 
+Measured Variable 1 
+DeviceSupervisor 
+ControlledControl Input 
+Display Output 
+Control 
+Command 
+Measured Variable 
+(Feedback) 
+Sensor 
+Environment 
+CONTROL 
+INFERRED SYSTEM OPERATING MODES 
+Controller 
+MODES 
+DISPLAY 
+INFERRED SYSTEM STATE 
+SUPERVISORY 
+MODE 
+MODES 
+º ¼ 
+
+SpecTRM Model of HETE Attitude Control System
+Orbit Day 
+Orbit Night 
+Ground Command 
+MODES 
+CONTROL Paddles 
+Detumble 
+Deploy Paddles 
+Reorient 
+Deploy Wheel 
+Acquire 
+Orbit Day
+Orbit Night
+Ground Command
+Torque 
+Elevation Angle 
+Azimuth Angle 
+Bias 
+Magnetic Fields (X,Y,Z) 
+Orbit 
+Deployed 
+Not deployed 
+Unknown 
+Unknown 
+Not tracking 
+Tracking 
+Optical System 
+Unknown 
+Night 
+Day 
+Unknown 
+Not deployed 
+Deployed 
+Wheel 
+Wheel 
+Momentum 
+Coils 
+Deploy Paddles
+PaddlesCONTROLMODES
+Sun 
+Sensors Magnetometers 
+Acquire
+Deploy Wheel
+Reorient
+Detumble
+Spinup 
+Wait 
+HETE ACS 
+Ops 
+Mission 
+º ³ 
+
+Control Mode 
+ACS Mode (2)
+= Detumble (Mode 1) 
+The purpose of detumble mode is to  minimize the magnitude of body momuntum vector in the X−Z plane. 
+As soon as the magnitude falls below a threshold,e software should transition to spinup mode. The mode 
+delay provides hysteresis in the mode transitions to prevent the software from jumping between modes too rapidly.
+In detumble mode, the wheel actuator shall be controlled such that the wheel maintains the velocity it had upon
+entering the mode, and the magnetic moment along the Y axis shall be controlled to minimize the angular velocity
+about the X and Z axes.
+OR 
+Control Mode 
+State Values 
+Spinup 
+Detumble 
+Wait 
+Ground Control 
+Time since entered wait >= 10 sec 
+Time since entered detumble < 100 sec 
+xz momentum error > xz momentum error threshold 
+Time since entered spinup >= 100 sec 
+Paddles in−state deployed 
+Optical system in−state tracking 
+Time since entered ground control >= 10 sec 
+T 
+T T 
+T T 
+T 
+T 
+T F 
+T T T 
+T T 
+F 
+F 
+T 
+. 
+º º 
+
+Output Command 
+Name
+Destination: 
+Acceptable Values: 
+Units: 
+Granularity: 
+Exception Handling: 
+Hazardous Values: 
+Timing Behavior: 
+Initiation Delay: 
+Completion Deadline: 
+Output Capacity Assumptions: 
+Load:
+Min time between outputs:
+Max time between outputs:
+Hazardous timing behavior: 
+Exception−Handling: 
+Feedback Information: 
+Variables: 
+Values: 
+Relationship: 
+Min. time (latency): 
+Max. time: 
+Exception Handling: 
+Reversed By: 
+Comments: 
+References: 
+DEFINITION 
+= ... 
+º ´ 
+
+Requirements Analysis 
+Model Execution, Animation, and Visualization 
+Completeness 
+State Machine Hazard Analysis (backwards reachability) 
+Human Task Analysis 
+Test Coverage Analysis and Test Case Generation 
+Automatic code generation 
+º µ 
+
+Does It Work? 
+It is being used for aerospace and automotive systems. 
+Have found important errors in requirements 
+Very complex systems modeled 
+Level 3 models used to maintain TCAS II for past 10 years 
+All suggested changes and upgrades first modeled 
+and evaluated through simulation. 
+º ¶ 
+
+Summary 
+Integrate design rationale and safety information into 
+specification and its structure 
+Capture domain knowledge (reusable architectures) 
+Provides traceability from high−level requirements to 
+detailed design and code. 
+Blackbox models at Level 3 
+Executable and analyzable 
+e.g., completeness, robustness, mode confusion, hazard 
+analysis, test case generation, code generation 
+Specification acts as an executable prototype 
+Can interface with system simulation 
+Visualization tools 
+Interface to contractors 
+º · 

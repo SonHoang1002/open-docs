@@ -1,0 +1,2740 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+IAP Lecture 3 
+Ed Crawley
+January 19, 2007
+Rev 2.0
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflection on Function 
+z Concept
+z Creativity
+z Architecture
+z PDP Synthesis
+z Closure on Definitions (for reference)
+z Change in style today, I will not talk to every chart, 
+but they are here for study and reference
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflection on Function 
+– Opportunity Set Results
+– Zooming
+– Solution Neutral Statement of Function
+– Expressing Function and Process
+– Summary Reflections on Function and 
+Form
+z Concept
+z Etc.
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ Reflections on Function?
+z What is the value related operand? 
+z What are the value related states that change?
+z What is the externally delivered function?
+z Who benefits?
+z What are the principle internal functions?
+z How are the internal functions mapped to elements of 
+form?
+z How do these combine to produce the emergent 
+externally delivered value related function?
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+Emergence and Zooming of Processes
+z A process can be zoomed into sub-processes
+z A process emerges from sub-processes
+z The process and sub-processes are not linked in any 
+explicit manner, as the system decomposes into 
+elements or the elements aggregate into the whole
+z Emergence is a powerful feature of systems - elements 
+and sub-processes can come together to cause a 
+process to emerge
+Amp
+Op AmpR2R1
+Amplify low frequency
+Amplify
+Set gain
+filter
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+Representation of Zooming
+Process
+Operand 1
+Instrument 1 Instrument 2
+Operand 2
+Process
+Operand 1
+Instrument 1 Instrument 2
+Operand 2
+Process A
+Process B
+z Process zooms into sub-processes, processes 
+emerge from sub-processes:
+z Object-process arrows can move to sub-processes and be 
+expanded or clarified, or if appropriate can remain attached 
+to the larger process
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+Solution Neutral Expression of Function
+z Functions should (initially) be expressed as solution
+neutral statements, having no solution of specific 
+function or form either explicit or implicit in the 
+statement
+z Do this by focusing on the operand(s), and what 
+attribute of the operand(s) you wish to change
+z Solution neutral statements: Not:
+– Cargo transporting Trucking
+– Message communicating Phoning
+– Food heating Broiling
+– Idea creating Brainstorming
+z This will focus on the creation of value!
+z This will also foster creativity, by allowing a wider range 
+of possible solutions to be imagined! 
+Figure by MIT OCW.
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Solution Neutral Statement of 
+Function - Questions?
+z What is the value related 
+operand?
+z What are the value related 
+changes in an attribute -
+the beneficial attribute?
+z What is the solution 
+neutral transformation of 
+these attributes?
+z This is the sought after 
+“solution neutral 
+function”
+Solution neutral
+process
+Operand
+Beneficial
+Attribute
+Decomposes to
+Has attribute of
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+Exit Row Passenger Functions?
+z In the event of an emergency, a passenger seated in an 
+exit row should:
+– Locate the emergency exit
+– Recognize the emergency exit opening mechanism
+– Comprehend the instructions for operating
+– Assess whether opening will in crease the hazards 
+– Follow crew instructions
+– Stow the emergency exit door
+– Assess the condition of the escape slide
+– Pass expeditiously through the exit
+– Assess, select and follow a safe path away from the exit
+ProcessingOperand
+Function
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Expressing Process - Limited Syntax
+z The assertion is that all process can be reduced to one 
+of a limited set
+z Trying this forces you to consider if the step is truly a 
+process, and of what limited type it might be
+z One useful set, developed by Krumhauer, is:
+– Channel (transport in place)
+– Store (for a period of time)
+– Change (in nature or type)
+– Vary (in magnitude)
+– Connect (multiple inputs to single outputs, or vice versa)
+z Try it on your next opportunity set, and see if it works
+Ref: Pahl and Beitz, after  Krumhauer
+ProcessingOperand
+Function
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+Fundamental Processes
+z Create (and Destroy)
+z Transport
+– In place  - from A to B, or to “spatial storage” and 
+recover from “storage”
+– In time – only delays allowed since time is causal 
+“temporal storage”
+z Transform
+– In type or form
+– In quantity – magnitude for continuous attributes, 
+number for discrete artefacts
+z Compare 
+– Any of the place, time, type or quantity [not sure it is 
+independent of Transform]
+A la Crawley
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+Fundamental Process Frameworks
+Create, 
+Destroy 
+Transform - 
+Transport Transform 
+Quantity 
+Create, 
+Destroy Place Time 
+(delay) 
+Type/ Form 
+Magnitude 
+(continuous) 
+Number 
+(discrete) 
+Compare 
+- Place 
+(channel) 
+Time 
+(store) 
+Type 
+(change) 
+Magnitude 
+(vary) 
+Number 
+(connect) 
+Create  Move 
+ 
+Store 
+ 
+Read, write - Write Look up 
+(compare and 
+locate) 
+- - - - And, Or (Equivalence, 
+If) 
+ 
+ 
+Dori
+Crawley
+Pahl &
+Beitz
+Turing
+Bool
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+Turing Machine
+Decomposes to
+Has attribute of
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of a Fundamental Physical Process
+Energy
+conservingObject
+U1
+U2
+Heat (Q)
+reservoir
+Work (W)
+reservoir
+Generally, in detailed physical systems, equations represent 
+processes, and variable represent the state of the objects
+Product/system ?
+
+15Massachusetts Institute of Technology  © Ed Crawley 2007
+OPM of a Social System
+DecidingDecision
+unmade
+made
+Information
+Leader
+Values
+Participants
+Goals
+Product/system ?
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Representing “Creation”
+z For informational objects, which are abstractions, the 
+process creating can readily be used (e.g. writing a 
+poem, creating a theory)
+z Care must be taking in using creating for physical 
+objects
+– Often can use creating with an abstraction
+– Or alternatively transformation with a more concrete description
+z Is creating ever strictly appropriate for a physical 
+system??
+
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Function
+z Function is the activity, operations, transformations that 
+create or contribute to performance - it is operand + 
+process
+z Function is enabled by form, and emerges as form is 
+assembled
+z Externally function delivered to the operand is linked to 
+the benefit of a product/system
+z The process part of function can be zoomed, and is 
+potentially expressible with a limited syntax
+z Function is a system attribute, and initially expressed by 
+the architect in solution neutral statement
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+Informational vs. Physical Processes and 
+Objects - “Duality”
+z Things (objects and processes) can be physical or informational
+z Physical things deal with matter and energy, are “tangible”, and 
+obey the “laws of nature”. Physical objects have mass 
+(particle/wave), and occupy coordinates in space and time
+z Informational things are not bound by the laws of nature. An 
+informational object is a piece of information in the abstract (e.g. a 
+database, an idea, a rule, a command). An informational process is 
+some transformation of information (e.g. reading, storing, learning, 
+creating, etc.)
+z Informational things always have a physical manifestation 
+somewhere (e.g. design → print, idea → neurons, rule → law book)
+z Physical things implicitly contain the information necessary to 
+describe them (but not derive them)
+z Processes can have records, plans, etc which are also informational 
+objects
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+Interfaces Have Form and Function
+z The structure usually 
+indicates the existence of an 
+interface (more about this 
+next time)
+z At the interface:
+– Form has some structural 
+relationship - usually compatible
+– A function is performed - usually 
+the process is the same or the 
+complement
+– The operand is the same
+Product/system boundary
+Process
+Operand
+Interface 
+Instrument
+Interface 
+Instrument
+Compatible
+Interface
+Figure by MIT OCW.
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+Interfaces -
+Questions
+z What is the operand(s) that is passed or shared?
+z What is the process(es) at the interface?
+z What are the instrument objects of the interface, and 
+how are they related (identical, compatible)?
+Operator
+Whistle
+Input 
+circuit
++ Input 
+interface
+exchange_contents (array, j) 
+Procedure exchange_contents(List
+array, number j)
+Process
+Operand
+Interface 
+Instrument
+Interface 
+Instrument
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+Goods and Services
+z Goods are objects
+z Services are processes
+z There is always an 
+operand
+z With every product good 
+object, there is an implicit 
+process which is linked to 
+value
+z With every product 
+service process, there is 
+always an implicit 
+instrument object 
+Service 
+process
+Goods
+object
+Implicit
+instrument
+Products
+Implicit
+process
+Product/systems always come in object-process-objects,
+and value is always linked to process acting on operand
+OperandOperand
+Decomposes to
+Has attribute of
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Objects and Processes in Natural Language
+Specific system
+Operating
+Product/
+System form
+Attribute of
+operating
+Attribute of 
+form
+Beneficial
+Attribute
+Operandz Objects are nouns: subjects 
+(agents and instruments) 
+and predicates (operands) 
+z Processes are verbs
+z All human languages are in 
+one of two patterns: NNV or 
+NVN
+z Read down for passive 
+voice, up for active
+Other 
+Attributes
+The combination of Operands, Processes and Instrument Objects, 
+together with attributes, can represent human language, and therefore 
+the systems that can be described with human language
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Form and Function
+Form: Function:
+What a system is What a system does
+Objects + Structure Operands + Processes
+Aggregates (and Decomposes) Emerges (and Zooms)
+Source of Cost Source of External Benefit
+Specified at an interface Specified at an interface
+Enables function Requires instrument form
+Form and Function are completely different ideas -
+Engineers tend to focus on the concrete, the form, and hence not
+emphasize the link to value provided by function
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture
+z Consists of:
+– Function
+– Related by Concept
+– To Form
+Form
+Function
+Concept
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Form - Defined
+z The physical/informational embodiment which 
+exists, or has the potential to exist
+z Is what the system “is”
+z The sum of the elements, which are segments (of 
+the whole of) the form
+z The structure of form - the formal relationships 
+among the elements
+z Is a system/product attribute
+Form is Elements + Structure
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+Function - Defined
+z The activities, operations and transformations
+that cause, create or contribute to performance 
+(i.e. meeting goals)
+z The actions for which a thing exists or is 
+employed
+z Is a product/system attribute
+Form is Operand + Process
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept - Definition
+z A product or system vision, idea, 
+notion or mental image which maps 
+Function to Form
+z Embodies principle of operation
+z Includes an abstraction of form
+z Concept rationalizes the structure of 
+the architecture (Imrich)
+z Establishes the solution-specific 
+vocabulary - it is the beginning of the 
+architecture
+Concept is not a product/system attribute, but a mapping
+Form
+FunctionConcept
+Figure by MIT OCW.
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept - Described
+z Is created by the architect
+z Must allow for execution of all functions
+z Establishes the design parameter
+z Implicitly represents a level of technology
+Managing and focusing creativity to create the 
+concept is a main role of the architect during the 
+architecting process
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept - Formal Definition
+z The combination of:
+– The specific 
+system operating 
+process and 
+operand
+– The specific 
+system form object
+– Related through the 
+generic form object 
+Specific system
+Operating
+Specific
+System form
+Generic
+Concept form
+Solution neutral
+process
+Specific
+Operand
+Value related
+Operand
+Decomposes to
+Specializes to
+Has attribute of
+Concept
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+Specialization
+z Specialization/Generalization
+– The relationship between a general object and its 
+specialized forms
+Figure by MIT OCW.
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Making Tone
+Solution neutral 
+statement of function
+Solution specific 
+function
+Solution specific 
+abstraction of form
+Vortex shedding and 
+amplifying 
+Whistle,
+Flute
+Air flow pulsating and 
+amplifying
+Horns,
+Woodwinds
+Diaphragm shaking 
+and amplifying
+Drums, 
+Strings
+??
+Making a tone
+
+32Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Making Tone
+Vortex
+shedding
+Vortex 
+shedder
+Making tone
+Flow 
+plusating
+Diaphragm
+vibrating
+Whistle
+Flute
+Flow 
+pulsator
+Horn
+Woodwind
+Diaphram
+vibrator
+Drum
+String
+Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Transporting?
+Transporting Concepts
+• walk
+• ride animal
+• wagon
+• balloon
+• train
+• bicycle
+• automobile/truck
+• airplane
+• helicopter
+• rocket
+• ??
+z What is the solution 
+neutral statement of 
+function?
+z What is the solution 
+specific function?
+z What is the solution 
+specific abstraction of 
+form?
+z All are present, but may 
+be implicit
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Transporting
+Solution neutral 
+statement of function
+Solution specific 
+function
+Solution specific 
+abstraction of form
+Rolling Car, wagon, 
+skateboard
+Air flying Aircraft, helicopter, 
+glider
+Floating Ship, surfboard, 
+blimps, sailboat, 
+canoe
+??
+Transporting a person
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept Space - Questions
+z What is the specific 
+operating process, and 
+if necessary, the 
+specific operand? 
+(function concept)
+z What is the generic 
+instrument object that 
+executes this process?
+z What is the 
+specialization of the 
+instrument object? 
+(form concept)
+Decomposes to
+Specializes to
+Has attribute of
+Specific system
+Operating
+Specific
+System form
+Generic
+Concept form
+Solution neutral
+process
+Specific
+Operand
+Value related
+Operand
+Concept
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+Exercise: Concepts for Fluid 
+Extraction
+z Each group take an object and answer the concept 
+questions:
+z What is the value related operand?
+z What is the value related attribute?
+z What is a solution neutral statement of the 
+value related transformation?
+z What are the solution specific processes and 
+operands that will achieve this 
+transformation (process concept)?
+z What are the solution specific object that can 
+act as instruments of this process (object 
+concept)?
+
+37Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts for Fluid Extraction
+Injected
+gasTranslating Pushing
+Cork
+Shearing
+Traction 
+pulling
+Body
+pulling
+Released
+gas
+Suction
+Tube
+Fork
+Bonded
+tab
+Body
+force
+Screw
+Decomposes to
+Specializes to
+Has attribute of
+
+38Massachusetts Institute of Technology  © Ed Crawley 2007
+Broader Concepts and Recursion
+z Often one can describe a specific operand, and the 
+solution neutral transformation
+z Or one can define the same problem at one or more 
+higher levers of hierarchy recursively
+z For example:
+– To increase shareholder value
+– To sell medical products
+– To sell medical sensors
+– To manufacture medical sensors
+z It is often useful to represent this recursion in the 
+concept tree
+
+39Massachusetts Institute of Technology  © Ed Crawley 2007
+Broader  Concepts 
+- Fluid Extraction
+Translating Pushing
+Shearing
+Traction 
+pulling
+Body
+pulling
+Removing
+Cork
+Destroying
+Opening
+Bottle
+Accessing
+Wine
+Burning
+Melting
+Vaporizing
+Wine 
+Bottle
+System
+Breaching
+Breaking
+Breaching
+Decomposes to
+Specializes to
+Has attribute of
+
+40Massachusetts Institute of Technology  © Ed Crawley 2007
+Recursion
+z Recursion is the use of repeated steps or elements
+z Processes can be used recursively 
+– Turn left, turn right,   turn left, turn right, …
+z In a generalization, objects can be used recursively as 
+well
+– No recursion
+– Recursion
+Figure by MIT OCW.
+
+41Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for Fluid Extraction
+Translating
+Cork
+Generating
+force
+Increasing
+force
+Transferring
+force
+Decomposes to
+Specializes to
+Has attribute of
+Translating
+Cork
+A process often, but not always, can be zoomed to 
+reveal a set of internal functions, the emergence of 
+which is synonymous with the process
+Note: this is a 
+interfacing 
+process
+
+42Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept and Parameter Selection
+z When a concept is chosen, the list of design 
+parameters is also implicitly established
+z When the design parameters are chose, the  
+design is finalized
+z Products based on the same concept are 
+continuously connected
+z Products based on different concepts are disjoint
+z Example: Table is concept - parameters are 
+length, width, height, number of legs, etc. Counter 
+is disjoint concept
+
+43Massachusetts Institute of Technology  © Ed Crawley 2007
+Form - Function Sequence
+Design 
+knowledge 
+capture,
+Reverse 
+engineering,
+Bottom up 
+design
+Mapping
+Form 
+definition
+Function 
+definition
+Mapping
+Conceptual 
+design
+
+44Massachusetts Institute of Technology  © Ed Crawley 2007
+Sequences in Design and Reverse 
+Engineering
+z In Design
+– Define externally delivered function, create concept, 
+break down (zoom) internal function, define elements 
+of form
+z In Reverse Engineering
+– Define elements, infer concept, infer internal function, 
+infer externally delivered function
+– Last two steps are difficult due to the emergence of 
+function
+
+45Massachusetts Institute of Technology  © Ed Crawley 2007
+Expressing Concept
+z There is no convention or standard for naming 
+concepts, but they tend to be nouns or noun phrases
+z Rationally, they should be named “operand + process + 
+instrument” but few are
+z They are often named by “operand + process + er” (lawn 
+mower), but this often works only for the first such 
+device (e.g. what is a people mover?)
+z Other common patterns are the operand + instrument, or 
+even just instrument
+z New concepts can be expressed by a few words or a 
+short phrase (e.g. cell phone)
+z Established concepts can often be expressed by a word 
+or two or an icon (e.g. Refrigerator,                 )
+
+46Massachusetts Institute of Technology  © Ed Crawley 2007
+Operand Process Instrument
+Operand/Process
+Operand/instrument
+Process/instrument
+(article) carrying case
+Process
+Instrument
+lawn mow er [rotary]
+hair dry er [portable 
+electric]phone tele [cordless]
+light (producing) bulb
+cork (removing) screw
+fire (burning) place
+hat (storing) rack
+suit (carrying) case
+(data and info) compute er
+(TV) control [remote] (device)
+(painting) painting (paint)
+(head) (covering) hat
+(food) (serving) table
+(person) (carrying) bicycle
+
+47Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary of Concept
+z A system vision which maps form to function 
+z It involves a principle of operation and an abstraction of 
+form
+z It rationalizes the details of the architectural structure
+z Is created by the architect
+z Must allow for the execution of all functions
+z Specifies the vector of design parameters, which, when 
+selected, will establish the design
+
+48Massachusetts Institute of Technology  © Ed Crawley 2007
+Creativity
+z Defined: The ability or power to cause to exist, to 
+bring into being, to originate, or to combine in a new 
+way
+z Focusing creativity is a role of the architect
+z Innovative new architectures often build around a 
+creative new idea
+z The concept development process is often a time of 
+peak creativity
+z Creativity must be tempered by the need to get 
+something accomplished
+
+49Massachusetts Institute of Technology  © Ed Crawley 2007
+Types of Creativity
+z Raw or pure creativity - thinking of something that no 
+one has ever thought of  - This is rare
+z Transfer of experience or metaphor from one field to 
+another  - Very common
+z Organizing knowledge, finding patterns, interpolating 
+and extrapolating  - Even more common
+
+50Massachusetts Institute of Technology  © Ed Crawley 2007
+Approaches to Stimulating Creativity
+z Study previous work (reverse 
+engineering, benchmarking, patent 
+search, etc.)
+z Metaphors from other systems (e.g. 
+nature)
+z Group Dynamics (brainstorming, 
+six hats)
+z Structural processes (TRIZ, mind 
+mapping)
+z Intellectual stimulants 
+(provocation, motion)
+
+51Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary Creativity
+z We learned there are about four ways to stimulate 
+creativity in concept design:
+– Metaphor (physical or human-made)
+– Invention (or new science)
+– Combination, rearrangement, evolution
+– Patterns and pattern matching
+z Objective is to move off established neural 
+pathways!
+
+52Massachusetts Institute of Technology  © Ed Crawley 2007
+References on Creativity
+z TRIZ web sites (e.g. www.jps.net/triz/triz.html)
+z Edward deBono: Lateral thinking, Serious 
+Creativity
+z Notes on the Synthesis of the Form, Christopher 
+Alexander, Harvard University Press, 1964
+z Integrated Methods for Successful Product 
+Engineering, Pugh
+
+53Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflection on Function 
+z Concept
+z Creativity
+z Architecture
+– Vs. concept
+– Analysis through to internal value related 
+processes
+– Inference from form
+– How do they connect to produce architecture?
+z Etc.
+
+54Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept vs. Architecture
+z Concept is a project or system vision, 
+idea, notion or mental image which 
+includes the principle of operation and 
+abstraction of form, and therefore 
+maps Function to Form
+z Architecture is the details of the 
+assignment of function to form, and 
+the definition of interfaces and 
+structure
+z We still lack a notation to give this any 
+coherence
+Form
+Function
+Architecture
+Form
+FunctionConcept
+
+55Massachusetts Institute of Technology  © Ed Crawley 2007
+Begin Architecture with Value Related 
+Process “Flow” Analysis
+z Start the analysis of architecture by identifying the 
+solution neutral statement of function, concept (and 
+potential multifunctional aspects) and whole product 
+system
+z Then immediately begin by identifying the main “flow” of 
+processes and operands within the product system that 
+creates value - the internal value related processes
+z Only then, try to connect the objects of form and their 
+structure to the internal processes that deliver value
+
+56Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Making Tone
+Vortex
+shedding
+Vortex 
+shedder
+Making tone
+Flow 
+plusating
+Diaphragm
+vibrating
+Whistle
+Flute
+Flow 
+pulsator
+Horn
+Woodwind
+Diaphram
+vibrator
+Drum
+String
+Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+57Massachusetts Institute of Technology  © Ed Crawley 2007
+Tone Making Concept - Whistle
+Making by
+Vortex sheddingTone
+Air
+Operator
+Whistle Project/system 
+boundary
+Tone
+Making
+Externally delivered 
+value related 
+process
+Operand  and 
+solution neutral 
+transformation 
+Specific 
+operand - value 
+related external 
+object that 
+changes 
+Value related 
+instrument 
+objects
+
+58Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for Making Tone
+Making
+Tone
+Decomposes to
+Specializes to
+Has attribute of
+Making
+Tone
+Making a tone more or less immediately breaks down 
+into generating the tone, and coupling it to the air
+Generating
+tone
+Coupling to
+air
+Note: this is a 
+interfacing 
+process
+
+59Massachusetts Institute of Technology  © Ed Crawley 2007
+Whistle - Idealized 
+internal 
+value related
+processes
+Product/system 
+boundary
+Creating
+Operator
+Flow
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+Whistle
+Making tone 
+Operands
+External value 
+process emerging 
+from internal value 
+related process
+z Idealized 
+internal 
+value related 
+processes 
+and 
+operands 
+informed by 
+the concept 
+whistle
+Generating 
+tone
+Coupling to
+Air
+Figure by MIT OCW.
+
+60Massachusetts Institute of Technology  © Ed Crawley 2007
+Whistle - Realizable
+Internal 
+value related
+processes
+Product/system 
+boundary
+Creating
+Operator
+Flow
+Aligning/
+Transporting
+Deflecting/
+Accelerating
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+Whistle
+Making tone 
+External value 
+process emerging 
+from internal value 
+related process
+z More realizable 
+internal value 
+related 
+processes and 
+operands 
+informed by 
+the concept 
+whistle
+Operands
+Figure by MIT OCW.
+
+61Massachusetts Institute of Technology  © Ed Crawley 2007
+Expanding a Concept to 
+an Architecture (1)
+z Identify the operand, and value related attribute, 
+and solution neutral transformation
+z Identify the concept process and instrument 
+object, and other aspects of the whole product 
+system and use context
+z Identify aspects of multifunctional concepts, if 
+applicable
+z Informed by the concept form, identify the:
+– Idealized internal processes that touch directly 
+on the delivery of value - the “value related 
+internal processes”
+– The intermediate operands along that path
+– (perhaps) More realizable internal value related 
+processes 
+z Begin to make an OPM of the architecture
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+62Massachusetts Institute of Technology  © Ed Crawley 2007
+Process - Object
+Architecture -
+Whistle
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Creating
+Operator
+Star
+Ring
+Flow
+Aligning/
+Transporting
+Deflecting/
+Accelerating
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+WhistleMaking tone
+Value related 
+instrument 
+object
+External value 
+process emerging 
+from internal value 
+related process
+Product/system 
+boundary
+Operands
+Figure by MIT OCW.
+
+63Massachusetts Institute of Technology  © Ed Crawley 2007
+z Now,
+z Within that concept, identify the:
+– Instrument objects to execute 
+the internal value related 
+processes
+– The other instruments that are 
+necessary to deliver value - the 
+whole project system
+z Continue to make an OPM of the 
+architecture
+Expanding a Concept to an 
+Architecture (2)
+Needs
+Value - Goals 
+Concept
+Architecture
+Operations
+
+64Massachusetts Institute of Technology  © Ed Crawley 2007
+Bump
+Cavity
+wall
+Hole
+Ramp
+Step
+Channel
+project/system 
+boundary
+Bump
+Cavity
+wall
+Hole
+Ramp
+StepChannel
+Creating
+Operator
+Star
+Ring
+Flow
+Aligning/
+Transporting
+Deflecting/
+Accelerating
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+WhistleMaking tone
+Whistle:
+Process - Object
+Architecture
+Figure by MIT OCW.
+
+65Massachusetts Institute of Technology  © Ed Crawley 2007
+QuickTime™ and a TIFF (Uncompressed) decompre
+Mouth
+Lips
+Throat
+Creating
+Lungs
+Flow
+Transporting
+Venting
+Creating
+Exciting
+Resonating/
+amplifying
+Coupling
+Vortex
+Tone
+(internal)
+Tone
+(radiated)
+External
+Air
+Human
+Making tone
+Lips
+Mouth
+Lungs
+Throat
+Tongue
+Deflecting/
+Accelerating
+Process - Object
+Architecture -
+Human Whistle
+Product/system 
+boundary
+
+66Massachusetts Institute of Technology  © Ed Crawley 2007
+Observations:
+z The selected concept has been analyzed for 
+multifunctional aspects
+z Informed by the concept form, the internal idealized and 
+realizable value related processes have been developed
+z A more detailed decomposition of form has been 
+identified, which mapped onto the function
+z Two remarkable different forms are found to have the 
+same internal processes, but different mappings, which 
+makes them different architectures!
+
+67Massachusetts Institute of Technology  © Ed Crawley 2007
+Process-Object Architecture Matrix
+Instrument
+Object 1
+Instrument
+Object 2
+Instrument
+Object 2 Operand 1 Operand 2
+Process 1 relationship relationship relationship
+Process 2 relationship relationship relationship relationship
+Process 3 relationship relationship
+z Graph of Process - Object Architecture can be 
+converted to a matrix 
+z Objects - Instruments and Operands on one side
+z Processes on the other
+z Relationship indicated by text - Full NNV structure
+z Not symmetric, but causal (cause and effect implied)
+
+68Massachusetts Institute of Technology  © Ed Crawley 2007
+Process-Object Architectures - Whistle
+operator
+bump
+channel
+ramp
+step
+hole
+cavity
+star
+air
+flow
+vortex
+tone (in)
+tone (ex)
+Plastic creating a c
+Whistle transporting I e
+deflecting I e
+venting I e
+creating I I c
+exciting I I c
+amplifying I I e
+coupling I I I c
+lungs
+throat
+tongue
+lips
+mouth
+air
+flow
+vortex
+tone (in)
+tone (ex)
+Human creating a c
+Whistle transporting a a e
+deflecting a e
+venting a e
+creating a I c
+exciting a I c
+amplifying a a e
+coupling a I I c
+Non-symmetric, causal, with full NNV structure
+a = agent, I = instrument, c = creates, e = effects
+
+69Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Sorting Array
+Sequentially
+exchanging Exchanger
+Array
+Sorting
+Inserting
+Partitioning
+Bubblesort
+Cocktail Sort
+Inserter
+Insertion sort
+Shell Sort
+Partitioner
+Quicksort
+Etc.
+Selected Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+70Massachusetts Institute of Technology  © Ed Crawley 2007
+Product/System - Code Bubblesort
+Procedure bubblesort (List array, number length_of_array)
+for i=1 to length_of_array
+for j=1 to length_of_array - i
+if array[ j ] > array [ j+1 ] then
+temporary = array [ j+1 ]
+array[ j+1 ] = array [ j ]
+array[ j ] = temporary
+end if
+end of j loop
+end of i loop
+return array
+End of procedure Product/system boundary
+
+71Massachusetts Institute of Technology  © Ed Crawley 2007
+Sorting Array Concept - Bubblesort
+Sequentially
+SortingArray
+Calling
+Routine
+Compiler
+Bubblesort Project/system 
+boundary
+Array
+Sorting
+Computer
+Specific 
+operand - value 
+related external 
+object that 
+changes 
+Externally delivered 
+value related 
+process
+Value related 
+instrument 
+objects
+Operand  and 
+solution neutral 
+transformation 
+
+72Massachusetts Institute of Technology  © Ed Crawley 2007
+I loop inst
+Array(j)
+Array(j+1)
+If inst
+Temp inst
+J loop inst
+Product/system 
+boundary
+Importing
+Calling
+routing
+Return
+statement
+Procedure
+statement
+Array
+Looping
+Looping
+Conditional
+testing
+Assigning
+Assigning
+Assigning
+Exporting
+Length_of
+_array
+Temp
+Sorted
+Array
+Compiler
+Routine
+SortingSoftware Code 
+Bubblesort :
+Process -
+Object
+Architecture
+Computer
+Operands
+External value 
+process emerging 
+from internal value 
+related process
+Value related 
+instrument 
+object
+z Note: process 
+control is 
+missing
+z How would 
+you show 
+this?
+
+73Massachusetts Institute of Technology  © Ed Crawley 2007
+Reflections on Simple System and Scale Up 
+to Medium Complexity Systems
+z Up to now, we have examined simple systems (whistle, 
+op amp, bubblesort, corkscrew, plus OS 2) largely for 
+pedagogic reasons, to understand ideas unencumbered 
+by complexity
+z Now we will start to examine “medium” complexity 
+systems (skateboard, refrigerator, ServeCo, TCP, plus 
+OS 4), to start to develop the means to examine complex 
+systems
+z One challenge is that the value flow analysis and the 
+analysis of the form elements and structure do not 
+immediately or obviously connect, have to work harder 
+at matching these up by using “outer in”t h i n k i n g
+
+74Massachusetts Institute of Technology  © Ed Crawley 2007
+Types of “Vertical” Thinking
+z When examining complex systems, there are 
+several ways of thinking through them:
+z Top down - start at the “highest” level and 
+reason down through the system
+z Bottom up - start at a lower level and reason 
+up
+z Middle out - start at a middle level, and 
+reason toward the top and bottom
+z Outer in - start at a the top and bottom, and 
+reason toward the middle
+Figure by MIT OCW.
+
+75Massachusetts Institute of Technology  © Ed Crawley 2007
+Example - Skateboard
+z Simple mechanical product/system
+z Truly only a medium complexity system (about 20 part 
+types and about 70 total parts)
+z Model for transporting as primary externally delivered 
+function
+
+76Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept to Architecture - Skateboard
+z Identify the operand, and value related attribute, and solution neutral 
+transformation
+z Identify the concept process and instrument object, and other aspects of 
+the whole product system and use context
+z Identify aspects of multifunctional concepts, if applicable
+z Informed by the concept form, identify the:
+– Idealized internal processes that touch directly on the delivery of 
+value - the “value related internal processes”
+– The intermediate operands along that path
+– (perhaps) More realizable internal value related processes 
+z Within that concept, identify the:
+– Instrument objects to execute the internal value related processes
+– The other instruments that are necessary to deliver value - the whole 
+project system
+Figure by MIT OCW.
+
+77Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Transporting a Person
+Rolling Roller
+Person
+transporting
+Air
+Flying
+Floating
+Skateboard
+Car
+Air Flyer
+Glider
+Helicopter
+Floater
+Ship
+Sailboat
+Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+78Massachusetts Institute of Technology  © Ed Crawley 2007
+Transporting Person Concept - Skateboard
+Transport by 
+rollingPerson
+Road
+Operator
+Skateboard Project/system 
+boundary
+Person
+Transporting
+is
+Specific 
+operand - value 
+related external 
+object that 
+changes 
+Externally delivered 
+value related 
+process
+Value related 
+instrument 
+objects
+Operand  and 
+solution neutral 
+transformation 
+
+79Massachusetts Institute of Technology  © Ed Crawley 2007
+Use Context - Skateboard 
+Rider as 
+OperandRoad Rider as OperatorSkateboard
+Whole Product System
+Use Context
+Pads, 
+helmets
+Half- pipes, 
+etc
+Curbs, 
+steps
+Friends w/ 
+boards
+Product/system boundary
+z What is the whole product system?
+z What is the use context in which it fits? 
+Whole product system
+Use context
+
+80Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for Transporting
+Transporting
+Person
+Thrusting
+Directing
+Levitating
+Decomposes to
+Specializes to
+Has attribute of
+Transporting
+Person
+Transporting contains three important sub-functions: 
+overcoming drag (thrusting), overcoming gravity 
+(levitating) and controlling the path of motion (directing)
+
+81Massachusetts Institute of Technology  © Ed Crawley 2007
+Rolling
+Pushing
+Transporting
+Rider
+Road
+Primary value 
+process
+Steering
+Levitating
+Thrusting
+Directing
+Product/system boundary
+Person
+is
+Operand
+Internal value 
+related process
+Skateboard
+Skateboard - Idealized 
+internal value related 
+processes
+Figure by MIT OCW.
+
+82Massachusetts Institute of Technology  © Ed Crawley 2007
+Skateboard
+Deck
+Adhesive
+Rubber 
+pad
+Assembly
+nut
+Top
+washer
+“King pin”
+bolt
+Pivot
+cup
+Wheel
+Wheel
+spacer Axle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing
+“Base
+Plate”
+Top
+bushing
+Bottom
+washer
+“King pin”
+nut
+“Deck”
+Wheel
+washer
+Deck 
+tape
+Bottom
+bushing
+Figure by MIT OCW.
+
+83Massachusetts Institute of Technology  © Ed Crawley 2007
+z Skateboard is 
+composed of about 69 
+elements of 21 types
+Decompositional View of a Medium System -
+Skateboard
+1
+1
+2
+8
+8 2
+2 2
+22
+2
+2
+2
+2
+4
+4
+8
+Adhesive Rubber pad Assemblynut Topwasher “King pin”boltBottomwasher Pivotcup WheelWheelspacerAxle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing“BasePlate” Top bushing Bottombushing “King pin”nut“Deck”
+Skateboard
+2
+Wheel
+washer
+4
+8
+Non-skid
+1
+Each bearing could be decomposed to an inner and outer race, 
+balls (8) and ball retainers (2) for 157 elements of 24 types
+Product/system boundary
+Figure by MIT OCW.
+
+84Massachusetts Institute of Technology  © Ed Crawley 2007
+Spatial/Topological Structure - Skateboard 
+Adhesive
+Rubber 
+pad
+Assembly
+nut
+Top
+washer
+“King pin”
+bolt
+Bottom
+bushing
+Pivot
+cup
+Wheel
+Wheel
+spacer
+Axle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing
+“Base
+Plate”
+Top
+bushing
+Bottom
+washer
+“King pin”
+nut
+“Deck”
+Wheel
+washer
+“Deck tape”
+Wheel
+washer Bearing
+• For physical systems, this 
+information could also be 
+shown on an assembly 
+diagram, but topology 
+would not be as explicit
+• In a complete description, 
+these arrows would be 
+labeled
+One of four wheels shown
+One of two 
+trucks shown
+
+85Massachusetts Institute of Technology  © Ed Crawley 2007
+Spatial 
+Structure -
+“List” -
+Skateboard
+Assembly bolt
+Deck tape
+Adhesive
+Deck
+Rubber pad
+Base plate
+Assembly nut
+Pivot cup
+Top washer
+Top bushing
+Bottom bushing
+Bottom washer
+King pin
+King pin nut
+Lower hanger
+Axel
+Wheel washer (inner)
+Bearing (inner)
+Wheel spacer
+Wheel
+Bearing (outer)
+Wheel washer (outer)
+Axel nut
+Assembly bolt x
+Deck tape w x
+Adhesive w t x
+Deck w t x
+Rubber pad w t x
+Base plate w t x
+Assembly nut w t x
+Pivot cup t x
+Top washer t x
+Top bushing t x
+Bottom bushing x
+Bottom washer t x
+King pin s ssssx
+King pin nut t w x
+Lower hanger t t t x
+Axel t x
+Wheel washer (inner) w x
+Bearing (inner) w t x
+Wheel spacer w t x
+Wheel w w w x
+Bearing (outer) w t s x
+Wheel washer (outer) w t x
+Axel nut w t x
+t = touches or tangent
+w = within
+s = surrounds
+
+86Massachusetts Institute of Technology  © Ed Crawley 2007
+Implementation Structure
+z The implementation structure captures information 
+about how the item was implemented
+z Elements were linked by some manufacturing/assembly/ 
+integration steps
+z Examples:
+– Bonded to (I.e. was bonded)
+– Bolted to (I.e. was bolted)
+– Compiled with 
+– Pressed against
+– Etc.
+z These are issues of form
+z Can also represent with object-object links in OPM
+
+87Massachusetts Institute of Technology  © Ed Crawley 2007
+Implementation Structure - Skateboard
+Adhesive
+Rubber 
+pad
+Assembly
+nut
+Top
+washer
+“King pin”
+bolt
+Bottom
+bushing
+Pivot
+cup
+Wheel
+Wheel
+spacer
+Axle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing
+“Base
+Plate”
+Top
+bushing
+Bottom
+washer
+“King pin”
+nut
+“Deck”
+Wheel
+washer
+“Deck tape”
+Wheel
+washer Bearing
+• Often very similar to, but 
+not identical to the 
+topological structure, but 
+different information on 
+links 
+• In a complete description, 
+these arrows would be 
+labeled as well
+One of two 
+trucks shown
+One of four wheels shown
+
+88Massachusetts Institute of Technology  © Ed Crawley 2007
+Structure -
+“List” -
+Skateboard
+Assembly bolt
+Deck tape
+Adhesive
+Deck
+Rubber pad
+Base plate
+Assembly nut
+Pivot cup
+Top washer
+Top bushing
+Bottom bushing
+Bottom washer
+King pin
+King pin nut
+Lower hanger
+Axel
+Wheel washer (inner)
+Bearing (inner)
+Wheel spacer
+Wheel
+Bearing (outer)
+Wheel washer (outer)
+Axel nut
+Assembly bolt x b b b s
+Deck tape w x g
+Adhesive w t x g
+Deck w t x p
+Rubber pad w t x p
+Base plate w t x p p p b
+Assembly nut w t x
+Pivot cup t x p
+Top washer t x p b
+Top bushing t x b p
+Bottom bushing x p b p
+Bottom washer t x b p
+King pin s ssssxs
+King pin nut t w x
+Lower hanger t t t x st
+Axel t x st st st st st s
+Wheel washer (inner) w x p
+Bearing (inner) w t x p p
+Wheel spacer w t x
+Wheel w w w x p
+Bearing (outer) w t s x p
+Wheel washer (outer) w t x p
+Axel nut w t x
+t = touches or tangent g = glued
+w = within b = bolted
+s = surrounds s = screwwed
+p = pressed
+st = stacked
+• Lower triangle 
+contains the 
+spatial structure, 
+which would be 
+symmetric
+• Upper triangle 
+contains the 
+implementation 
+structure, which 
+would be 
+symmetric
+• This is starting to 
+look like an 
+architecture!
+
+89Massachusetts Institute of Technology  © Ed Crawley 2007
+How do Form and Function Connect?
+z We have a high level model of the internal value related 
+function of a skateboard
+z And a detailed parts list, and understanding of the 
+formal structure (in this case absolutely complete, with 
+every part enumerated, not the usual case!)
+z How do the elements and their structure allow the higher 
+level value related externally delivered function to 
+emerge?
+Note that we are reasoning “outer in”
+
+90Massachusetts Institute of Technology  © Ed Crawley 2007
+Example - Refrigerator
+z More integrated product/system - mechanical, electrical, 
+thermal processes
+z Really more complex than a medium system (about 300 
+parts of 200 types), but can be simplified to represent a 
+medium system
+z Model of physical/thermal process system
+
+91Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Preserving Food
+z Solution neutral 
+statement is: 
+‘preserving food’
+z Solution specific 
+processes: chilling, 
+freezing, etc.
+z Solution specific form 
+for chilling: 
+refrigerator, cooler, 
+etc.
+z Selected concept is 
+chilling with a 
+refrigerator
+Preserving
+Chilling
+Refrigerator
+Chiller
+Food
+Cooler
+????
+Freezing
+Etc.
+???
+Selected Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+92Massachusetts Institute of Technology  © Ed Crawley 2007
+Preserving Food Concept - Refrigerator
+ChillingFood
+Air
+Operator
+Refrigerator
+Operand -value 
+related external 
+object that 
+changes state
+Externally delivered 
+value related 
+process
+Value related 
+instrument 
+object
+Project/system 
+boundary
+Food
+Preserving
+Operand  and 
+solution neutral 
+transformation 
+Electric
+Power
+Outlet
+Floor
+Figure by MIT OCW.
+
+93Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for Chilling
+Preserving
+Food
+Heat
+Extracting
+Heat load
+reducing
+Temperature
+Regulating
+Decomposes to
+Specializes to
+Has attribute of
+Chilling
+Food
+“Chilling” implies cooling, but at a relatively constant 
+temperature above freezing, and hence temperature 
+regulating. Chilling efficiently implies that the ambient 
+heat load on the process be reduced.
+
+94Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+RefrigeratingSensing,Feeding back
+Operator
+Refrigerator
+Refrigerator -
+Idealized internal 
+value related
+processes
+z Idealized 
+internal value 
+related 
+processes and 
+operands 
+informed by 
+the concept 
+refrigerator
+Heat 
+extracting
+Heat load
+Reducing 
+Temperature
+Regulating
+Floor
+Electric 
+Outlet
+Minimizing
+Figure by MIT OCW.
+
+95Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Transferring
+load
+Operator
+Refrigerator -
+Realizable 
+Internal 
+ProcessesProject/system boundary
+Circulating
+Value related
+internal processes
+Operands
+
+96Massachusetts Institute of Technology  © Ed Crawley 2007
+Primary Value, Other Value, Interfacing, and 
+Supporting Internal Functions
+z All product/systems have a primary 
+value related process - why the 
+product was purchased
+z Many have other processes that 
+deliver other or additional value, e.g. 
+music in car, ice maker in frig
+z All product/system have interface 
+processes with the operands, other 
+elements of the whole product system
+z Most product/systems have other 
+internal processes that somehow 
+support the value processes, but do 
+not them selves add any value
+Primary
+value related
+Other
+value related
+Interfacing
+Supporting 
+processes
+
+97Massachusetts Institute of Technology  © Ed Crawley 2007
+Primary Value, Other Value, Interfacing, and 
+Supporting Internal Functions - Refrigerator
+z All product/systems have a primary 
+value related process - chilling food
+z Many have other value related 
+processes - ice making, dispensing 
+cold water, freezing, ?
+z All have interface processes - with 
+food,  floor, ?
+z Most have other internal processes 
+that support the value processes -
+structurally supporting, ?
+Primary
+value related
+Other
+value related
+Interfacing
+Supporting 
+processes
+
+98Massachusetts Institute of Technology  © Ed Crawley 2007
+Form of A Simple Refrigerator - List
+evaporator fan, motor compressor wiring harness dairly compartment assembly cabinet shelf ladder (l,r) support
+evaporator shroud running capacitor door shelf assembly (3) glass shelf assembly
+wiring harness compressor mount door gasket shelf assembly with track for basket
+heat exchanger starting relay door trim roll-out basket assembly
+accumulator overload protector door pannel crisper roller (l,r,l,r)
+evaoporator coil fan bracket (condensor fan) door handle crisper slide (l,r,l,r)
+drain tube control knob and indicator door center crisper assembly
+drain trought assembly controller (refig temp) switch depressor crisper tray assembly
+drain pan control bracket light diffuser crisper glass assembly
+condenser light bulb (4) fan guard criper draw assembly
+fan switch light stand off door hinge (top) louvered grille
+light switch light socket door hinge (bottom) compressor fan shroud assembly
+switch housing control light and socket door frame (top, sides) compressor shroud assembly
+condensor fan, schroud, motor power cord back cover control pannel
+condensor schroud light terminator legs, rollers evaporator cover
+compressor egg tray base assembly cabinet assembly
+condensate heater loop kickplate
+z Parts list for a simple refrigerator, no ice maker, cold 
+water dispenser, freezer, etc.
+z 66 part types in list is already simplified
+z Actually about 210 part numbers on bill of material
+
+99Massachusetts Institute of Technology  © Ed Crawley 2007
+Rationalize Element List 
+primary value elements and elements in assemblies or supporting and secondary other value related elements
+ assembiies important details in element element, connectors, etc.
+cabinet assembly cabinet assembly cabinet,  insulation sturcture outer pannels
+light diffuser light diffuser
+fan guard fan guard
+door hinge (top) hinges I door hinge assembly (top)
+door hinge (bottom) I door hinge assembly (bottom)
+door frame (top, sides) door frame (top, sides)
+back cover back cover
+legs, rollers legs, rollers  legs, rollers
+base assembly base assembly (beams)
+kickplate kickplate
+z Try to rationalize element listing to a more manageable number 20-40
+z Some important elements that are highly integral will have to be
+expanded - e.g. cabinet assembly to cabinet, insulation, structure, 
+outer panels
+z Some elements can be grouped into abstractions - e.g. top and 
+bottom door hinges to hinge
+z Some can be identified as being associated with supporting or 
+secondary elements or connectors - e.g. light diffuser, fan guard, 
+base assembly beams
+z Some can be identified with other value functions - e.g. outer panels
+
+100Massachusetts Institute of Technology  © Ed Crawley 2007
+How do Form and Function Connect?
+z We have a high level model of the internal value related 
+function of a skateboard
+z And a detailed parts list, and understanding of the 
+formal structure (in this case absolutely complete, with 
+every part enumerated, not the usual case!)
+z How do the elements and their structure allow the higher 
+level value related function to emerge?
+z Is their evidence of interfacing functions?
+z Is their evidence of value related functions other than 
+the primary one?
+z Is their evidence of internal “supporting functions” other 
+than primary functions
+Note that we are reasoning “outer in”
+
+101Massachusetts Institute of Technology  © Ed Crawley 2007
+The Product/System Architecture 
+Architecture
+Processes
+Instrument 
+Forms + 
+Structure
+Operands
+Concept
+Processing
+Instrument 
+Form
+Operand
+
+102Massachusetts Institute of Technology  © Ed Crawley 2007
+Synthesized PDP
+Group reports on:
+z Steps which appeared in most or all 
+PDP’s
+z Synthesis into reference PDP
+z Distinguishing features
+
+103Massachusetts Institute of Technology  © Ed Crawley 2007
+Closure on Definitions
+z System
+z Complexity
+– Dynamic
+– Large
+– Perceived Complexity
+z Part
+z Detail
+z Atomic Parts
+z Product
+z Value
+z Benefit
+z Product/system
+
+104Massachusetts Institute of Technology  © Ed Crawley 2007
+Closure on Definitions
+System z A set of interrelated elements which perform a 
+function, whose functionality is greater than the 
+sum of the parts [Reference]
+z Two or more elements that interact by design or 
+coincidence
+z Interacting parts or elements that can be 
+regarded as a whole (within a boundary)
+Alternate
+definitions
+
+105Massachusetts Institute of Technology  © Ed Crawley 2007
+Closure on Definitions
+Complexity
+Complex 
+Systems
+z having many interrelated elements and 
+interfaces [Reference]
+z have many levels of elements, types of 
+elements, connections and types of 
+connections
+z require a great deal of information to 
+specify
+Related Concepts:
+Evolving 
+(process)
+z having evolving requirements or 
+resources
+Large (team) z requiring a team larger than one which can 
+communicate directly among themselves
+Complicated z appearing to the observer as being difficult 
+to understand (an issue of perception)
+
+106Massachusetts Institute of Technology  © Ed Crawley 2007
+Closure on Definitions
+Product
+Value
+Benefit
+Product/
+system
+z A thing which can be delivered or transferred 
+and has value
+z Benefit at cost
+z Worth, importance, utility as judged by a 
+subjective observer (the beneficiary)
+z A product which is also a system, emphasizing 
+the dual nature
+
+107Massachusetts Institute of Technology  © Ed Crawley 2007
+Closure on Definitions
+z A part is an element that you cannot take apart 
+and then reconstitute in its original form - it has 
+been irreversibly implemented [no link to 
+function],   or
+z A part is an element that you cannot take apart 
+without destroying its ability to deliver its 
+function [explicit link to function]
+z An element of a part (so a part can be a system)
+z A part, or
+z The details of a part which have independent 
+function
+Part
+Detail
+Atomic
+part
+
+108Massachusetts Institute of Technology  © Ed Crawley 2007
+Additional material on fundamental 
+processes - FYI
+
+109Massachusetts Institute of Technology  © Ed Crawley 2007
+Fundamental Processes
+z Create (and Destroy)
+z Transport
+– In place  - from A to B, or to “spatial storage” and 
+recover from “storage”
+– In time – only delays allowed since time is causal 
+“temporal storage”
+z Transform
+– In type or form
+– In quantity – magnitude for continuous attributes, 
+number for discrete artefacts
+z Compare 
+– Any of the place, time, type or quantity [not sure it is 
+independent of Transform]
+A la Crawley
+
+110Massachusetts Institute of Technology  © Ed Crawley 2007
+Fundamental Process Frameworks
+Create,
+Destroy
+Transform -
+Transport Transform
+Quantity
+Create,
+Destroy Place Time
+(delay)
+Type/ Form
+Magnitude
+(continuous)
+Number
+(discrete)
+Compare
+-P l a c e
+(channel)
+Time
+(store)
+Type
+(change)
+Magnitude
+(vary)
+Number
+(connect)
+Create Move Store Read, write - Write Look up
+(compare and
+locate)
+- - - - And, Or (Equivalence)
+Dori
+Crawley
+Pahl &
+Beitz
+Turing
+Bool
+
+111Massachusetts Institute of Technology  © Ed Crawley 2007
+Map fundamental processes to OPM
+z Try to map fundamental 
+processes on generic 
+OPM of system operating
+z See if this leads to any 
+systematization of the 
+classical fundamental 
+processes
+z Explore if this forms a 
+basis of predicting 
+emergence or idealized 
+system design
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Beneficial
+Attribute
+Operand
+
+112Massachusetts Institute of Technology  © Ed Crawley 2007
+Creation/Destroy
+z Can show existence 
+explicitly or implicitly
+z Have to be cautious as 
+to what is really 
+created - an object (I.e. 
+an arrangement of 
+things) or its mass
+z Has to do with a 
+fundamental change in 
+the existence of 
+something
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Existence
+Operand
+No Yes
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Operand
+Destroy has arrows in 
+opposite sense
+
+113Massachusetts Institute of Technology  © Ed Crawley 2007
+Transform Type/Form (Change)
+z Can show existence 
+explicitly or implicitly
+z Has to do with a 
+fundamental change 
+in the existence of 
+something
+z Something is 
+destroyed and 
+something entirely 
+new is created
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Existence
+Pre-process
+Operand
+No Yes
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Post-process
+Operand
+Existence
+Post-process
+Operand
+No Yes
+Post-process
+Operand
+
+114Massachusetts Institute of Technology  © Ed Crawley 2007
+Transport (discrete object)
+z Has to do with a 
+fundamental change 
+in location of 
+something
+z Changes the location 
+attribute of the 
+operand
+z Must now use 
+attribute that changes 
+(vs.. creation)
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Location
+Pre-process
+Operand
+Here There
+
+115Massachusetts Institute of Technology  © Ed Crawley 2007
+Transport/channel (field variable)
+z Has to do with a 
+fundamental change 
+in location of 
+something, but that is 
+more of a field 
+variable like heat, 
+stress, charge
+z Changes the location 
+attribute of the 
+operand, but may be 
+bi-directional
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Location
+Pre-process
+Operand
+Left Right
+Transports/
+channels
+BeamAttribute ofoperating
+Attribute of 
+form
+Location
+Force
+Left Right
+
+116Massachusetts Institute of Technology  © Ed Crawley 2007
+Transport/channel (field variable)
+Specific system
+Operating
+PipeAttribute ofoperating
+Attribute of 
+form
+Location
+Flow
+Left Right
+Transports/
+channels
+Beam
+Attribute of
+operating
+Location
+Force
+Left Right
+Alternate
+Specific system
+Operating
+WireAttribute ofoperating
+Attribute of 
+form
+Location
+Current
+Left Right
+Location
+Voltage
+Left Right
+
+117Massachusetts Institute of Technology  © Ed Crawley 2007
+Store
+z Complex idea of moving 
+something to a storage 
+location, leaving it there 
+some latency time, and 
+then recovering
+z Storing process may 
+include or be in addition 
+to the stowing and un-
+stowing processes
+z Field variable also store, 
+e.g. energy storage in 
+an electric field
+Stowing
+Specific
+System form
+Attribute of 
+form
+Location
+Operand
+Here ThereStorage
+Storing
+Specific
+System form
+Attribute of 
+form
+Un-stowing
+Specific
+System form
+Attribute of 
+form
+
+118Massachusetts Institute of Technology  © Ed Crawley 2007
+Vary (Magnitude)
+z Has to do with a fundamental 
+change in a continuously 
+variable state of an operand 
+other than location (e.g. 
+amplitude, temperature)
+z Could you extend this to 
+discrete states without loss 
+of generality (e.g. color)
+z Could extend to states that, 
+like location, don’t really 
+change anything about the 
+object itself (e.g. ownership)
+z Why distinguish this from 
+transport, which just changes 
+a different state, associated 
+with location?
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+State
+Operand
+Old New
+
+119Massachusetts Institute of Technology  © Ed Crawley 2007
+Classes of States
+z States that are continuously variable 
+and actually effect the “intrinsic state”
+of the object
+– Temperature, pressure, voltage, current, 
+etc.
+z States that are discrete and actually 
+effect the “intrinsic state” of the object
+– Color, size, material composition, on/off, 
+in storage/not, created/not
+z States that are continuously variable 
+and do not actually effect the “state” of 
+the object
+– Location
+z States that are discrete and do not 
+actually effect the “state” of the object
+– Ownership
+Continuous Discrete
+Intrinsic
+Extrinsic
+
+120Massachusetts Institute of Technology  © Ed Crawley 2007
+Transform Number (Connect)
+z This is in fact a class of processes that 
+is probably richer than all the others 
+combined
+z Could include:
+– Connection of two objects to form a 
+joint object (as in assembly)
+– Flowing together of two objects (fork in 
+a river)
+– Combination of a physical object and 
+an information object (as in a controlled 
+process)
+– Processes conditional on the status of 
+an object
+z We have to expand this considerable, 
+once we understand the one and two 
+operand processes
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Existence
+Pre-process
+Operand
+No Yes
+Existence
+Post-process
+Operand
+No Yes
+Existence
+Pre-process
+Operand
+No Yes
+2 to 1 shown, could
+Also be 1 to 2
+
+121Massachusetts Institute of Technology  © Ed Crawley 2007
+Issues raised in Mapping fundamental 
+processes to OPM
+z Class of state: 
+continuous, discrete, 
+intrinsic, extrinsic
+z Number of operands: 
+one, two, three (more??)
+z Nature of process 
+(transport, store, vary, 
+etc)
+z Can we connect to 
+notions of abstract 
+algebra
+Specific system
+Operating
+Specific
+System form
+Attribute of
+operating
+Attribute of 
+form
+Beneficial
+Attribute
+Operand

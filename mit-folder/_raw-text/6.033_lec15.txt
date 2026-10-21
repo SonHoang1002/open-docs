@@ -1,0 +1,566 @@
+   
+   
+  
+6.033 Spring 2018
+Lecture #15 
+• When replication fails us
+• Atomicity via shadow copies
+• Isolation
+• Transactions
+6.033 | spring 2018 | Katrina LaCurts
+1
+
+ 
+  
+ 
+        
+  
+  
+high-level goal: build reliable 
+systems from unreliable components 
+this is difficult because reasoning about failures 
+is difficult. we need some abstractions that will 
+let us simplify. 
+6.033 | spring 2018 | Katrina LaCurts  
+2
+
+      
+   
+      
+  
+atomicity 
+an action is atomic if it happens completely or 
+not at all. if we can guarantee atomicity, it will 
+be much easier to reason about failures 
+6.033 | spring 2018 | Katrina LaCurts  
+3
+
+ 
+   
+  
+  
+transfer (bank, account_a, account_b, amount): 
+bank[account_a] = bank[account_a] -amount crash! 
+!
+bank[account_b] = bank[account_b] + amount 
+problem: account_a lost amount dollars, but
+account_b didn’t gain amount dollars
+6.033 | spring 2018 | Katrina LaCurts  
+4
+
+ 
+       
+      
+  
+transfer (bank, account_a, account_b, amount): 
+bank[account_a] = bank[account_a] -amount crash! 
+!
+bank[account_b] = bank[account_b] + amount 
+solution: make this action atomic. ensure that 
+we complete both steps or neither step. 
+6.033 | spring 2018 | Katrina LaCurts  
+5
+
+   
+ 
+ 
+ 
+    
+  
+quest for atomicity: attempt 1 
+transfer (bank_file, account_a, account_b, amount): 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] 
+- amount crash! 
+!
+bank[account_b] = bank[account_b] + amount
+crash! !write_accounts(bank_file) 
+problem: a crash during write_accounts 
+leaves bank_file in an intermediate state
+6.033 | spring 2018 | Katrina LaCurts  
+6
+
+   
+ 
+   
+    
+ 
+ 
+ 
+  
+quest for atomicity: attempt 2 
+(shadow copies) 
+transfer (bank_file, account_a, account_b, amount): 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] -amount 
+bank[account_b] = bank[account_b] + amount 
+write_accounts(tmp_file) 
+rename(tmp_file, bank_file) 
+crash! 
+! 
+crash! 
+! 
+crash! 
+! 
+problem: a crash during rename potentially
+leaves bank_file in an intermediate state
+6.033 | spring 2018 | Katrina LaCurts  
+7
+
+   
+ 
+  
+ 
+  
+quest for atomicity: attempt 2 
+(shadow copies) 
+transfer (bank_file, account_a, account_b, amount): 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] -amount 
+bank[account_b] = bank[account_b] + amount 
+write_accounts(tmp_file) 
+crash! 
+!rename(tmp_file, bank_file) 
+solution: make rename atomic
+6.033 | spring 2018 | Katrina LaCurts  
+8
+
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 1 
+filename “tmp_file” -> inode 2 
+6.033 | spring 2018 | Katrina LaCurts  
+9
+
+          
+                
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 1 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+// point bank_file’s dirent at inode 2 
+// delete tmp_file’s dirent 
+// remove refcount on inode 1 
+6.033 | spring 2018 | Katrina LaCurts  
+10
+
+          
+                
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+orig_file dirent = tmp_inode 
+// delete tmp_file’s dirent 
+// remove refcount on inode 1 
+6.033 | spring 2018 | Katrina LaCurts  
+11
+
+          
+                
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+orig_file dirent = tmp_inode 
+remove 
+tmp_file dirent 
+// remove refcount on inode 1 
+6.033 | spring 2018 | Katrina LaCurts  
+12
+
+          
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 0 refcount: 1 
+rename(tmp_file, 
+orig_file): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+orig_file dirent = tmp_inode 
+remove 
+tmp_file dirent 
+decref(orig_inode) 
+6.033 | spring 2018 | Katrina LaCurts  
+13
+
+          
+                
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 1 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+// point bank_file’s dirent at inode 2 
+// delete tmp_file’s dirent 
+// remove refcount on inode 1 
+6.033 | spring 2018 | Katrina LaCurts  
+14
+
+          
+                
+ 
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 1 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1
+crash! 
+! 
+orig_file dirent = tmp_inode rename didn’t happen
+remove tmp_file dirent 
+decref(orig_inode) 
+6.033 | spring 2018 | Katrina LaCurts  
+15
+
+          
+                
+ 
+   
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+orig_file dirent = tmp_inode crash! 
+! 
+remove tmp_file dirent rename happened,
+decref(orig_inode) but refcounts are wrong 
+6.033 | spring 2018 | Katrina LaCurts  
+16
+
+          
+                
+ 
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode ? 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+crash! 
+!orig_file dirent = tmp_inode
+crash during this line seems bad..remove tmp_file dirent 
+decref(orig_inode) 
+6.033 | spring 2018 | Katrina LaCurts  
+17
+
+          
+                
+ 
+     
+ 
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode ? 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+crash! 
+!orig_file dirent = tmp_inode
+crash during this line seems bad..remove tmp_file direntbut is okay because single-sector writes 
+decref(orig_inode) are themselves atomic 
+6.033 | spring 2018 | Katrina LaCurts  
+18
+
+          
+                
+ 
+   
+   
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+orig_file dirent = tmp_inode crash! 
+! 
+remove tmp_file dirent rename happened,
+decref(orig_inode) but refcounts are wrong 
+6.033 | spring 2018 | Katrina LaCurts  
+19
+
+          
+                
+   
+  
+  
+quest for atomicity: making rename atomic
+directory entries 
+filename “bank_file” -> inode 2 
+filename “tmp_file” -> inode 2 
+inode 1: // old data inode 2: // new data 
+data blocks: [..] data blocks: 
+[..] 
+refcount: 1 refcount: 1 
+rename(tmp_file, orig_file
+): 
+tmp_inode = lookup(tmp_file) // = 2 
+orig_inode = lookup(orig_file) // = 1 
+incref(tmp_inode) 
+orig_file 
+dirent = tmp_inode 
+decref(orig_inode) problem: this is a mess, 
+and is still incorrect remove tmp_file dirent 
+decref(tmp_inode) 6.033 | spring 2018 | Katrina LaCurts  
+20
+
+ 
+  
+  
+solution: recover from failure 
+(clean things up) 
+recover(disk): 
+for inode in disk.inodes: 
+inode.refcount = find_all_refs(disk.root_dir, inode) 
+if exists(“tmp_file”): 
+unlink(“tmp_file”) 
+6.033 | spring 2018 | Katrina LaCurts  
+21
+
+      
+     
+   
+        
+    
+     
+  
+atomicity
+(first abstraction) 
+not quite solved; shadow copies perform poorly
+even for a single user and a single file, and we 
+haven’t even talked about concurrency 
+isolation 
+(second abstraction) 
+if we guarantee isolation, then two actions A1
+and A2 will appear to have run serially even if 
+they were executed concurrently
+(i.e., A1 before A2, or vice versa) 
+6.033 | spring 2018 | Katrina LaCurts  
+22
+
+               
+  
+     
+                 
+  
+      
+       
+   
+    
+  
+transactions: provide atomicity and 
+isolation 
+Transaction 1 Transaction 2 
+begin begin 
+transfer(A, B, 20) transfer(B, C, 5) 
+withdraw(B, 10) deposit(A, 5) 
+end end 
+atomicity: each transaction will appear to have run to 
+completion, or not at all 
+isolation: when mult iple transactions are run 
+concurrently, it will appear as if they were run 
+sequentially (serially) 
+6.033 | spring 2018 | Katrina LaCurts  
+23
+
+    
+      
+  
+  
+atomicity and isolation — and thus,
+transactions — make it easier to reason 
+about failures (and concurrency) 
+6.033 | spring 2018 | Katrina LaCurts  
+24
+
+    
+     
+  
+transfer (bank_file, account_a, account_b, amount): 
+acquire(lock) 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] -amount 
+bank[account_b] = bank[account_b] + amount 
+write_accounts(“tmp_file”) 
+rename(“tmp_file”, bank_file) 
+release(lock) 
+couldn’t we just put locks around
+everything? 
+(isn’t that what locks are for?) 
+6.033 | spring 2018 | Katrina LaCurts  
+25
+
+     
+      
+  
+transfer (bank_file, account_a, account_b, amount): 
+acquire(lock) 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] -amount 
+bank[account_b] = bank[account_b] + amount 
+write_accounts(“tmp_file”) 
+rename(“tmp_file”, bank_file) 
+release(lock) 
+this particular strategy will perform poorly
+(would force a single transfer at a time) 
+6.033 | spring 2018 | Katrina LaCurts  
+26
+
+     
+      
+  
+    
+  
+transfer (bank_file, account_a, account_b, amount): 
+acquire(lock) 
+bank = read_accounts(bank_file) 
+bank[account_a] = bank[account_a] -amount 
+bank[account_b] = bank[account_b] + amount 
+write_accounts(“tmp_file”) 
+rename(“tmp_file”, bank_file) 
+release(lock) 
+this particular strategy will perform poorly
+(would force a single transfer at a time) 
+locks sometimes require global reasoning, 
+which is messy 
+eventually, we’ll incorporate locks, but in a systematic way 
+6.033 | spring 2018 | Katrina LaCurts  
+27
+
+     
+   
+    
+   
+   
+    
+ 
+    
+ 
+  
+goal: to implement transactions,
+which provide atomicity and isolation, 
+while not hindering performance 
+shadow copies. work, but perform atomicity poorly and don’t allow for concurrency 
+? 
+(coarse-grained locks perform poorly, isolation finer-grained locks are difficult to 
+reason about) 
+eventually, we also want transaction-based systems to 
+be distributed: to run across multiple machines 
+6.033 | spring 2018 | Katrina LaCurts  
+28
+
+  
+          
+        
+   
+         
+       
+  
+• Transactions provide atomicity and isolation , both of
+which make it easier for us to reason about failures
+because we don’t have to deal with intermediate states.
+• Shadow copies are one way to achieve atomicity. The
+work, but perform poorly: require copying an entire file
+even for small changes, and don’t allow for concurrency.
+6.033 | spring 2018 | Katrina LaCurts  
+29
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+30

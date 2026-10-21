@@ -1,0 +1,442 @@
+   
+  
+6.033 Spring 2018
+Lecture #24 
+• Anonymity and Digital Currency
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+server
+ 
+Previous Lectures
+  
+server
+resourceguardprincipal
+(identifies client on 
+server)
+request
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+  
+ 
+  
+Bitcoin and Tor 
+two technologies that deal, either directly or 
+somewhat-tangentially, with anonymity 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+ 
+  
+digital currency 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+  
+currency 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+   
+ 
+  
+decentralized currency 
+can we avoid having a centralized bank? 
+problem: easily forgeable 
+I, Karen, 
+give Mark 
+one coin
+Karen Mark
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+   
+ 
+  
+       
+  
+decentralized currency 
+can we avoid having a centralized bank? 
+problem: replay attacks 
+I, Karen, 
+give Mark 
+one coin
+Karen Mark
+!
+use digital signatures
+Karen signs the message with her secret key
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+   
+  
+ 
+  
+decentralized currency 
+can we avoid having a centralized bank? 
+I, Karen, 
+give Mark 
+coin 18723
+Karen Mark
+!
+use sequence numbers
+(serial numbers)
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+   
+     
+ 
+  
+decentralized currency 
+can we avoid having a centralized bank? 
+problem: how does Mark know that Karen 
+owns coin 18723? 
+I, Karen, 
+give Mark 
+coin 18723
+Karen Mark
+!
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+ 
+       
+  
+     
+coin 18723
+!
+broadcast transactions 
+everyone in the network keeps a log of all transactions
+(a “decentralized, public log”) 
+For ordering, each transaction will contain a hash of the transaction that came before it 
+Karen
+Pete
+I, Karen, 
+give Mark 
+Mark
+I, Karen, 
+give Mark 
+coin 18723
+!
+log
+log
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+         
+    
+        
+  
+problem: what if Katrina tries to spend with Mark and
+Pete at the same time? 
+(before either party has a chance to publish the transaction) 
+Katrina
+Pete
+I, Katrina, 
+give Pete 
+coin 47289
+!
+log
+Mark
+log
+I, Katrina, 
+give Mark 
+coin 47289
+!
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+Pete
+log
+Mark
+log
+        
+   
+  
+idea: get consensus from “enough” of the network — let’s 
+say 51% — before verifying the transaction 
+Katrina
+Pete
+I, Katrina, 
+give Pete 
+coin 47289
+!
+log
+Mark
+log
+I, Katrina, 
+give Mark 
+coin 47289
+!
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+Katrina
+Pete
+log
+Mark
+log
+  
+        
+   
+idea: get consensus from “enough” of the network — let’s 
+say 51% — before verifying the transaction 
+Katrina
+Pete
+log
+Mark
+log
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+Katrina
+Pete
+log
+Mark
+log
+ 
+      
+  
+problem: Sybil Attacks 
+can be solved by using strong identities, but we want to be anonymous 
+Katrina
+Pete
+log
+Mark
+log
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+  
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Pete
+Mark
+Karen
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+  
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Mark
+Karen
+log
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+           
+  
+          
+  
+Mark uses his log to verify that Karen owns coin 09825, and
+then sets about solving a proof-of-work to validate this 
+transaction 
+Once he solves it, Mark broadcasts the transaction along with 
+the solution to the rest of the network 
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Mark
+Karen
+log
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+         
+   
+  
+in reality, everyone in the network is competing to 
+validate the transaction first 
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Pete
+Mark
+Karen
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+Mark uses his log to verify that Karen owns coin 09825, and
+then sets about solving a proof -of-work to validate this 
+transaction
+Once he solves it, Mark broadcasts the transaction along with 
+the solution to the rest of the network
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Mark
+Karen
+log
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Mark
+Karen
+log
+Karen -> Mark, 09825
+Howie -> Muriel, 78123
+Pete -> Sam, 140924
+block of (pending) transactions
+typically, users will verify a block of transactions at once, rather 
+than one transaction at a time
+since each block of transactions includes a hash that points to 
+the previous block, we refer to the log as the blockchain
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Mark
+Karen
+Karen -> Mark, 09825
+Howie -> Muriel, 78123
+Pete -> Sam, 140924
+block of (pending) transactions
+typically, users will verify a block of transactions at once, rather 
+than one transaction at a time
+since each block of transactions includes a hash that points to 
+the previous block, we refer to the log as the blockchain
+blockchain
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+!
+I, Karen, want 
+to give Pete 
+coin 09825
+Pete
+Mark
+Karen
+If multiple users “win” the competition at (roughly) the same 
+time, the blockchain will fork
+blockchain
+blockchain
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+23
+6.033 | spring 2018 | Katrina LaCurts  
+
+
+24
+6.033 | spring 2018 | Katrina LaCurts  
+
+
+Katrina
+Pete
+Mark
+I, Katrina, 
+give Pete 
+coin 47289
+!
+I, Katrina, 
+give Mark 
+coin 47289
+!
+blockchain
+blockchain
+idea: Katrina tries to validate a block that 
+includes both of those transactions
+won’t work — other users will examine the block and spot inconsistencies
+6.033 | spring 2018 | Katrina LaCurts 
+25
+
+idea: Katrina tries to get both transactions 
+validated on the network
+won’t work — eventually network will confirm only one
+Katrina
+Pete
+I, Katrina, 
+give Pete 
+coin 47289
+!
+Mark
+I, Katrina, 
+give Mark 
+coin 47289
+!
+blockchain
+blockchain
+6.033 | spring 2018 | Katrina LaCurts 
+26
+
+Katrina
+Pete
+I, Katrina, 
+give Pete 
+coin 47289
+!
+Katrina’
+I, Katrina, 
+give Katrina’ 
+coin 47289
+!
+blockchain
+blockchain
+idea: Katrina tries to spend a coin with Pete and herself
+(Katrina’ is a Sybil of Katrina)
+Katrina would need a lot of compute power to pull this off
+6.033 | spring 2018 | Katrina LaCurts 
+27
+
+• Bitcoin is a decentralized digital currency.  Being
+decentralized means that there is no bank; in Bitcoin,
+everyone is the bank.
+• Bitcoin provides a distributed public log called the
+blockchain that can be used for purposes other than
+digital currency.  It uses proofs-of-work to prevent Sybil
+Attacks, since strong identities won’t work.
+• In theory, users of Bitcoin are anonymous ; in practice,
+it’s not clear how true that is.
+6.033 | spring 2018 | Katrina LaCurts 
+28
+
+Katrina
+Pete
+I, Katrina, 
+give Pete 
+coin 47289
+!
+log
+Mark
+log
+Mark (and rest 
+of network) 
+updates logs
+I, Katrina, 
+give Mark 
+coin 47289
+!
+Mark rejects this transaction 
+because of info in log
+double-spending:suppose Katrina tries to spend coin 
+47289 with two different people
+6.033 | spring 2018 | Katrina LaCurts 
+29
+
+ 
+ 
+ 
+            
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+30

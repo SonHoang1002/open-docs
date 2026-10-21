@@ -1,0 +1,2368 @@
+1Massachusetts Institute of Technology  © Ed Crawley 2007
+System Architecture
+IAP Lecture 4
+Ed Crawley
+January 23, 2007
+Rev 1.4
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Today’s Topics
+z Reflections on Architecture of Medium 
+Systems
+z Architecture, Example - Refrigerator
+z Complexity
+z Example - Skateboard
+z Downstream processes - Operations, 
+Operator, Design, Implementation
+z Sequence and Timing
+z Example - TCP
+
+3Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept to Architecture
+z Identify the operand, and value related attribute, and solution 
+neutral transformation
+z Identify the concept process and instrument object
+z Identify one or two other concepts. Do they differ in process or
+instrument object?
+z For the reference concept, identify other aspects of the whole 
+product system and use context
+z Identify aspects of multifunctional concepts, if applicable
+z Informed by the concept form, identify the:
+– Idealized internal processes that touch directly on the delivery
+of value - the “value related internal processes”
+– The intermediate operands along that path
+– (perhaps) More realizable internal value related processes 
+
+4Massachusetts Institute of Technology  © Ed Crawley 2007
+Concept to Architecture (2)
+z Develop a detailed list of element, and then a rationalized list of 
+level 2 elements (20-30)
+z Show the formal structure (in this case absolutely complete, with 
+every part enumerated, not the usual case!)
+z How do the elements and their structure allow the higher level value 
+related function to emerge? What is the mapping of level 2 elements 
+to the value related internal functions?
+z Is their evidence of interfacing functions?
+z Is their evidence of value related functions other than the primary 
+one?
+z Is their evidence of internal “supporting functions” other than 
+primary functions
+
+5Massachusetts Institute of Technology  © Ed Crawley 2007
+Objective - Understanding Level 1 
+Architecture
+z The reason for analyzing the 
+level 1 processes (at least the 
+internal processes related to 
+value) and the level 2 elements 
+of form is to try to understand 
+the level 1 architecture of the 
+product/system
+z This will probably have only 7+/-
+2 internal functions and 
+elements of form, however the 
+designation of these (and their 
+interfaces) is critical to the 
+success of the system
+Level 0
+concept
+Level 1
+7 ish
+Level 2
+50 ish
+
+6Massachusetts Institute of Technology  © Ed Crawley 2007
+Decompose 2 and Modularize 1
+“Down 2, up 1”
+z Start with the system at 
+level 0
+z “Dip down” to level 2, and 
+determine structure their
+z “Pull up to “recombine” to 
+at level 1 modules or 
+abstractions
+z The real wisdom about 
+connectivity at level 1 is 
+found at level 2!
+Figure by MIT OCW.
+
+
+7Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts - Preserving Food
+z Solution neutral 
+statement is: 
+‘preserving food’
+z Solution specific 
+processes: chilling, 
+freezing, etc.
+z Solution specific form 
+for chilling: 
+refrigerator, cooler, 
+etc.
+z Selected concept is 
+chilling with a 
+refrigerator
+Preserving
+Chilling
+Refrigerator
+Chiller
+Food
+Cooler
+????
+Freezing
+Etc.
+???
+Selected Concept
+Decomposes to
+Specializes to
+Has attribute of
+
+8Massachusetts Institute of Technology  © Ed Crawley 2007
+Preserving Food Concept - Refrigerator
+ChillingFood
+Air
+Operator
+Refrigerator
+Operand -value 
+related external 
+object that 
+changes state
+Externally delivered 
+value related 
+process
+Value related 
+instrument 
+object
+Project/system 
+boundary
+Food
+Preserving
+Operand  and 
+solution neutral 
+transformation 
+Electric
+Power
+Outlet
+Floor
+QuickTime™ and a TIFF (Uncompressed) decompressor are needed to see this picture.
+
+9Massachusetts Institute of Technology  © Ed Crawley 2007
+Context - Refrigerator
+FoodOutsideAir InsideAir Operator Outlet FloorRefrigerator
+Whole Refrigerator System
+Kitchen
+Etc.Counters Other appliances Cabinets
+Product/system boundary
+z What is the whole product system?
+z What is the usage context in which it fits?
+NB: a complete job would include the architecture 
+of the usage context not just the objects
+
+10Massachusetts Institute of Technology  © Ed Crawley 2007
+Multi-function Concepts 
+for Chilling
+Preserving
+Food
+Heat
+Extracting
+Heat load
+reducing
+Temperature
+Regulating
+Decomposes to
+Specializes to
+Has attribute of
+Chilling
+Food
+“Chilling” implies cooling, but at a relatively constant 
+temperature above freezing, and hence temperature 
+regulating. Chilling efficiently implies that the ambient 
+heat load on the process be reduced.
+
+11Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+RefrigeratingSensing,Feeding back
+Operator
+Refrigerator
+z Idealized 
+internal value 
+related 
+processes and 
+operands 
+informed by 
+the concept 
+refrigerator
+Refrigerator -
+Idealized internal 
+value related
+processes
+Heat 
+extracting
+Heat load
+Reducing 
+Temperature
+Regulating
+Floor
+Electric 
+Outlet
+Minimizing
+Figure by MIT OCW.
+
+12Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Transferring
+load
+Operator
+Refrigerator -
+Realizable 
+Internal 
+ProcessesProject/system boundary
+Circulating
+Value related
+internal processes
+Operands
+
+13Massachusetts Institute of Technology  © Ed Crawley 2007
+Form of A Simple Refrigerator - List
+evaporator fan, motor compressor wiring harness dairly compartment assembly cabinet shelf ladder (l,r) support
+evaporator shroud running capacitor door shelf assembly (3) glass shelf assembly
+wiring harness compressor mount door gasket shelf assembly with track for basket
+heat exchanger starting relay door trim roll-out basket assembly
+accumulator overload protector door pannel crisper roller (l,r,l,r)
+evaoporator coil fan bracket (condensor fan) door handle crisper slide (l,r,l,r)
+drain tube control knob and indicator door center crisper assembly
+drain trought assembly controller (refig temp) switch depressor crisper tray assembly
+drain pan control bracket light diffuser crisper glass assembly
+condenser light bulb (4) fan guard criper draw assembly
+fan switch light stand off door hinge (top) louvered grille
+light switch light socket door hinge (bottom) compressor fan shroud assembly
+switch housing control light and socket door frame (top, sides) compressor shroud assembly
+condensor fan, schroud, motor power cord back cover control pannel
+condensor schroud light terminator legs, rollers evaporator cover
+compressor egg tray base assembly cabinet assembly
+condensate heater loop kickplate
+z Plus whole product system elements: floor, electric 
+outlet, operator, plus the operands - air, food
+z Parts list for a simple refrigerator, no ice maker, cold 
+water dispenser, freezer, etc.
+z 66 part types in list is already simplified
+z Actually about 210 part numbers on bill of material
+
+14Massachusetts Institute of Technology  © Ed Crawley 2007
+Rationalize Element List 
+z Start with a list of 40-70 elements (7+/-2)2
+z Try to rationalize element listing to a more manageable number 20-40
+z Some important elements that are highly integral will have to be
+expanded in order to identify elements important to the level 1 
+architecture - e.g. cabinet assembly to cabinet, insulation, structure, 
+outer panels
+z Some elements can be grouped into abstractions because their fine 
+structure will not influence and understanding of the level 1 
+architecture- e.g. top and bottom door hinges and parts to hinge
+z Some elements can be grouped into a class (the elements are 
+instances), so long as the topology does not require them to be 
+identified individually - e.g. crisper roller, door trim, light bulbs (4)
+z Some elements should be explicitly maintained as external interfaces 
+- better to keep them in the list - e.g legs, power cord
+z Some elements appear to be associated with other value functions -
+e.g. outer panels, condensate heater loop
+z Set aside for the moment the elements associated with what appeart
+to be tertiary elements or connectors that do not affect level 1
+architecture - e.g. light diffuser, fan guard
+
+15Massachusetts Institute of Technology  © Ed Crawley 2007
+Abstraction - Class/Instance 
+Relationship
+z One type of abstraction that is used is the 
+relationship between a class of something, and 
+an instance of the class
+z The instance is referred to as an instantiation 
+of the class
+z For example:
+– A class of Ford Explorer vs. my Ford Explorer (VIN #)
+– A class of procedure vs. a instance of a procedure 
+call
+– What is a part number?
+Class
+Instance
+Decomposes to
+Specializes to
+Has attribute of
+Has an instance of
+Figure by MIT OCW.
+
+16Massachusetts Institute of Technology  © Ed Crawley 2007
+Structure Refrigerator
+z Structure 
+reveals 4 bus 
+like elements: 
+cabinet, door, 
+wire harness, 
+heat 
+exchanger
+z Other 
+elements can 
+lump
+z Observed half 
+band width of 
+about 7!! For 
+non bus 
+elements
+cabinet assembly
+hinges
+legs, rollers
+glass shelves
+roll-out basket assembly
+crisper assemblies and draws
+evaporator fan, motor 
+heat exchanger
+accumulator
+evaporator coil
+condenser
+compressor
+condensor fan, motor
+wiring harness
+fan switch
+light switch
+control knob and indicator
+controller (refig temp)
+light bulb (4)
+power cord
+door 
+door handle
+dairly compartment assembly
+door shelf assembly (3)
+condensate disposal asbl.
+louvered grille
+door pannel
+electic outlet 
+floor
+operator
+ourside air
+inside air
+food
+cabinet assembly x m m m m m m mmmm mm mmm mm
+hinges tb x m
+legs, rollers t x
+glass shelves tw x m
+roll-out basket assembly w t x
+crisper assemblies and draws tw x
+evaporator fan, motor tw x e
+heat exchanger tw x mi mi m m m
+accumulator t x mi
+evaporator coil t da t t x m
+condenser tw tt x m
+compressor tw t t x e
+condensor fan, motor tw da x e
+wiring harness w t t t x e e e e e e
+fan switch t t x
+light switch t t x
+control knob and indicator tw t x m
+controller (refig temp) w t t x
+light bulb (4) tw t x
+power cord t t x e
+door tb t t t x m m m m
+door handle tx
+dairly compartment assembly tx
+door shelf assembly (3) tx
+condensate disposal asbl. t t t x
+louvered grille t da x
+door pannel tx
+electic outlet tx
+floor t x
+operator tt x
+outside air t t t t ov x
+inside air t ssst t t t ss x
+food t t t t t w x
+
+17Massachusetts Institute of Technology  © Ed Crawley 2007
+Observations - Structure Refrigerator
+z Some first level elements identifiable 
+– As tightly interacting clusters
+– As busses
+– Others stand alone
+z Criteria applied was to minimize “interaction” in form, 
+which will minimize interfaces
+z What about left over elements like hinge (which is 
+mechanically connected to door and cabinet) and 
+switches (which are connected to the cabinet, but 
+interact with the door)
+z Note that there is no information on function here!
+
+18Massachusetts Institute of Technology  © Ed Crawley 2007
+Hierarchy
+z Hierarchy is defined as:  a system in which grades or 
+classes are ranked one above the other
+z Hierarchy in technical systems occurs due to:
+– The level of decomposition of form, function, etc.
+– The creation of layered systems
+z Hierarchy tends to hide information more than one layer 
+away from the reference point.
+z Examples?
+Figure by MIT OCW.
+
+19Massachusetts Institute of Technology  © Ed Crawley 2007
+A Hierarchy of Elements and Complexity
+z Use context
+z Whole product system
+z Product/system
+z Module
+– A a collection of (1...n) parts which are defined 
+by some intent (e.g. integration) to be a 
+distinct sub-system
+z Part
+z Detail
+A product that is a part (to the customer) is integral. 
+Others are modular.
+Complexity can be measured at the 
+atomic part level, which is either the part 
+of functional detail level - you must which 
+when define the complexity of a system 
+
+20Massachusetts Institute of Technology  © Ed Crawley 2007
+Parts and Details
+z A part is an element that you cannot take apart 
+and then reconstitute in its original form - it has 
+been irreversibly implemented [no link to 
+function],   or
+z A part is an element that you cannot take apart 
+without destroying its ability to deliver its 
+function [explicit link to function]
+z An element of a part (so a part can be a system)
+z A part, or
+z The details of a part which have independent 
+function
+Part
+Detail
+Atomic
+part
+
+21Massachusetts Institute of Technology  © Ed Crawley 2007
+Making Judgments about Details
+z Even the simplest part has details:
+– Nail has details
+– Op amp has details
+– Instruction has details
+z The judgment is: are these details 
+of parts important to consider at 
+the level of the system you are 
+examining?
+If x > y, then …..
+
+22Massachusetts Institute of Technology  © Ed Crawley 2007
+Structure Refrigerator
+z Structure 
+reveals 4 bus 
+like elements: 
+cabinet, door, 
+wire harness, 
+heat 
+exchanger
+z Other 
+elements can 
+lump
+z Observed half 
+band width of 
+about 7!! For 
+non bus 
+elements
+cabinet assembly
+hinges
+legs, rollers
+glass shelves
+roll-out basket assembly
+crisper assemblies and draws
+evaporator fan, motor 
+heat exchanger
+accumulator
+evaporator coil
+condenser
+compressor
+condensor fan, motor
+wiring harness
+fan switch
+light switch
+control knob and indicator
+controller (refig temp)
+light bulb (4)
+power cord
+door 
+door handle
+dairly compartment assembly
+door shelf assembly (3)
+condensate disposal asbl.
+louvered grille
+door pannel
+electic outlet 
+floor
+operator
+ourside air
+inside air
+food
+cabinet assembly x m m m m m m mmmm mm mmm mm
+hinges tb x m
+legs, rollers t x
+glass shelves tw x m
+roll-out basket assembly w t x
+crisper assemblies and draws tw x
+evaporator fan, motor tw x e
+heat exchanger tw x mi mi m m m
+accumulator t x mi
+evaporator coil t da t t x m
+condenser tw tt x m
+compressor tw t t x e
+condensor fan, motor tw da x e
+wiring harness w t t t x e e e e e e
+fan switch t t x
+light switch t t x
+control knob and indicator tw t x m
+controller (refig temp) w t t x
+light bulb (4) tw t x
+power cord t t x e
+door tb t t t x m m m m
+door handle tx
+dairly compartment assembly tx
+door shelf assembly (3) tx
+condensate disposal asbl. t t t x
+louvered grille t da x
+door pannel tx
+electic outlet tx
+floor t x
+operator tt x
+outside air t t t t ov x
+inside air t ssst t t t ss x
+food t t t t t w x
+
+23Massachusetts Institute of Technology  © Ed Crawley 2007
+Mapping of Level 2 Elements onto Function
+z Mapping on functions identifies some alignment and 
+some misalignment with clustering done on form
+cabinet assembly
+hinges
+legs, rollers
+glass shelves
+roll-out basket assembly
+crisper assemblies and draws
+evaporator fan, motor 
+heat exchanger
+accumulator
+evaporator coil
+condenser
+compressor
+condensor fan, motor
+wiring harness
+fan switch
+light switch
+control knob and indicator
+controller (refig temp)
+light bulb (4)
+power cord
+door 
+door handle
+dairly compartment assembly
+door shelf assembly (3)
+condensate disposal asbl.
+louvered grille
+door pannel
+electic outlet 
+floor
+operator
+ourside air
+inside air
+food
+conducting and convecting(load) I Ie e
+circulating (outside air) I e
+refirgerating I I I I I I I I e e
+sensing, feedback II a I
+circulating (inside air) I I e
+conducting and convecting(inside) I ee
+transfering load (from food) I I I I I e
+illuminating II e
+load carrying I I e e eeeeeeeeeeeeee I eeeeee
+power carrying e e e I e eeee
+structurally interfacing I I
+power interfacing II
+appearance improving I II
+condensate evaporating I
+
+24Massachusetts Institute of Technology  © Ed Crawley 2007
+Value related
+internal processes
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Refrigerator
+Evaporator FanCirculating
+Value related
+Instrument
+Objects
+Operands
+
+25Massachusetts Institute of Technology  © Ed Crawley 2007
+Value related
+internal processes
+Supporting
+processes
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Evaporator FanCirculating
+Value related
+Instrument
+Objects
+Supporting objects
+and interfaces
+Operands
+
+26Massachusetts Institute of Technology  © Ed Crawley 2007
+Value related
+internal processes
+Supporting
+processes
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+Value related
+Instrument
+Objects
+Supporting objects
+and interfaces
+Operations
+Operands
+
+27Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture in Layers
+z Architecture can be though of as existing in layers
+z The value related operand and other intermediate 
+operands
+z The processes the touch on the direct value delivery
+z The instrument objects
+z Several more layers of supporting processes (typically 
+structurally supporting, powering, controlling) and 
+associated instrument objects
+Cooling RefrigeratorUnit Powering ElectricalService
+project/system boundary
+Food
+Internal value 
+related process
+Value related 
+instrument 
+object
+Supporting
+processes
+Supporting objects
+and interfaces
+Operand
+
+28Massachusetts Institute of Technology  © Ed Crawley 2007
+Primary Value, Other Value, Interfacing, and 
+Supporting Internal Functions - Refrigerator
+z All product/systems have a primary 
+value related process - chilling food
+z Many have other value related 
+processes - ice making, dispensing 
+cold water, freezing, ?
+z All have interface processes - with 
+food,  floor, ?
+z Most have other internal processes 
+that support the value processes -
+structurally supporting, ?
+Primary
+value related
+Other
+value related
+Interfacing
+Supporting 
+processes
+
+29Massachusetts Institute of Technology  © Ed Crawley 2007
+Refrigerator - Additional Value Processes
+Owner pleasing
+appearance
+Notice posting
+Water cooling
+Owner pleasing 
+brand What influence with these 
+processes have on the 
+architecture?
+Food 
+inventorying
+Condensate 
+disposal
+Food
+Freezing
+Network service 
+providing
+
+30Massachusetts Institute of Technology  © Ed Crawley 2007
+A Notional Precedence of Processes
+z Sub-processes which support the primary 
+externally-delivered process linked to value
+z Other sub-processes linked to other 
+necessary externally-delivered processes
+z Interfacing processes
+z Supporting/connecting (matter related) 
+processes
+z Powering (energy related) processes
+z Controlling/regulating (information related) 
+processes
+Then -
+Then -
+Then-
+
+31Massachusetts Institute of Technology  © Ed Crawley 2007
+Zig - Zagging (after Suh)
+z In thinking through 
+system, you tend to 
+start in one domain 
+(object or process)
+z Think and work in that 
+domain as long as it 
+makes sense
+z Then switch to the other
+z And do this recursively
+z Called by Suh zig-
+zagging
+Operand Process
+Specialized Specialized 
+Operand Process
+Specialized Expanded
+Instrument Processes
+Rationalized Functions
+Parts of parts
+Parts
+Figure by MIT OCW.
+
+32Massachusetts Institute of Technology  © Ed Crawley 2007
+More Magic
+z Refrigerator
+z Cooler
+z So why do we use refrigerators? The complexity must 
+be worth it!
+
+33Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+
+34Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Regulating
+Illuminating
+Box
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Light
+Insulated top
+Operator
+Powering
+Load carrying
+Ice
+Floor
+Structurally
+interfacing
+Melting
+Cooler!
+project/system boundary
+Circulating
+Circulating
+
+35Massachusetts Institute of Technology  © Ed Crawley 2007
+Process-Object  Observation
+z The externally delivered processes of a system act on 
+its operand(s), whose states are changed by the 
+processes (e.g. person/rider)
+z The primary externally delivered process of a system 
+acts on one or more of the operand(s), and is linked to 
+value (e.g. transporting)
+z Other externally delivered processes potentially act on 
+the same or other operands, and deliver additional 
+value, which may enhance or differentiate the product, 
+but should not be confused with its primary function 
+(e.g. ride smoothing, aesthetics)
+
+36Massachusetts Institute of Technology  © Ed Crawley 2007
+Process-Object  Observation (cont.)
+z Zooming will identify the internal processes which combine to 
+produce the emergent external process
+z Zooming to internal processes will often reveal additional 
+operands which are concealed or otherwise incidental to the 
+processes and operands associated with value (e.g. flow and 
+vortex in the whistle example). These additional operands should
+also be considered in the whole product system
+z Zooming to internal processes will identify the objects which act 
+as agents and instruments of the internal processes that are 
+linked to value delivery
+z There is almost always one or two layers of process-object pairs 
+in a layer below those that are directly linked to value, which 
+support, connect, power, control, etc. the value related instrument 
+objects
+z There is then often an additional layer of interfaces to the things 
+external to the product/system
+
+37Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary Process-Object Architecture
+z Operand object, processes and instrument objects can 
+be shown with OPM in one graph of an architecture, 
+which is interchangeable with a matrix representation
+z Layers appear of processes and objects that directly link 
+to value, and supporting (connecting, controlling, 
+powering) objects and processes
+z Interfaces also have object and process character that 
+must be identified and controlled
+z Note that we have now created a view of the architecture 
+that contains 5 layers:
+– The specific concept - the specific operand, process and 
+instrument
+– 2 layers down of decomposition of operands, processes and 
+instruments
+– 2 layers up - the whole product system and use case
+– Remarkably close to one of the deliverables of the architect!
+
+38Massachusetts Institute of Technology  © Ed Crawley 2007
+Complexity
+Defined:
+z Having many interrelated, interconnected or interwoven 
+elements and interfaces
+Therefore
+z A complex system requires a great deal of information 
+to specify
+z Complexity is an absolute and quantifiable system 
+property (once a measure and atomic level are defined)
+z Apparent complexity is the perception that something is 
+complex.  Complicated things have high apparent 
+complexity
+It is the role of the architect to manage the evolution of complexity 
+in such a way that a complex system does not appear complicated 
+
+39Massachusetts Institute of Technology  © Ed Crawley 2007
+¿ What Makes a System Complex?
+z Think back to the structure of simple systems analyzed 
+earlier
+z How have we dealt with trying to “simplify it, so that 
+complex systems are not so complicate?
+z How might you measure it?
+
+40Massachusetts Institute of Technology  © Ed Crawley 2007
+Approaches to Managing Complexity
+z Abstractions
+– Class - Instance
+– Generalization - Specialization
+• Hierarchy
+z Decomposition (and zooming)
+z Recursion
+
+41Massachusetts Institute of Technology  © Ed Crawley 2007
+Abstraction
+z Abstraction defined as:
+– expression of quality apart from the object
+– having only the intrinsic nature rather than the form
+z Abstraction can be used in both function and form
+z Abstraction can be used to characterize and hide more 
+detailed structure and behavior within them, allowing 
+simpler representation of the “surface”
+z Examples: cup, pen, routine_name
+Figure by MIT OCW.
+
+42Massachusetts Institute of Technology  © Ed Crawley 2007
+Abstraction - Class/Instance 
+Relationship
+z One type of abstraction that is used is the 
+relationship between a class of something, and 
+an instance of the class
+z The instance is referred to as an instantiation 
+of the class
+z For example:
+– A class of Ford Explorer vs. my Ford Explorer (VIN #)
+– A class of procedure vs. a instance of a procedure 
+call
+– What is a part number?
+Class
+Instance
+Decomposes to
+Specializes to
+Has attribute of
+Has an instance of
+Figure by MIT OCW.
+
+43Massachusetts Institute of Technology  © Ed Crawley 2007
+Specialization
+z Specialization/Generalization
+– The relationship between a general object and its 
+specialized forms
+Figure by MIT OCW.
+
+44Massachusetts Institute of Technology  © Ed Crawley 2007
+Hierarchy
+z Hierarchy is defined as:  a system in which grades or 
+classes are ranked one above the other
+z Hierarchy in technical systems occurs due to:
+– The level of decomposition of form, function, etc.
+– The creation of layered systems
+z Hierarchy tends to hide information more than one layer 
+away from the reference point.
+z Examples?
+Figure by MIT OCW.
+
+45Massachusetts Institute of Technology  © Ed Crawley 2007
+Decomposition of a System
+z Decomposition is the division into smaller constituents 
+z The system object at level 0 decomposes to the element 
+objects at level 1
+z The element objects at level 1 aggregate to the system
+z This is the whole - part relationship, so common that it 
+has its own symbol
+Level
+0
+1 (down)
+SYSTEM
+Element 1 Element 2
+...
+Figure by MIT OCW.
+
+46Massachusetts Institute of Technology  © Ed Crawley 2007
+Emergence and Zooming of Processes
+z A process can be zoomed into sub-processes
+z A process emerges from sub-processes
+z The process and sub-processes are not linked in any 
+explicit manner, as the system decomposes into 
+elements or the elements aggregate into the whole
+z Emergence is a powerful feature of systems - elements 
+and sub-processes can come together to cause a 
+process to emerge
+Amp
+Op AmpR2R1
+Amplify low frequency
+Amplify
+Set gain
+filter
+
+2Massachusetts Institute of Technology  © Ed Crawley 2007
+Repetition and Recursion
+z Repetition is the use of repeated steps or elements
+z Processes can be used repeatedly 
+– Turn left, turn right,   turn left, turn right, …
+z Objects can be used recursively as well
+– No repetition
+– Repetition
+z Recursion has the additional sense that the process or 
+object uses itself within the whole
+Figure by MIT OCW.
+
+48Massachusetts Institute of Technology  © Ed Crawley 2007
+Ways to Think About Complex 
+Systems
+Figure by MIT OCW.
+z Holism
+z Critical thinking
+z Objects (instruments and operands) and processes
+z Whole product systems and use context
+z Top down, bottom up, middle out, outer in
+z 2 down, 1 up levels of decomposition
+z Layer of value delivery, supporting, interfacing
+z Zig zag between form and function
+
+49Massachusetts Institute of Technology  © Ed Crawley 2007
+Dirt Simple Measure of Complexity
+z Number of things: Nthings
+z Number of types of things: Ntypes_of_things
+z Number of connections among things: Nconnections
+z Number of types of connections: Ntypes_of_connections
+z Simplest measure that captures all of these is the sum:
+z C = Nthings + Ntypes_of_things + Nconnections + Ntypes_of_connections
+z A lot of work to calculate!
+
+50Massachusetts Institute of Technology  © Ed Crawley 2007
+Summary - Complexity
+z Complexity is a technical system is an absolute thing 
+that can be quantified and measured (once a metric and 
+an atomic part have been defined)
+z It is the role of the architect to manage complexity (and 
+reduce apparent complexity)
+z Common approaches to managing complexity are 
+abstraction, decomposition, hierarchy and recursion, 
+which are separate ideas, but often used in combination
+
+51Massachusetts Institute of Technology  © Ed Crawley 2007
+Exercise: Form of a Medium System
+z Examine the form of two medium systems, which has 
+already been decomposed to “atomic parts”: 
+– skateboard (mechanical) 69 elements of 21 types
+– naval signal flags (informational) 26 elements of 26 
+types
+z Creating abstractions and hierarchy, aggregate the 
+“atomic parts” (at level 2) into level 1 abstractions
+
+52Massachusetts Institute of Technology  © Ed Crawley 2007
+¿Reflections on Medium Systems?
+z How did you decompose 0 level product/system 
+or aggregate 2nd level parts to create first level 
+elements?
+z What techniques did you use to manage 
+complexity in the system?
+The wisdom on 1st level decomposition is found at the 2nd level,
+not the 1st. The architect must always “dip down” two levels to 
+understand/create the first level down. 
+
+Figure by MIT OCW.
+1 2 2 2 2
+Board Connection Suspension Axle Wheel
+assembly kit assembly assembly assembly
+2
+Shock 
+assembly
+1 2 8 2 2 2 2 2 4 4
+Rubber Assembly Top Bottom “King pin” Pivot WheelAdhesive Axle Wheelpad nut washer bushing bolt cup spacer
+1 1 8 2 2 2 2 2 4 8 8
+Deck tape” Assembly “Base Top Bottom “King pin” Lower Axle Wheel“Deck” BearingNon-skid bolt Plate” bushing washer nut “hanger” nut washer
+NB: these aggregations are ad hoc and not “correct” 53Massachusetts Institute of Technology  © Ed Crawley 2007
+z Skateboard is composed of 
+about 69 elements of 21 types
+z These can be aggregated into 
+about 9 elements of 5 types
+Form of a Medium System - Skateboard
+Skateboard
+“
+
+54Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture - Skateboard
+Contacting
+Connecting
+Powering
+Ride
+smoothing
+Rolling
+Pushing
+Transporting
+Rider
+Road
+Primary value 
+process
+Interfacing 
+“in”
+Other value 
+process
+Connecting
+Powering
+Load
+tranferring
+Powering
+Shock
+absorbing
+Steering
+Levitating
+Thrusting
+Interfacing
+Shock 
+assembly
+Lower
+“hanger”
+Pivot
+cup
+”Base
+Plate”
+Wheel
+assemblyDirecting
+“Deck tape”
+Non-skid
+Axle 
+assembly
+Load 
+transferring
+Load
+transferring
+Load 
+transferring
+“Deck”
+Connection
+kit
+Adhesive
+Load 
+transferring
+Product/system boundary
+Person
+is
+
+55Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture - Skateboard
+Contacting
+Connecting
+Powering
+Ride
+smoothing
+Rolling
+Pushing
+Transporting
+Rider
+Road
+Interfacing 
+“in”
+Other value 
+process
+Connecting
+Powering
+Primary value 
+process
+Load
+tranferring
+Powering
+Shock
+absorbing
+Steering
+Levitating
+Thrusting
+Interfacing
+Shock 
+assembly
+Lower
+“hanger”
+Pivot
+cup
+”Base
+Plate”
+Wheel
+assemblyDirecting
+“Deck tape”
+Non-skid
+Axle 
+assembly
+Load 
+transferring
+Load
+transferring
+Load 
+transferring
+“Deck”
+Connection
+kit
+Adhesive
+Load 
+transferring
+Product/system boundary
+Person
+is
+Operand
+Internal value 
+related process Value related 
+instrument 
+object
+Supporting
+processes
+Supporting objects
+and interfaces
+
+56Massachusetts Institute of Technology  © Ed Crawley 2007
+Formal 
+Analysis -
+Skateboard
+Assembly bolt
+Deck tape
+Adhesive
+Deck
+Rubber pad
+Base plate
+Assembly nut
+Pivot cup
+Top washer
+Top bushing
+Bottom bushing
+Bottom washer
+King pin
+King pin nut
+Lower hanger
+Axel
+Wheel washer (inner)
+Bearing (inner)
+Wheel spacer
+Wheel
+Bearing (outer)
+Wheel washer (outer)
+Axel nut
+Assembly bolt x b b b s
+Deck tape w x g
+Adhesive w t x g
+Deck w t x p
+Rubber pad w t x p
+Base plate w t x p p p b
+Assembly nut w t x
+Pivot cup t x p
+Top washer t x p b
+Top bushing t x b p
+Bottom bushing x p b p
+Bottom washer t x b p
+King pin s ssssxs
+King pin nut t w x
+Lower hanger t t t x st
+Axel t x st st st st st s
+Wheel washer (inner) w x p
+Bearing (inner) w t x p p
+Wheel spacer w t x
+Wheel w w w x p
+Bearing (outer) w t s x p
+Wheel washer (outer) w t x p
+Axel nut w t x
+t = touches or tangent g = glued
+w = within b = bolted
+s = surrounds s = screwwed
+p = pressed
+st = stacked
+• Red areas might 
+be modules at 
+level 1
+• Blue areas would 
+be interfaces that 
+must be 
+maintained 
+between modules
+• Much more about 
+this later!
+
+57Massachusetts Institute of Technology  © Ed Crawley 2007
+Architecture Centric View of the PDP
+Upstream Downstream
+Think of yourself as here today
+Architecture
+Form
+FunctionConcept
+
+58Massachusetts Institute of Technology  © Ed Crawley 2007
+Principle Downstream Influences
+z Operational influences of the delivered system/product :
+– The system operating and associated timing
+– Operational sequence
+– Dynamic behavior and transitions
+– How humans interact with the system as operators
+– The operational cost of the system
+z How the system is realized:
+– Design
+– Implementation
+z How the system is envisioned to evolve
+
+59Massachusetts Institute of Technology  © Ed Crawley 2007
+Framework for Downstream Influences
+Implementation
+Evolution
+Operations
+Architecture
+Design
+System Operating
+Operator 
+(training, etc.)
+Operational cost
+Form
+FunctionConcept
+
+60Massachusetts Institute of Technology  © Ed Crawley 2007
+Downstream Impacts on Architecture
+z During its development, the product will pass through all 
+the downstream influences (e.g. it will be designed, 
+implemented, operated, etc.)
+z However, while architecting, these influences must also 
+be considered, in order to ensure that the product will be 
+successful (AFX)
+z This is sometimes called design for “ilities”
+(designablilty, implementability, operability, etc)
+z Downstream influences give rise to ambiguity at the 
+time of architecting, which should be reduced/resolved 
+to the extent possible in the architecting process
+z As the product passes through the downstream steps, 
+the actual complexity of the system grows
+
+61Massachusetts Institute of Technology  © Ed Crawley 2007
+Downstream Ambiguity in Architecting
+z At the time of architecting, there is a great deal of 
+ambiguity regarding these downstream influences, 
+because they are “in the future”
+– Will manufacturing be ready?
+– How much testing do we have to budget/schedule?
+– Are the design tools available/calibrated?
+– How do we expect this product to evolve?
+– In what condition will it be operated?
+– Who will train the operator?
+Anticipating the often ambiguous impact of the 
+downstream influences and planning for their impact is a 
+main role of the architect
+
+62Massachusetts Institute of Technology  © Ed Crawley 2007
+Downstream Complexity
+z As the product passes through the downstream steps, 
+the actual complexity (as measured through the known 
+and documented information on interactions) grows
+– Design information accumulates
+– Implementation plans evolve
+– Operation, training, maintenance, etc. plans develop
+– Evolution plans begin
+z Complexity grows approximately combinatorially with 
+elements and participants
+Creating abstractions, hierarchy and decomposition to 
+keep the perceived complexity within bounds for all 
+participants in the process is a main role of the architect
+
+63Massachusetts Institute of Technology  © Ed Crawley 2007
+Operator
+z Operator is a product attribute
+z Who will use/execute the system (including 
+training, performance, motivation, etc.)
+z Necessary for products with human 
+agents/operators/supervisors
+– most important for human-in-loop (e.g. bicycle)
+– important for direct human operation (e.g. 
+lathe, wheelchair, GUI)
+– for other products, can be considered part of 
+interface/constraints (e.g. human factors 
+design, industrial design)
+z Because of the unique issues of human 
+performance and safety, it is useful to keep 
+separate as an additional attribute
+Operator
+
+64Massachusetts Institute of Technology  © Ed Crawley 2007
+Operations Cost
+z Operations Cost is a product attribute
+z How much it will cost to operate the system
+z This is the recurring operational related costs
+– Operator and other personnel
+– Training
+– Maintenance and (nominal) upgrades
+– Consumables
+– Indirect operating costs (insurance, etc.)
+Operating
+cost
+
+65Massachusetts Institute of Technology  © Ed Crawley 2007
+System Operating - Timing
+z Timing is a product attribute
+z When the system operates, the time sequence of events
+z Has two important aspects
+– Operational sequence
+– Dynamic behavior
+z Operations sequence is the total set of steps or 
+processes that the system undergoes, inclusive of the 
+primary process for which it is intended
+z Dynamic behavior is the detailed timing of steps, their 
+sequence, start time, duration, overlap, etc.
+System
+Operating
+
+66Massachusetts Institute of Technology  © Ed Crawley 2007
+Operating Sequence
+z Except for static and very simple product/systems, it is 
+important to represent the sequence of events that are 
+executed by the system to deliver its function
+z There are various ways to represent sequence:
+– Invocation arrows on OPM
+– Several OPMs or animation
+– Sequence lines
+– Flow control diagrams
+– State transition diagrams
+– Algebra of sequence
+z Focus first on the sequences associated with the 
+delivery of primary value and other value processes
+
+67Massachusetts Institute of Technology  © Ed Crawley 2007
+I loop inst
+If inst
+Procedure
+Exchange
+contents
+J loop inst
+product/system 
+boundary
+Importing
+GPC
+Return
+statement
+Procedure
+statement
+Loop
+controlling
+Loop
+controlling
+Conditional
+testing
+Exchanging
+Loop
+testing
+Loop
+testing
+Exporting
+Compiler
+Routine
+SortingSoftware Code Bubblesort :
+Process - Object
+Architecture
+
+68Massachusetts Institute of Technology  © Ed Crawley 2007
+I loop inst
+If inst
+Procedure
+Exchange
+contents
+J loop inst
+product/system 
+boundary
+Importing
+GPC
+Return
+statement
+Procedure
+statement
+Loop
+controlling
+Loop
+controlling
+Conditional
+testing
+Exchanging
+Loop
+testing
+Loop
+testing
+Exporting
+Compiler
+Routine
+SortingSoftware Code Bubblesort :
+Process - Object
+Architecture
+
+69Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Power chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+
+70Massachusetts Institute of Technology  © Ed Crawley 2007
+Open
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Insulated door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Plug/chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+Closed
+On
+On
+On
+Off
+Off
+
+71Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Sensing,
+Feeding back
+Illuminating
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Grasping,
+moving
+Mixing
+Transferring
+load
+Controller
+Shelves
+Light
+Insulated door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Plug/chord
+Refrigerator
+Product/system boundary
+Evaporator Fan
+Open Closed
+On
+On
+On
+Off
+Off
+Wiring harness
+
+72Massachusetts Institute of Technology  © Ed Crawley 2007
+Food
+Outside
+Air
+Conducting,
+Convecting
+Inside
+Air
+Conducting,
+Convecting
+Refrigerating
+Circulating
+Sensing,
+Feeding back
+Refrigerator
+Cabinet
+Condenser Fan
+Opening,
+closing
+Transferring
+load
+Controller
+Shelves
+Light
+Insulated door
+Operator
+Power
+carrying
+Load carrying
+Outlet
+Floor
+Structurally
+interfacing
+Power
+interfacing
+Wheels
+Plug/chord
+Wiring harness
+Refrigerator
+Product/system boundary
+Evaporator FanCirculating
+Open Closed
+On
+On
+On
+Off
+
+73Massachusetts Institute of Technology  © Ed Crawley 2007
+“Sequence” Lines
+z Sometimes convenient to 
+represent sequence on 
+vertical or horizontal line, 
+and label events and 
+changes in state
+z Can do this for one object 
+or several
+Corkscrew
+Pulling
+Cork = in
+Cork = out
+
+74Massachusetts Institute of Technology  © Ed Crawley 2007
+Refrigerator
+Opening Door closed
+Door
+Door open
+Closing Door openDoor closed
+Mixing
+Air
+On
+Light
+Off
+Food
+Moving
+Fan, Refrigerator
+Operating
+
+75Massachusetts Institute of Technology  © Ed Crawley 2007
+Operational Sequence Steps
+z Executing primary process is a relatively confined 
+view, with no sense of the overall set of steps
+necessary to get it going, take it down, store, 
+maintain and operate in other than the nominal 
+mode
+z Stand Alone Operations are operations where the 
+object must operate without connection to its 
+normal system (e.g. backing a trailer by hand, 
+testing a piece of code)
+z Contingency Operations are operations other than 
+normal which might reasonably be encountered, and 
+from which recovery is necessary without loss of 
+primary function, personal or property damage (e.g. 
+a spill, noise on a transmission line)
+z Emergency Operations are operations other than 
+normal which are outside the contingency window, 
+and when primary function will not be executed, 
+some property damage will be allowed, but personal 
+loss is to be avoided (e.g. a crash, loss of a 
+transmission circuit)
+Stand alone ops.
+Contingency ops.
+Emergency ops.
+
+76Massachusetts Institute of Technology  © Ed Crawley 2007
+Commissioning, Maintaining, 
+Decommissioning
+z Commissioning includes:
+– Waiting in storage, shipping, etc.
+– Getting the system installed, and ready in 
+principle to execute - retrieving, 
+connecting, powering, initializing
+– Loading or positioning, set to execute
+z Decommissioning is the reverse
+z Maintaining includes:
+– Inspecting, calibrating
+– Repairing, maintaining, overhauling
+– Updating
+Waiting in storage
+Retrieving, 
+connecting, 
+powering-up, 
+initializing
+Loading, 
+positioning
+Archiving, 
+unloading
+Terminating, 
+disconnecting,
+depowering, storing
+Inspecting, repairing,
+calibrating, updating, 
+maintaining
+
+77Massachusetts Institute of Technology  © Ed Crawley 2007
+Commissioning
+positioning
+Stand alone ops.
+Contingency, 
+Emergency ops.
+Maintenance, 
+Repair,  Upgrade.
+Stowing, 
+decommissioning
+Overview Operations
+Operational
+Sequencing
+z Commissioning and positioning operations are 
+necessary to get the system from the point of 
+implementation delivery to the point of operation (e.g. 
+transport, storage, get ready, get set)
+z Stand alone operations are those that do not involve 
+interactions with other parts of the whole project 
+system usually involved in operations (e.g. check out, 
+trouble shooting)
+z Operational sequence is the sequence and if necessary 
+timing of the steps in actual value delivery operation
+z Contingency operations are those from which you 
+expect a graceful and continued operation, at perhaps 
+less than maximum value delivery, but no loss of life or 
+property. Emergency operation abandon all value 
+delivery and seek to preserve life and property
+z Maintenance is the planned activities, repair, the 
+unplanned activities, upgrade the in place improvement 
+z Stowing and decommissioning is the set of end of 
+service interval steps necessary to make the system 
+ready again, or retire it
+
+78Massachusetts Institute of Technology  © Ed Crawley 2007
+Operational Sequence - All Processes
+Waiting in storage
+Retrieving, 
+connecting, powering-up, 
+setting up, initializing
+Loading, preparing
+Stand alone ops.
+Contingency ops.
+Emergency ops.
+Archiving, unloading
+Terminating, disconnecting,
+depowering, storing
+Inspecting, repairing,
+calibrating, updating, 
+maintaining
+Executing
+Primary Process
+System
+Operating
+Store
+Get ready
+Get set
+Go
+Get unset
+Get unready
+Fix
+Nominal
+Stand alone
+Contingent
+Emergency
+
+79Massachusetts Institute of Technology  © Ed Crawley 2007
+Operational Sequence - Cork Translator
+Waiting in storage
+Removing protective cap
+Engaging cork
+Stand alone ops ?.
+Cork breaks
+Emergency ops?
+Dial 911
+Disengaging cork
+Replacing protective cap
+Inspecting, repairing,
+calibrating, updating, 
+Maintaining?
+Translating cork
+OPERATING
+Store
+Get ready
+Get set
+Go
+Get unset
+Get unready
+Fix
+Nominal
+Stand alone
+Contingent
+Emergency
+
+80Massachusetts Institute of Technology  © Ed Crawley 2007
+Waiting in storage
+Retrieving, 
+connecting, 
+powering-up, 
+initializing
+Loading, 
+preparing
+Stand alone ops.
+Contingency ops.
+Emergency ops.
+Archiving, 
+unloading
+Terminating, 
+disconnecting,
+depowering, storing
+Inspecting, repairing,
+calibrating, updating, 
+maintaining
+Shipping,
+storing
+Set up, 
+rolling into place
+Cooling down,
+adjusting shelves
+(only)
+Spill containing,
+cleaning
+Suffocation
+Preventing
+Fire safety
+?
+Disposing
+Repair, diagnostics
+Opportunity?
+Opportunity?
+Refrigerator -
+Operational 
+Sequence
+Opportunity?
+What influence with these 
+processes have on the 
+architecture?
+
+81Massachusetts Institute of Technology  © Ed Crawley 2007
+Dynamic Behavior - Timing
+z Detailed knowledge of the timing of processes and 
+associated state changes is important for “dynamic”
+systems whose functionality is time dependent or real 
+time
+– Start-up transients
+– Multiple parallel processes
+– Latency
+– Timing constraints (e.g. schedule)
+z Examples in “medium” systems?
+
+82Massachusetts Institute of Technology  © Ed Crawley 2007
+Dynamic Behavior (cont.)
+z In both HW and SW, relatively simple if there is a 
+single thread/string of events.
+z In hardware, there is often the potential of 
+simultaneous events, which could interact and/or 
+have critical timing (e.g. skidding while driving, 
+terminal guidance)
+z In software, even more complex
+– Run time environment
+– Process string/thread management
+– Indetermination of timing because of 
+interaction with other applications or operating 
+systems
+– Interrupts, etc.
+
+83Massachusetts Institute of Technology  © Ed Crawley 2007
+State Transitions - Skateboard
+Storing
+Cornering
+Accelerating
+Loading
+Skidding
+Colliding
+Storing
+Separating
+Accelerating
+Loading
+Jumping
+(rider)Flipping(board)
+Board
+
+84Massachusetts Institute of Technology  © Ed Crawley 2007
+What is the Sequence of Operations?
+z Is it single string?
+z Or multiple string?
+
+
+85Massachusetts Institute of Technology  © Ed Crawley 2007
+Other Downstream Processes
+z The system must be designed, so it must be architected 
+in such a way that design can proceed smoothly and 
+efficiently
+z The system must be implemented, so it must be 
+architected for manufacturability, coding, integration, 
+test, and verification
+z The system may evolve and be updated, so it must be 
+architected with a view towards these changes -
+Evolution is really just a recursive pass through 
+conception, design and implementation
+z Each has its own who, what, where, when, ...
+
+86Massachusetts Institute of Technology  © Ed Crawley 2007
+Implementation
+z Implementation is the generic term for 
+transitioning the product/system from a design 
+to the deliverable object
+– Creation of elements - manufacturing, crafting, coding
+– Integration - assembly, compilation and system build
+– Testing - verification and validation
+– Preparation for delivery
+z Implementation involves objects and processes
+z Can be modeled with OPM as well
+
+87Massachusetts Institute of Technology  © Ed Crawley 2007
+Inner race Outer race Ball retainerBall
+886 4 1 6
+1
+1
+2
+8
+8 2
+2 2
+22
+2
+2
+2
+2
+4
+4
+8
+Adhesive Rubber pad Assemblynut Topwasher “King pin”boltBottombushing Pivotcup WheelWheelspacerAxle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing“BasePlate” Topbushing Bottomwasher “King pin”nut“Deck”
+2
+Wheel
+washer
+4
+8
+Non-skid
+1
+“Deck tape”
+“Deck” +
+tape
+Plane +
+bolt
+“Truck”
+Complete
+hanger
+Wheel
+assembly
+“Truck” +
+wheels
+“Board”
+OPM Implementation -
+Skateboard
+NB: processes are suppressed and implicit 
+and on complete OPM would be shown
+
+88Massachusetts Institute of Technology  © Ed Crawley 2007
+Inner race Outer race Ball retainerBall
+886 4 1 6
+1
+1
+2
+8
+8 2
+2 2
+22
+2
+2
+2
+2
+4
+4
+8
+Adhesive Rubber pad Assemblynut Topwasher “King pin”boltBottombushing Pivotcup WheelWheelspacerAxle
+Assembly 
+bolt
+Lower
+“hanger”
+Axle
+nut Bearing“BasePlate” Tobbushing Bottomwasher “King pin”nut“Deck”
+2
+Wheel
+washer
+4
+8
+Non-skid
+1
+“Deck tape”
+“Deck” +
+tape
+Plane +
+bolt
+“Truck”
+Complete
+hanger
+Wheel
+assembly
+“Truck” +
+wheels
+“Board”
+SKU “parts”
+apart “parts”
+
+89Massachusetts Institute of Technology  © Ed Crawley 2007
+Concepts and Architectures in Information 
+Systems
+z In information and software enabled systems, concepts 
+and their development into architectures are captured in 
+different ways at various levels
+z Low level are algorithms and their implementation, e.g. 
+bubblesort
+z Application domain software are patterns, e.g. bridge
+z Higher level application domain software is more 
+classical allocation of functionality to modules and 
+routines, and definition of interfaces
+z In network software, concepts and architectures are 
+captured in protocols, such as Transport Command 
+Protocol (TCP), and at a higher level, the entire 
+architecture of the XXX seven layer model
+
+90Massachusetts Institute of Technology  © Ed Crawley 2007
+OSI Model
+Network Process to Application
+Application
+OSI Model
+Physical
+Transport
+Network
+Data Link
+Session
+Presentation
+Network Process to Application
+Interhost Communication
+End-to-End Connections and
+MAC and LLC
+Path Determination and IP
+Data Representation and
+Encryption
+Reliability
+(Logical Addressing)
+(Physical Addressing)
+Media, Signal
+and Binary Transmission
+Data
+Data
+Data
+Data
+Segments
+Packets
+Frames
+Bits
+Layer
+[Media Layers] [Host Layers]
+Figure by MIT OCW.
+
+91Massachusetts Institute of Technology  © Ed Crawley 2007
+Application
+Presentation
+Session
+Transport
+Network
+Data Link
+Physical
+FTP, Telnet, SMTP, POP3,
+X-Window, HTTP
+SCTP COPS
+CMOT, SNMP
+IMAP4 GDP
+SOCKS SLP WCCP
+TFTP
+NTP
+TACACS+, TACACS
+RLOGIN, RSHELL, PRINT
+REXEC, RWHO
+HTTP-s
+SSH
+RADIUS
+ISAKMP
+RTSP
+ PPTP, L2TP,
+ATMP Trailers
+ARP, RARP SLIP
+TDP, MPLS
+ICMP RSVP VRRP
+PIM DHCP BOOTP
+BGP, RIP,  EGP,
+OSPF, DVMRP
+ X.25
+TCP
+TALI
+ UDP
+Mobile IP
+DNS
+LDAP SS7 DSMCC (MPEG)
+IMGP
+ IP
+Figure by MIT OCW.
+
+92Massachusetts Institute of Technology  © Ed Crawley 2007
+1 2 53 4 76 8 9 10 1311 12 1514 16 17 18 2119 20 2322 24 25 26 2927 28 31300
+0 1 2 3
+4 5 6 7
+Source Port Number
+(16 bits)
+Destination Port Number
+(16 bits)
+Sequence Number
+(32 bits)
+8 9 10 11
+Acknowledgement Number
+(32 bits)
+12 13 14 15
+Window Size
+(16 bits)
+16 17 18 19
+Window Size
+(4 bits)
+Reserved
+(6 bits)
+URG
+ACK
+PSH
+RST
+SYN
+FIN
+TCP Checksum
+(16 bits)
+Urgent Pointer
+(16 bits)
+20 21 22 23
+Options
+(variable length, padded with 0 bytes)
+Data 
+(if any)
+Bit
+20 Bytes
+TCP Header
+RFC 793 – Transmission Control Protocol
+Figure by MIT OCW.
+
+93Massachusetts Institute of Technology  © Ed Crawley 2007
+Reliable Service
+Best Effort Service
+Application
+Transport
+Network
+Data Link
+Physical Layer
+FTP
+Client
+TCP
+IP
+Ethernet
+Driver
+FTP
+Client
+TCP
+IP
+Ethernet
+Driver
+Figure by MIT OCW.
+
+94Massachusetts Institute of Technology  © Ed Crawley 2007
+TCP Connection Establishment
+Send ACK y+1
+Receive FIN + ACK
+Receive ACK
+Receive FIN
+Send FIN seq=x
+Host ATime
+In the Network
+Host B
+Send ACK x+1
+Send FIN seq=y, ACK x+1
+Receive ACK
+Figure by MIT OCW.
+
+95Massachusetts Institute of Technology  © Ed Crawley 2007
+How Would You Analyze this 
+“Architecture”?

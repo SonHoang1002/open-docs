@@ -1,0 +1,426 @@
+ 
+ 
+ 
+  
+6.033 Spring 2018
+Lecture #3 
+• Operating systems
+• Virtual memory
+• OS abstractions
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+ 
+           
+     
+    
+  
+Lingering Problem 
+Client Server internet 
+load(amazon.com/buy.html?socks)
+what if we don’t want our modules to be on entirely
+separate machines? how can we enforce 
+modularity on a single machine? 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+          
+       
+   
+    
+    
+     
+   
+  
+ operating systems enforce modularity on 
+a single machine 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+(and corrupt
+) each others’ memory
+2. programs should be able to
+communicate
+3. programs should be able to share a
+CPU witho u
+t one program halting the
+progress of the others
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+       
+   
+    
+    
+     
+   
+ 
+  
+          
+ 
+ 
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+virtualize memory (and corrupt) each others’ memory
+virtualize2. programs should be able to communication communicate links 
+3. programs should be able to share a
+CPU witho u
+t one program halting the virtualize processors 
+pro
+gress of the others
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+    
+       
+   
+    
+    
+     
+   
+ 
+  
+ 
+ 
+ 
+  
+          
+ 
+ 
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+virtual memory (and corrupt) each others’ memory
+2. programs should be able to assume that they 
+communicate don’t need to 
+(for today) 
+3. programs should be able to share a assume one p rogram 
+CPU without o
+ne program halting the per CPU 
+progress o f 
+the others (for today) 
+today’s goal: virtualize memory so that programs cannot refer
+to each others’ memory 
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+  
+     how does a program use memory? 
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+ 
+ 
+  
+Multiple Programs 
+CPU1 (used by program1) main memory 
+232-1
+instructions for 
+EIP program1
+31 0 
+instructions for 
+CPU2 (used by program2) program2
+data for program1EIP 
+31 0 data for program2
+0 
+problem: no boundaries 
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+  
+ 
+  
+      
+  
+Solution: Virtualize Memory 
+31 0 
+EIP virtual address 
+0 
+0 
+232-1
+MMU uses program1’s table to translate 
+the virtual address to a physical address 
+physical
+address 
+PTR 
+virtual physical 
+address memory CPU1 (used by program1) MMU 
+232-1 232-1
+instructions for 
+program1
+data for program1
+instructions for 
+program2
+data for program2
+table for program1
+table for program2
+0 
+main memory 
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+ 
+     
+ 
+  
+  
+Storing the Mapping 
+naive method: store every mapping; virtual address acts as 
+an index into the table 
+0x00000000 
+0x00000001 
+0x00000002 
+0x00000003 
+… 
+0xbe26dc9 
+0xc090f81c 
+0xb762a572 
+0x5dcc90ee 
+… 
+32 bits per entry 
+232 entries 
+= 16GB to store the table 
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+  
+ 
+ 
+  
+  
+  
+Using Page Tables 
+CPU1(used by program1)
+EIP 0x00002148 
+31 0 
+MMU 
+0x00002148 
+index into
+page table 
+virtual page number: 0x00002 
+(top 20 bits) 
+offset: 0x148 
+(bottom 12 bits) 
+physical page number: 0x00004 
+to main
+0x00004148 memory 
+table for program1
+0x00003 
+0x00000 
+0x00004 
+0x00005 
+… 
+(exists in main memory) 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+ 
+     
+      
+  
+         
+  
+Storing the Mapping 
+space-efficient mapping: map to pages in memory 
+one page is (typically) 2 12 bits of memory. 
+232-12 = 220 entries 
+32 bits* per entry 
+= 4MB to store the
+ table 
+* you’ll see why it’s not 20 bits in a second
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+           
+       
+       
+        
+  
+Page Table Entries 
+page table entries are 32 bits because they contain a 20-bit 
+physical page number and 12 bits of additional information 
+31 12 11 0 
+physical page number 
+present (P) bit: is the page currently in DRAM? 
+read/write (R/W) bit: is the program allowed to write 
+to this address? 
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+ 
+     
+      
+  
+      
+  
+Storing the Mapping 
+space-efficient mapping: map to pages in memory 
+one page is (typically) 2 12 bits of memory. 
+232-12 = 220 entries 
+32 bits per entry 
+= 4MB to store the ta
+ble 
+problem: 4MB is still a fair amount of space 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+ 
+     
+      
+  
+   
+  
+Storing the Mapping 
+space-efficient mapping: map to pages in memory 
+one page is (typically) 2 12 bits of memory. 
+232-12 = 220 entries 
+32 bits per entry 
+= 4MB to store the
+ table 
+solution: page the page t able 
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+  
+      
+    
+ 
+did we achieve our goal? is a program’s
+memory protected from corruption by
+another program? 
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+  
+           
+       
+       
+        
+      
+  
+  
+Page Table Entries 
+page table entries are 32 bits because they contain a 20-bit 
+physical page number and 12 bits of additional information 
+31 12 11 0 
+physical page number 
+present (P) bit: is the page currently in DRAM? 
+read/write (R/W) bit: is the program allowed to write 
+to this address? 
+user/supervisor (U/S) bit: does the pro gram have 
+access to this address? 
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+ 
+  
+kernel manages page faults and 
+other interrupts 
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+ 
+     
+  
+operating systems: enforce 
+modularity on a single machine via 
+virtualization 
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+ 
+     
+ 
+  
+operating systems: enforce 
+modularity on a single machine via 
+virtualization and abstraction 
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+      
+ 
+  
+  
+    
+  
+  
+  
+#include <stdio.h> 
+#include <unistd.h> 
+void (*m)(); 
+void f() {
+printf("child is running m = %p\n", m); 
+} 
+int main() { 
+m = f; 
+if (fork() == 0) { 
+printf("child has started\n"); 
+int i; 
+for (i = 0; i < 15; i++) { 
+sleep(1); 
+(*m)();
+} 
+} 
+else { 
+printf("parent has started\n"); 
+sleep (5);
+printf("parent is running; let's write to m = %p\n", m); 
+m = 0; 
+printf("parent tries to invoke m = %p\n", m);
+(*m)(); 
+printf("parent is still alive\n"
+); 
+}
+} 
+m is a pointer to a function
+that returns void 
+set m to point to f 
+Child: ev
+ery second for
+15 seconds, call m 
+Par
+ent: overwrite 
+m and then call it
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+  
+   
+     
+       
+ 
+ 
+  
+     
+      
+   
+  
+• Operating systems enforce modularity on a single
+machine via virtualization and abstraction
+• Virtualizing memory prevents programs from referring to
+(and corrupting) each other’s memory. The MMU
+translates virtual addresses to physical addresses using
+page tables
+• The OS presents abstractions for devices via system
+calls, which are implemented with interrupts. Using
+interrupts means the kernel directly accesses the
+devices, not the user
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+22

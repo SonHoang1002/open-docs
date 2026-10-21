@@ -1,0 +1,222 @@
+  
+ 
+  
+6.033 Spring 2018
+Lecture #7 
+• Approaching Performance Problems
+• General Performance-improvement Techniques
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+       
+   
+    
+    
+     
+   
+ 
+ 
+  
+  
+          
+ 
+ 
+operating systems enforce modularity 
+on a single machine using virtualization 
+in order to enforce modularity + build an effective operating system 
+1. programs shouldn’t be able to refer to
+(and corrupt
+) each others’ memory
+2. programs should be able to
+communicate
+3. programs should be able to share a
+CPU witho u
+t one program halting the
+progress of the others
+virtual memory 
+bounded buffers 
+(virtualize communication links) 
+threads 
+(virtualize processors) 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+  
+  
+ 
+  
+ 
+      
+  
+guest OS guest OS 
+virtual hardware virtual hardware 
+U/K U/K 
+PTR PTR 
+page table page table… … 
+virtual machine monitor (VMM) 
+physical hardware 
+U/K, PTR, page table, … 
+virtual machines: enforce modular i ty between multiple 
+OSes running on the same physical machine 
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+ 
+  
+ 
+  
+how do we get systems (operating 
+or otherwise) to not just work, but 
+to work well? 
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+  
+     
+ 
+ 
+  
+How to Improve Performance in
+Two Easy Steps 
+1. measure the system to fi nd the
+bottleneck
+2. relax the bottleneck
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+ 
+     
+    
+  
+number of users 
+throughput 
+number of users 
+latency 
+few users 
+low latency
+low throughput (few users = few requests) 
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+ 
+      
+     
+    
+  
+number of users 
+latency 
+number of users 
+throughput 
+moderate users 
+low latency (new users consume previously idle resources) 
+high throughput (more users = more requests) 
+6.033 | spring 2018 | Katrina LaCurts 
+7
+
+ 
+   
+     
+    
+  
+number of users 
+throughput 
+number of users 
+latency 
+many users
+high latency (requests queue up)
+throughput plateaus (can’t serve requests any faster) 
+6.033 | spring 2018 | Katrina LaCurts 
+8
+
+  
+ 
+ 
+     
+ 
+ 
+  
+How to Improve Performance in
+Two Easy Steps 
+1. measure the system, and
+c
+ompare it to our system model,
+to find the bottleneck
+2. relax the bottleneck
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+  
+HDDs SSDs 
+blocks 
+platters 
+tracks pages 
+cells sectors 
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+  
+example disk specs (Hitachi 7K400) 
+capacity: 400GB 
+number of platters: 5 
+time for one revolution: 8.3ms 
+average read seek time: 8.2ms 
+average write seek time: 9.2ms 
+number of heads: 10 
+number of sectors per track: 567-1170 
+number of bytes per sector: 512 
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+  
+     
+ 
+ 
+  
+How to Improve Performance in
+Two Easy Steps 
+1. measure the system to fi nd the
+bottleneck
+2. relax the bottleneck
+- batch requests
+- cache d
+ata
+- exploit concurrency
+- exploit parallelism
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+ 
+       
+    
+   
+  
+ 
+   
+     
+ 
+  
+• Approaching Performance Problems
+We approach performance problems in systems by 
+measuring and modeling our system to find the 
+bottleneck, and then relaxing (fixing) the bottleneck 
+• Performance -improvement Techniques
+Four common techniques to improve performance: 
+batching, caching, concurrency , and parallelism . 
+To be effective, all of these techniques require an 
+understanding of how the underlying system works 
+and is used 
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+ 
+ 
+ 
+            
+ 
+ 
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+14

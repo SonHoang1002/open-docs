@@ -1,0 +1,213 @@
+  
+   
+   
+6.033 Spring 2018
+Lecture #1 
+• Complexity
+• Modularity and abstraction
+• Enforced modularity via client/server models
+6.033 | spring 2018 | Katrina LaCurts 
+1
+
+   
+      
+     
+    
+  
+what is a system? 
+a set of interconnected components that has an 
+expected behavior observed at the interface with its 
+environment 
+what makes building systems
+difficult? 
+complexity 
+6.033 | spring 2018 | Katrina LaCurts 
+2
+
+source: http://www.informationisbeautiful.net/visualizations/million-lines-of-code/
+Today’s Systems are Incredibly Complex
+© source unknown. All rights reserved. This content is excluded from our Creative Commons license. 
+For more information, see https://ocw.mit.edu/help/faq-fair-use.
+6.033 | spring 2018 | Katrina LaCurts 
+3
+
+complexity limits what we can build and 
+causes a number of unforeseen issues
+6.033 | spring 2018 | Katrina LaCurts 
+4
+
+how do we mitigate complexity?
+with design principles such as modularityand 
+abstraction
+6.033 | spring 2018 | Katrina LaCurts 
+5
+
+how do we enforce modularity?
+one way is to use the client/server model
+6.033 | spring 2018 | Katrina LaCurts 
+6
+
+7
+Class Server
+(on machine 2) Class Browser(on machine 1) 
+requestdef main(): def server_load_url(): 
+html = browser_load_url(URL) 
+... 
+... 
+return html 
+reply 
+6.033 | spring 2018 | Katrina LaCurts  
+
+8
+Stub Clients and RPCs 
+Class Browser
+(on machine 1) 
+def main(): def server_load_url(): 
+html = browser_load_url(URL) 
+... 
+... 
+return html 
+Class Server
+(on machine 2) 
+def browser_load_url(url): 
+msg = url # could reformat 
+send request 
+wait for reply 
+html = reply # could reformat
+stub
+ 
+return html 
+request 
+reply 
+def handle_server_load_url(url): 
+wait for request 
+url = request 
+html = server_load_url(URL) 
+reply = html
+send reply stub
+6.033 | spring 2018 | Katrina LaCurts  
+
+Challenges with RPCs
+Client Server
+6.033 | spring 2018 | Katrina LaCurts 
+9
+
+Challenges with RPCs
+Client Serverinternet
+6.033 | spring 2018 | Katrina LaCurts 
+10
+
+Challenges with RPCs
+Client Serverinternet
+load(“view.html?item”)
+X
+6.033 | spring 2018 | Katrina LaCurts 
+11
+
+Challenges with RPCs
+Client Serverinternet
+load(“view.html?item”)
+X
+load(“view.html?item”)
+6.033 | spring 2018 | Katrina LaCurts 
+12
+
+Challenges with RPCs
+Client Serverinternet
+load(“buy.html?item&ccNo=xxx”)
+X
+6.033 | spring 2018 | Katrina LaCurts 
+13
+
+Challenges with RPCs
+Client Serverinternet
+load(“buy.html?item&ccNo=xxx”)
+X
+load(“buy.html?item&ccNo=xxx”)
+6.033 | spring 2018 | Katrina LaCurts 
+14
+
+Challenges with RPCs
+Client Serverinternet
+load(“buy.html?item&ccNo=xxx”)
+X
+load(“buy.html?item&ccNo=xxx”)
+problem: just bought the same thing twice
+6.033 | spring 2018 | Katrina LaCurts 
+15
+
+Challenges with RPCs
+Client Serverinternet
+load(“buy.html? UID”)
+X
+load(“buy.html? UID”)
+client | UID| reply
+state on server
+replay results from table 
+instead of reprocessing 
+order
+problem:server can still fail
+6.033 | spring 2018 | Katrina LaCurts 
+16
+
+What else might we want?
+Client Serverinternet
+6.033 | spring 2018 | Katrina LaCurts 
+17
+
+What else might we want?
+Serverinternet
+scalability
+6.033 | spring 2018 | Katrina LaCurts 
+18
+
+What else might we want?
+internet
+scalability fault-tolerance/reliability
+6.033 | spring 2018 | Katrina LaCurts 
+19
+
+What else might we want?
+internet
+scalability fault-tolerance/reliability
+!
+!
+!
+6.033 | spring 2018 | Katrina LaCurts 
+20
+
+What else might we want?
+internet
+scalability fault-tolerance/reliability
+!
+"
+"
+"
+security
+"
+6.033 | spring 2018 | Katrina LaCurts 
+21
+
+• Complexity limits what we can build, but can be
+mitigated with modularity and abstraction
+• One way to enforce modularity is with a client/server
+model, where the two modules reside on different
+machines and communicate with RPCs; network/server
+failures are still an issue
+next lecture:naming, which allows modules to 
+communicate
+coming up:operating systems, which enforce 
+modularity on a single machine
+6.033 | spring 2018 | Katrina LaCurts 
+22
+
+ 
+ 
+ 
+            
+MIT OpenCourseWare 
+https://ocw.mit.edu 
+6.033 Computer System Engineering
+Spring 2018 
+For information about citing these materials or our Terms of Use, visit: https://ocw.mit.edu/terms. 
+23

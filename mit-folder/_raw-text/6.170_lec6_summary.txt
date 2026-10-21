@@ -1,0 +1,23 @@
+Summary of Object Model Notation for Code 
+6.170 / Lab in Software Engineering / Fall 2005 
+S S abstract S interface S 
+class abstract class abstract interface 
+or interface class 
+S 
+S1 extends or implements S 
+S1 
+Multiplicities 
+S T 
+? zero or one 
+m F n ! exactly one 
++ one or more 
+* zero or more 
+F is a ﬁeld from S to T with multiplicities m and n 
+Associates n T's with each S, and maps m S's to each T 
+S Tm F[i] n 
+F is an indexed ﬁeld from S to T with multiplicities m and n 
+Associates n T's with each S and i, and maps m S's for a given i to each T 
+S T 
+Target ﬁnal marking: over lifetime of each S, set of T's associated with it is unchanged 
+S T 
+Source ﬁnal marking: over lifetime of each T, set of S's mapped to it is unchanged 

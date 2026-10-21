@@ -1,0 +1,529 @@
+1 
+Image removed due to copyright restrictions. 
+Design Project Experiences:
+ Space Elevator Simulator
+  Part II 
+6.170 
+Page 1
+1 
+
+2 
+• 
+• 
+. 
+• 
+• 
+• 
+Image removed due to copyright restrictions. 
+“Realistic” Space Elevator 
+Edwards & Westling, 2002 
+Spacecraft launched into 
+geosynchronous (35,000km) orbit. 
+Spacecraft lowers thin ribbon toward 
+ground, and moves outward to keep it 
+from falling, eventually ending up at 
+100,000 km to act as a counterweight
+When ribbon reaches earth, it is tied to a 
+base station (floating platform off the 
+coast of Ecuador). 
+To strengthen and widen the initial 
+ribbon, climbers, powered by lasers 
+from earth stitch on additional ribbons 
+for 2½ years. 
+Ribbon is 3 feet wide and supports 13 
+tons in completed elevator. 
+Page 2
+2 
+
+3 
+“
+” 
+’
+…
+nd
+. 
+Space Elevator Quotes 
+The space elevator will be built about 50 years 
+after everyone stops laughing.
+- Arthur C. Clarke, 1985 
+"It ll be built 10 years after everybody stops 
+laughing  and I think they have stopped 
+laughing,"  Arthur C. Clarke, 2003, 2  Annual 
+Space Elevator conference, New Mexico
+Page 3
+3 
+
+4 
+• 
+• j
+– 
+• 
+• 
+– 
+– 
+→
+Functionality 
+Simulate and view space elevator dynamics 
+Main ob ects are Central planet, cable, 
+counterweight, climber 
+Cable modeled as masses and springs 
+Main forces are gravitational, centrifugal and 
+coriolis 
+Different views: 
+Text file 
+Swing 
+ Java 3D 
+Because of Coriolis force, the object does not actually deviate from its 
+path, but it appears to do so because of the motion of the coordinate 
+system. 
+Page 4 
+4 
+
+5 
+’ j l
+l
+l
+l j l
+l
+i l
+l
+i ld 
+i
+l i i
+MDD 
+Main 
+World 
+SimStruct TimeSim 
+SimOut 
+Creation, 
+mutation 
+Displays 
+SimOut 
+Startup, 
+refresh 
+Startup, 
+refresh 
+SimOut 
+Viewer 
+Draw 
+(Swing) 
+Dynamically 
+updates 
+and reads 
+SimStruct 
+Constructor Invokes TimeSim 
+methods 
+Calls Draw methods 
+Calls 
+Draw 
+methods 
+Editor 
+Let s have ob ects in the World cal  Draw methods and draw 
+themselves.  This makes for a more extensible wor d because we can 
+add modu es and add their draw methods. 
+Similar y, we will have ob ects in Wor d call the simulator methods to 
+simu ate their dynamics. 
+In this MDD it is clear that World s the central module/ADT.  Wor d and 
+Editor are tightly coupled since the Wor d will need to invoke Editor 
+methods to edit its objects, and the ed tor will need to invoke Wor
+methods to update the objects w th new ones, or update object 
+positions. 
+Wor d objects call methods in Draw and T meS m to draw or simulate 
+themselves. 
+Page 5
+5 
+
+6 
+• 
+• 
+’
+i
+l l
+l i j
+i l j
+l
+i
+l
+i i l
+i l ldEl
+ i l i
+Class Hierarchy (partial) 
+World 
+module World 
+World 
+Element 
+abstract class 
+World 
+Structure 
+Array of instances of 
+world elements 
+Contains WorldStructure, Simulator 
+Cable Planet 
+Want to define new operations on all or 
+subset of WorldElement subclass objects 
+Want to define new subclasses of WorldElement 
+calcGrav 
+calcGrav calcGrav 
+Moon 
+calcGrav 
+calcCor 
+calcCor calcCor calcCor 
+Let s look at the class hierarchy for the viewer part of the Space 
+Elevator (SE) s mulator. 
+We have a Wor d class, a Wor dStructure class and an abstract 
+WorldE ement class.  A World object conta ns a WorldStructure ob ect 
+and a S mu ator ob ect. 
+WorldE ements can be instantiated as planets, cables, masses, and 
+connectors (spr ngs). 
+If we want to define a new subclass of Wor dElement it is easy to do 
+this, and the subclass will nher t the skeletal imp ementation of the 
+abstract parent class. 
+However, defin ng a new operation for al  Wor ements is harder 
+because we have to first provide a skeletal implementation for the 
+abstract class, and then provide mp ementat ons for each of the 
+subclasses. 
+Page 6
+6 
+
+7 
+• 
+• 
+– 
+Visitor Design Pattern 
+Set up WorldElement so arbitrary operations can 
+be added easily 
+World 
+Element 
+Cable Planet 
+abstract class 
+Visitor 
+GravVisitor CorVisitor 
+abstract class 
+Factor out the operations in a separate hierarchy 
+of classes, all extending the abstract class Visitor 
+Each subclass represents one operation 
+Page 7
+7 
+
+8 
+} } 
+• 
+• 
+Visitor (Calculator) Design Pattern 
+World 
+Element 
+Cable Planet 
+Visitor 
+GravVisitor CorVisitor 
+abstract class abstract class 
+Accept(Visitor v) 
+Accept(Visitor v) {
+ v.VisitCable(this); 
+Accept(Visitor v) {
+ v.VisitPlanet(this); 
+VisitCable(Cable c) 
+VisitPlanet(Planet p) 
+VisitCable(Cable c) 
+VisitPlanet(Planet p) 
+VisitCable(Cable c) 
+VisitPlanet(Planet p) 
+Double Dispatching 
+Visitor abstract class can provide skeletal 
+implementation for each WorldElement subclass 
+For example, in a cable, computing the tension in the cable.  Then the 
+gravitational force is added to the tension by the GravVisitor subclass. 
+The Coriolis force is added in the CorVisitor subclass. 
+Page 8 
+8 
+
+9 
+… 
+… 
+j j
+j) j) 
+( j) 
+j j) 
+j j) 
+j j) 
+Double Dispatching 
+WorldElement elm = 
+Visitor vis = 
+elm.Accept(vis); 
+cableOb .Accept(vis)   PlanOb .Accept(vis) 
+vis.VisitCable(cableOb vis.VisitPlanet(planOb
+First dispatch 
+GravVObj.VisitPlanet planOb
+CorVOb .VisitPlanet(planOb
+GravVOb .VisitCable(cableOb
+CorVOb .VisitCable(cableOb
+Second dispatch 
+Page 9
+9 
+
+10 
+} } 
+• 
+• 
+Overloading 
+World 
+Element 
+Cable Planet 
+Visitor 
+GravVisitor CorVisitor 
+abstract class abstract class 
+Accept(Visitor v) 
+Accept(Visitor v) {
+ v.Visit(this); 
+Accept(Visitor v) {
+ v.Visit(this); 
+Visit(Cable c) 
+Visit(Planet p) 
+Visit(Cable c) 
+Visit(Planet p) 
+Visit(Cable c) 
+Visit(Planet p) 
+Just syntactic sugar 
+Do not use if you find it confusing! 
+overloading 
+For example, in a cable, computing the tension in the cable.  Then the 
+gravitational force is added to the tension by the GravVisitor subclass. 
+The Coriolis force is added in the CorVisitor subclass. 
+Page 10 
+10 
+
+11 
+… 
+… 
+j j
+( j) ( j) 
+j j) 
+j j) 
+j j) 
+j j) 
+Double Dispatching with Overloading 
+WorldElement elm = 
+Visitor vis = 
+elm.Accept(vis); 
+cableOb .Accept(vis)   PlanOb .Accept(vis) 
+vis.Visit cableOb   vis.Visit planOb
+First dispatch 
+GravVOb .Visit(planOb
+CorVOb .Visit(planOb
+GravVOb .Visit(cableOb
+CorVOb .Visit(cableOb
+Second dispatch 
+The Java dispatcher will do the right thing when you overload method 
+names.  Depending on the argument type, the appropriate method will 
+be called. 
+Page 11 
+11 
+
+12 
+• 
+j
+j
+j++) { 
+} 
+} 
+• 
+– 
+each 
+Visitor Usage 
+In the TimeSim simulator module, we can now 
+write code like: 
+for(i = 0; i < WorldStructureOb .Elements.size(); i++) { 
+elm = WorldStructureOb .Elements.get(i); 
+for(j = 0; j < visitorsVector.size(); 
+vis = visitorsVector.get(j); 
+elm.Accept(vis); 
+The above code does not have to change even if 
+we add new WorldElement subclasses or new 
+Visitor subclasses (operations) 
+Need to add visit methods for each new element in 
+Visitor subclass 
+Accept is defined appropriately for each WorldElement concrete 
+subclass and operation pair.  It could be a no-op, that is, it may not 
+do anything. 
+Visitor makes it easy to add new operations, but it makes it harder to 
+add new elements.  Each new element must get its VisitElement() 
+method in each Visitor class. 
+Three other points: 
+•	 A Visitor can visit elements that are unrelated through inheritance. 
+In our example Cable and Planet do not need to be related. 
+•	 A Visitor can accumulate state as they visit each element of an 
+object structure in an instance variable of the visitor. In normal 
+operations such state would have to be passed as arguments to the 
+operation. 
+•	 A Visitor may need access to state that otherwise may be declared 
+private. 
+Page 12 
+12 
+
+13 
+• j
+Viewer Functionality 
+Main 
+World SimOut 
+Viewer 
+Draw 
+(Swing) 
+Editor 
+Render 
+(Java 3D) 
+The Java 3D API provides a set of ob ect­
+oriented interfaces to build, render, and 
+control the behavior of 3D objects. 
+Today, we’ll look briefly at the Java 3D functionality in the simulator. 
+Page 13
+13 
+
+14 
+• 
+• j
+• 
+– 
+• 
+j
+a 
+– 
+Java 3D API 
+Hierarchy of Java classes which serve as an 
+interface to a 3D rendering system 
+Geometric ob ects reside in a virtual universe 
+Details of rendering handled automatically 
+Objects rendered in parallel using Java threads 
+A Java 3D program creates instances of 
+ob ects and places them a tree structure called 
+scene graph 
+Scene graph completely specifies the contents 
+of the virtual universe and how it is to be 
+rendered 
+Page 14
+14 
+
+15 
+BG BG 
+S 
+S S 
+TG TG 
+j
+Java 3D Scene Graph 
+Appearance 
+Appearance Appearance 
+Geometry 
+Geometry 
+Virtual Universe 
+Locale (root) 
+Branch 
+Group 
+Transform 
+Group 
+Parent-child 
+reference 
+Visual ob ect 
+Shape3D 
+NodeComponent 
+Only a single virtual universe in a Java 3D program.  Can have multiple 
+but they cannot communicate with each other. 
+Locale objects are landmarks in the Virtual Universe.  Typically, there is 
+only one Locale object in a Virtual Universe. 
+Branch Group objects collect together a set of visual objects (or 
+Shape3D objects). 
+Transform Group objects specify the transformations that can be 
+performed on the child Shape3D objects. 
+The visual Shape3D object such as a cube or a sphere consists of 
+NodeComponent references such as Appearance and Geometry. 
+Each scene graph is rooted at a Locale object. 
+The fundamental constraint in a Java 3D scene graph is that each 
+Shape3D object has to have a single path to the root Locale object. 
+Page 15 
+15 
+
+16 
+BG 
+BG 
+S 
+S 
+TG 
+TG 
+TG 
+ject 
+ject 
+Scene Graph Example 
+Appearance 
+Appearance Geometry 
+Geometry 
+Locale (root) 
+Rotation 
+Rotation 
+Revolution 
+Sun Landmark 
+Earth 
+Shape3D 
+ob Moon Shape3D 
+ob
+Other planets 
+Here is a simple example of a scene graph representing the Moon 
+rotating around the Earth, and both of them rotating around their own 
+axes. 
+The Locale object represents the Sun, the reference in this virtual 
+universe (or solar system).  Note how two successive transforms can 
+be applied to a Shape3D object, in this case the moon. 
+The entire Branch Group could be transformed through another 
+Transform Group (TG) to create rotation of the earth around the Sun. 
+Page 16 
+16 
+
+17 
+j “ ” 
+• 
+– 
+» /
+– 
+• 
+• “ ”
+– 
+– /
+• 
+Pro ect Report
+Significant discussions prior to coding 
+What should the functionality be? 
+Not an issue in Gizmoball AntiChess 
+2 Weeks of MDDs, Class Hierarchies and 
+Object models 
+About 3600 lines of code 
+Getting the physics right  took a while 
+Some of the physics is still questionable 
+Not an issue in Gizmoball AntiChess 
+Lots of fun, especially because Matt and Lee 
+debugged my code! 
+Page 17
+17 
+
+18 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+• 
+Nine Stages of My Design Project 
+Wild Euphoria. 
+Growing Concern. 
+Near Total Disillusionment. 
+Unmitigated Disaster. 
+Search For The Guilty. 
+Punishment Of The Innocent. 
+Scream for Professional Help. 
+Declare Victory! 
+Blatant Self-Promotion. 
+Page 18
+18 
+
+19 
+Demonstration 
+Page 19
+19 
