@@ -1,0 +1,405 @@
+openapi: 3.1.0
+info:
+  title: Wedding Guestbook API
+  version: 1.0.0
+  summary: API lời chúc và RSVP cho wedding guestbook
+  description: |
+    API công khai cho khách gửi lời chúc, xem danh sách và RSVP.
+    Quản trị viên dùng Bearer JWT để sửa/xóa lời chúc không phù hợp.
+    Lỗi dùng application/problem+json (RFC 9457); thời gian là ISO 8601 UTC.
+  contact: { name: Wedding Server Team, email: api@wedding.example.com }
+  license: { name: MIT, identifier: MIT }
+tags:
+  - { name: Messages, description: Lời chúc và RSVP }
+security: [{ bearerAuth: [] }]
+servers:
+  - { url: "http://localhost:3000/api", description: Local }
+  - { url: "https://api.wedding.example.com/api", description: Production }
+paths:
+  /messages:
+    get:
+      tags: [Messages]
+      operationId: listMessages
+      summary: Lấy danh sách lời chúc
+      description: Mới nhất trước, dùng cursor để load thêm (infinite scroll).
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/Cursor"
+        - $ref: "#/components/parameters/Limit"
+        - name: will_attend
+          in: query
+          schema: { type: boolean }
+        - name: guest_of
+          in: query
+          schema: { type: string, maxLength: 80 }
+        - name: q
+          in: query
+          schema: { type: string, minLength: 2, maxLength: 100 }
+      responses:
+        "200":
+          description: Danh sách lời chúc (có thể rỗng).
+          headers:
+            X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/MessagePage" }
+              examples:
+                firstPage: { $ref: "#/components/examples/MessagePageExample" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "429": { $ref: "#/components/responses/TooManyRequests" }
+        "500": { $ref: "#/components/responses/ServerError" }
+    post:
+      tags: [Messages]
+      operationId: createMessage
+      summary: Gửi lời chúc mới
+      description: Tạo lời chúc và broadcast `message.created` qua WebSocket.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MessageCreate" }
+            examples:
+              attending:
+                summary: Khách tham dự
+                value:
+                  sender_name: Nguyễn Minh Anh
+                  content: Chúc hai bạn trăm năm hạnh phúc!
+                  will_attend: true
+                  guest_of: Bạn thân cô dâu
+                  number_attend: 2
+      responses:
+        "201":
+          description: Đã tạo lời chúc.
+          headers:
+            Location:
+              description: URL của lời chúc vừa tạo.
+              required: true
+              schema: { type: string, format: uri-reference }
+            X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success, data]
+                properties:
+                  success: { const: true }
+                  data: { $ref: "#/components/schemas/Message" }
+                additionalProperties: false
+              examples:
+                created: { $ref: "#/components/examples/MessageExample" }
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "409": { $ref: "#/components/responses/Conflict" }
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }
+        "429": { $ref: "#/components/responses/TooManyRequests" }
+        "500": { $ref: "#/components/responses/ServerError" }
+  /messages/{messageId}:
+    parameters:
+      - $ref: "#/components/parameters/MessageId"
+    put:
+      tags: [Messages]
+      operationId: replaceMessage
+      summary: Thay thế toàn bộ lời chúc
+      description: Field thiếu bị đặt về null/default; dùng PATCH để sửa một phần.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MessageReplace" }
+      responses:
+        "200":
+          description: Đã cập nhật.
+          headers:
+            X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success, data]
+                properties:
+                  success: { const: true }
+                  data: { $ref: "#/components/schemas/Message" }
+                additionalProperties: false
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }
+        "500": { $ref: "#/components/responses/ServerError" }
+    patch:
+      tags: [Messages]
+      operationId: updateMessage
+      summary: Cập nhật một phần lời chúc
+      description: Chỉ cập nhật field được gửi; body rỗng bị từ chối.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MessagePatch" }
+          application/merge-patch+json:
+            schema: { $ref: "#/components/schemas/MessagePatch" }
+      responses:
+        "200":
+          description: Đã cập nhật một phần.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success, data]
+                properties:
+                  success: { const: true }
+                  data: { $ref: "#/components/schemas/Message" }
+                additionalProperties: false
+        "400": { $ref: "#/components/responses/BadRequest" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/UnprocessableEntity" }
+        "500": { $ref: "#/components/responses/ServerError" }
+    delete:
+      tags: [Messages]
+      operationId: deleteMessage
+      summary: Xóa một lời chúc
+      description: Xóa vĩnh viễn; broadcast `message.deleted` qua WebSocket.
+      responses:
+        "204":
+          description: Đã xóa.
+          headers:
+            X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+        "401": { $ref: "#/components/responses/Unauthorized" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "500": { $ref: "#/components/responses/ServerError" }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "JWT admin; gửi `Authorization: Bearer <token>`."
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: Con trỏ opaque từ `page.next_cursor`; không tự parse.
+      schema: { type: string, maxLength: 256, pattern: "^[A-Za-z0-9_-]+$" }
+      example: eyJjcmVhdGVkX2F0IjoiMjAyNi0xMC0yNVQxMDowMDowMFoiLCJpZCI6MTIzfQ
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+    MessageId:
+      name: messageId
+      in: path
+      required: true
+      schema: { type: integer, format: int64, minimum: 1 }
+      example: 42
+  headers:
+    XRequestId:
+      description: ID trace của request.
+      required: true
+      schema: { type: string, format: uuid }
+      example: 3f1c2a9e-7b6d-4f2a-9c1e-2d8b7a6f5e4d
+  schemas:
+    Message:
+      type: object
+      required: [id, sender_name, content, will_attend, guest_of, number_attend, created_at]
+      properties:
+        id: { type: integer, format: int64, minimum: 1, readOnly: true }
+        sender_name: { type: string, minLength: 1, maxLength: 80 }
+        content: { type: string, minLength: 1, maxLength: 1000 }
+        will_attend: { type: boolean }
+        guest_of: { type: [string, "null"], maxLength: 80 }
+        number_attend: { type: integer, minimum: 0, maximum: 20 }
+        created_at: { type: string, format: date-time, readOnly: true }
+      additionalProperties: false
+    MessageCreate:
+      type: object
+      required: [sender_name, content, will_attend]
+      properties:
+        sender_name: { type: string, minLength: 1, maxLength: 80 }
+        content: { type: string, minLength: 1, maxLength: 1000 }
+        will_attend: { type: boolean }
+        guest_of: { type: [string, "null"], maxLength: 80 }
+        number_attend: { type: integer, minimum: 0, maximum: 20, default: 1 }
+      additionalProperties: false
+      if:
+        properties: { will_attend: { const: true } }
+        required: [will_attend]
+      then:
+        properties: { number_attend: { minimum: 1 } }
+      examples:
+        - sender_name: Nguyễn Minh Anh
+          content: Chúc hai bạn trăm năm hạnh phúc!
+          will_attend: true
+          guest_of: Bạn thân cô dâu
+          number_attend: 2
+    MessageReplace:
+      type: object
+      required: [sender_name, content, will_attend, number_attend]
+      properties:
+        sender_name: { type: string, minLength: 1, maxLength: 80 }
+        content: { type: string, minLength: 1, maxLength: 1000 }
+        will_attend: { type: boolean }
+        guest_of: { type: [string, "null"], maxLength: 80 }
+        number_attend: { type: integer, minimum: 0, maximum: 20 }
+      additionalProperties: false
+    MessagePatch:
+      type: object
+      minProperties: 1
+      properties:
+        sender_name: { type: string, minLength: 1, maxLength: 80 }
+        content: { type: string, minLength: 1, maxLength: 1000 }
+        will_attend: { type: boolean }
+        guest_of: { type: [string, "null"], maxLength: 80 }
+        number_attend: { type: integer, minimum: 0, maximum: 20 }
+      additionalProperties: false
+    MessagePage:
+      type: object
+      required: [success, data, page]
+      properties:
+        success: { const: true }
+        data: { type: array, items: { $ref: "#/components/schemas/Message" } }
+        page: { $ref: "#/components/schemas/PageInfo" }
+      additionalProperties: false
+    PageInfo:
+      type: object
+      required: [next_cursor, has_more]
+      properties:
+        next_cursor: { type: [string, "null"], maxLength: 256 }
+        has_more: { type: boolean }
+      additionalProperties: false
+    Problem:
+      type: object
+      description: Lỗi theo RFC 9457.
+      required: [type, title, status]
+      properties:
+        type: { type: string, format: uri, default: "about:blank" }
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        detail: { type: string }
+        instance: { type: string, format: uri-reference }
+        code: { type: string, pattern: "^[A-Z][A-Z0-9_]*$" }
+        request_id: { type: string, format: uuid }
+      additionalProperties: true
+    ValidationProblem:
+      allOf:
+        - $ref: "#/components/schemas/Problem"
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                required: [path, message]
+                properties:
+                  path: { type: string }
+                  message: { type: string }
+                  code: { type: string }
+                additionalProperties: false
+          additionalProperties: true
+  responses:
+    BadRequest:
+      description: Request sai cú pháp hoặc thiếu dữ liệu bắt buộc.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Unauthorized:
+      description: Thiếu hoặc sai Bearer token.
+      headers:
+        WWW-Authenticate:
+          schema: { type: string, example: 'Bearer realm="wedding-api"' }
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Forbidden:
+      description: Đã xác thực nhưng không đủ quyền.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    NotFound:
+      description: Không tìm thấy lời chúc.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    Conflict:
+      description: Xung đột trạng thái hoặc Idempotency-Key.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    UnprocessableEntity:
+      description: Đúng cú pháp nhưng vi phạm business rule.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/ValidationProblem" }
+          examples:
+            rsvp:
+              value:
+                type: https://api.wedding.example.com/problems/validation-error
+                title: Dữ liệu không hợp lệ
+                status: 422
+                detail: number_attend phải >= 1 khi will_attend = true.
+                code: VALIDATION_ERROR
+                errors:
+                  - { path: number_attend, message: Phải lớn hơn hoặc bằng 1, code: too_small }
+    TooManyRequests:
+      description: Vượt giới hạn tần suất.
+      headers:
+        Retry-After:
+          schema: { type: integer, minimum: 1 }
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+    ServerError:
+      description: Lỗi không lường trước ở server.
+      headers:
+        X-Request-Id: { $ref: "#/components/headers/XRequestId" }
+      content:
+        application/problem+json:
+          schema: { $ref: "#/components/schemas/Problem" }
+  examples:
+    MessageExample:
+      summary: Một lời chúc đã lưu
+      value:
+        success: true
+        data:
+          id: 42
+          sender_name: Nguyễn Minh Anh
+          content: Chúc hai bạn trăm năm hạnh phúc!
+          will_attend: true
+          guest_of: Bạn thân cô dâu
+          number_attend: 2
+          created_at: "2026-10-25T10:00:00.000Z"
+    MessagePageExample:
+      summary: Trang đầu tiên
+      value:
+        success: true
+        data:
+          - id: 42
+            sender_name: Nguyễn Minh Anh
+            content: Chúc hai bạn trăm năm hạnh phúc!
+            will_attend: true
+            guest_of: Bạn thân cô dâu
+            number_attend: 2
+            created_at: "2026-10-25T10:00:00.000Z"
+        page:
+          next_cursor: eyJjcmVhdGVkX2F0IjoiMjAyNi0xMC0yNVQwOTo1ODowMFoiLCJpZCI6NDF9
+          has_more: true
+externalDocs:
+  description: Hướng dẫn tích hợp và changelog
+  url: https://docs.wedding.example.com/api
