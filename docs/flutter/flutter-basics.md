@@ -1,7 +1,8 @@
-# Flutter cơ bản — Từ Dart đến guestbook realtime
+# Flutter cơ bản — Từ Dart đến ứng dụng thực tế
 
-> Nền tảng trước khi làm app wedding: Dart, widget/layout, form, state, HTTP, WebSocket,
-> testing, debug. Ví dụ gắn với API thật `GET/POST /api/messages` và WebSocket `/ws`.
+> Nền tảng toàn diện: Dart 3, widget/layout, form, state, HTTP, WebSocket, testing,
+> debug. Ví dụ dùng domain trung lập (danh sách đơn hàng/lời nhắn/tin tức) với API REST
+> và WebSocket để minh họa realtime. Tất cả đều áp dụng cho app Flutter bất kỳ.
 
 ---
 
@@ -21,7 +22,7 @@
 12. [Testing cơ bản](#12-testing-cơ-bản)
 13. [Debug](#13-debug)
 14. [Build và run](#14-build-và-run)
-15. [Ví dụ tổng hợp: guestbook screen](#15-ví-dụ-tổng-hợp-guestbook-screen)
+15. [Ví dụ tổng hợp: màn hình danh sách realtime](#15-ví-dụ-tổng-hợp-màn-hình-danh-sách-realtime)
 16. [Bài tập](#16-bài-tập)
 17. [Anti-patterns cơ bản](#17-anti-patterns-cơ-bản)
 18. [Tài liệu tham khảo](#18-tài-liệu-tham-khảo)
@@ -731,9 +732,9 @@ Flavors dev/staging/prod cấu hình native + `--dart-define`; chi tiết ở
 
 ---
 
-## 15. Ví dụ tổng hợp: guestbook screen
+## 15. Ví dụ tổng hợp: màn hình danh sách realtime
 
-Screen dùng `MessageApi` (mục 8), `GuestbookSocket` (mục 10), `RsvpForm` (mục 6):
+Màn hình minh họa dùng API client (mục 8), socket realtime (mục 10), form gửi dữ liệu (mục 6). Ý tưởng là danh sách items với khả năng thêm mới và cập nhật realtime.
 
 ```dart
 final _api = MessageApi();
@@ -799,8 +800,8 @@ Widget build(BuildContext context) => Scaffold(
     );
 ```
 
-Form gửi xong backend broadcast `new_message` cho cả sender, nên list tự cập nhật; nếu
-muốn phản hồi tức thì, thêm item từ response POST và kiểm tra id trùng.
+Sau khi gửi thành công, server có thể broadcast event realtime cho tất cả client; app
+có thể cập nhật list từ event hoặc thêm tạm từ response và dedupe theo id để tránh trùng.
 
 ---
 

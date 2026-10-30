@@ -1,8 +1,8 @@
 # Python cơ bản — Từ cú pháp đến chương trình chạy được
 
 > Nền tảng Python 3.12+: cách interpreter chạy code, kiểu dữ liệu, collection, hàm, OOP,
-> exception, file, stdlib, type hint, pytest và debug. Ví dụ xuyên suốt là bài toán
-> **quản lý khách mời wedding** — đủ nhỏ để hiểu, đủ thật để dùng lại.
+> exception, file, stdlib, type hint, pytest và debug. Ví dụ xuyên suốt dùng domain trung lập
+> (khách hàng/đơn hàng/sản phẩm) — đủ nhỏ để hiểu, đủ áp dụng thực tế.
 
 ---
 
@@ -309,8 +309,8 @@ single = (42,)          # phẩy bắt buộc
 empty = ()
 
 from collections import namedtuple
-Guest = namedtuple("Guest", ["name", "side"])
-g = Guest("Hoa", "bride")
+Customer = namedtuple("Customer", ["name", "segment"])
+c = Customer("Hoa", "retail")
 print(g.name, g.side)
 ```
 
@@ -749,30 +749,30 @@ def factorial(n: int) -> int:
 ### 6.1 Class cơ bản
 
 ```python
-class Guest:
+class Customer:
     """Một khách mời."""
 
-    venue = "Wedding Hall"          # class attribute, chia sẻ
+    store_location = "Main Warehouse"          # class attribute, chia sẻ
 
-    def __init__(self, name: str, side: str = "bride") -> None:
+    def __init__(self, name: str, segment: str = "retail") -> None:
         self.name = name            # instance attribute
-        self.side = side
-        self._table: int | None = None   # quy ước private
+        self.segment = segment
+        self._group: int | None = None   # quy ước private
 
-    def assign_table(self, number: int) -> None:
+    def assign_group(self, number: int) -> None:
         if number <= 0:
-            raise ValueError("Số bàn phải dương")
-        self._table = number
+            raise ValueError("Số nhóm phải dương")
+        self._group = number
 
     @property
-    def table(self) -> int | None:
-        return self._table
+    def group(self) -> int | None:
+        return self._group
 
     def __repr__(self) -> str:
-        return f"Guest(name={self.name!r}, side={self.side!r})"
+        return f"Customer(name={self.name!r}, segment={self.segment!r})"
 
 
-hoa = Guest("Hoa")
+cust = Customer("Hoa")
 hoa.assign_table(3)
 print(hoa.table)          # 3
 ```
@@ -783,7 +783,7 @@ không phải private thật; `__name` bị name-mangling thành `_Class__name` 
 ### 6.2 Instance, class, static method
 
 ```python
-class Guest:
+class Customer:
     count = 0
 
     def __init__(self, name: str) -> None:
@@ -825,7 +825,7 @@ class Person:
 class Guest(Person):
     def __init__(self, name: str, side: str) -> None:
         super().__init__(name)
-        self.side = side
+        self.segment = segment
 
     def describe(self) -> str:
         return f"Guest({self.name}, {self.side})"
@@ -904,7 +904,7 @@ Tự sinh `__init__`, `__repr__`, `__eq__`; phù hợp DTO/domain model đơn gi
 from dataclasses import dataclass, field
 
 @dataclass(frozen=True, slots=True)
-class Guest:
+class Customer:
     name: str
     side: str = "bride"
     tags: tuple[str, ...] = ()
@@ -990,7 +990,7 @@ dependency injection nhẹ trong Python.
 attribute.
 
 ```python
-class GuestList:
+class CustomerList:
     def __init__(self, repository: "GuestRepository") -> None:
         self._repo = repository
 
@@ -1924,7 +1924,7 @@ from dataclasses import dataclass, replace
 
 
 @dataclass(frozen=True, slots=True)
-class Guest:
+class Customer:
     name: str
     side: str = "bride"
     table: int | None = None
@@ -2247,3 +2247,392 @@ def retry(func: Callable[[], T], attempts: int = 3, base_delay: float = 0.5) -> 
 
 *Tiếp theo: [`python-advanced.md`](./python-advanced.md) để hiểu data model, async, GIL,
 profiling và packaging.*
+
+
+## 18. Python 3.12/3.13 — Tính năng hữu ích cho code thực tế
+
+### 18.1 PEP 695: `type` statement cho generics
+
+```python
+from collections.abc import Iterable
+
+type Vector[T] = list[T]
+type Pair[K, V] = tuple[K, V]
+
+def first[T](items: Iterable[T]) -> T | None:
+    for x in items:
+        return x
+    return None
+
+v: Vector[int] = [1, 2, 3]
+p: Pair[str, int] = ("qty", 5)
+```
+
+### 18.2 PEP 698: `@override`
+
+```python
+from typing import override
+
+class BaseService:
+    def process(self, x: int) -> int:
+        return x
+
+class LoggingService(BaseService):
+    @override
+    def process(self, x: int) -> int:
+        return x * 2
+```
+
+`@override` giúp type checker phát hiện lỗi khi refactor (đổi tên phương thức). Cần Python 3.12+.
+
+### 18.3 `TypeIs` (PEP 742, 3.13+)
+
+`TypeIs` chặt chẽ hơn `TypeGuard`: nếu hàm trả về `True`, type checker thu hẹp chính xác kiểu trong cả nhánh `if` và context sử dụng.
+
+```python
+from typing import TypeIs
+
+def is_str_list(x: object) -> TypeIs[list[str]]:
+    return isinstance(x, list) and all(isinstance(i, str) for i in x)
+
+def process(x: object) -> int:
+    if is_str_list(x):
+        return len(x[0])  # x là list[str]
+    return 0
+```
+
+### 18.4 `warnings.deprecated` (3.13+)
+
+```python
+from warnings import deprecated
+
+@deprecated("Dùng process_v2 thay thế; sẽ xóa trong phiên bản sau")
+def process_old(x: int) -> int:
+    return x * 2
+```
+
+### 18.5 t-string (template string, PEP 750, 3.14+)
+
+t-string trả về `Template` object, cho phép kiểm soát interpolation trước khi format (hữu ích log an toàn, tránh SQL injection).
+
+```python
+from string.templatelib import Template
+
+name = "Alice"
+tmpl: Template = t"Hello {name}"  # Python 3.14+
+# Có thể xử lý từng phần interpolation trước khi ghép
+```
+
+> ⚠️ Không dùng t-string như f-string trực tiếp nếu chưa kiểm soát xử lý; chỉ dùng khi có nhu cầu lọc/escape rõ ràng.
+
+---
+
+## 19. Type hints thực tế nâng cao
+
+### 19.1 `Protocol` (structural typing)
+
+```python
+from typing import Protocol
+
+class HasId(Protocol):
+    id: int
+
+class Customer:
+    def __init__(self, id: int, name: str) -> None:
+        self.id = id
+        self.name = name
+
+class Order:
+    def __init__(self, id: int, total: float) -> None:
+        self.id = id
+        self.total = total
+
+def get_id(obj: HasId) -> int:
+    return obj.id
+
+get_id(Customer(1, "A"))  # OK
+get_id(Order(2, 9.99))    # OK
+```
+
+### 19.2 `TypeVar`, `ParamSpec`, `Concatenate`
+
+```python
+from collections.abc import Callable
+from typing import ParamSpec, TypeVar, Concatenate
+
+P = ParamSpec("P")
+R = TypeVar("R")
+T = TypeVar("T")
+
+def log_call(func: Callable[P, R]) -> Callable[P, R]:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+        print(f"Gọi {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+class Service:
+    def run(self, x: int) -> str:
+        return str(x)
+
+def with_context(ctx: dict[str, str], func: Callable[Concatenate[Service, P], R]) -> Callable[P, R]:
+    # Mẫu dùng khi muốn "inject" tham số
+    ...
+```
+
+### 19.3 `TypedDict`, `NotRequired`, `Required`
+
+```python
+from typing import NotRequired, TypedDict
+
+class ProductPayload(TypedDict):
+    name: str
+    price: float
+    sku: NotRequired[str]
+
+def create_product(data: ProductPayload) -> dict[str, object]:
+    return {"name": data["name"], "price": data["price"]}
+```
+
+### 19.4 `Literal`, `Final`, `Self`
+
+```python
+from typing import Final, Literal, Self
+
+Status = Literal["draft", "active", "archived"]
+
+MAX_RETRIES: Final[int] = 3
+
+class Builder:
+    def __init__(self) -> None:
+        self.value: int = 0
+    def set(self, v: int) -> Self:
+        self.value = v
+        return self
+```
+
+### 19.5 `overload`
+
+```python
+from typing import overload
+
+@overload
+def parse(v: str) -> dict[str, str]: ...
+@overload
+def parse(v: int) -> dict[str, int]: ...
+
+def parse(v: str | int) -> dict[str, str] | dict[str, int]:
+    if isinstance(v, str):
+        return {"s": v}
+    return {"n": v}
+```
+
+> 💡 Luôn chạy type checker (`mypy` hoặc `pyright`) trong CI. Type hints là tài liệu có thể kiểm tra được.
+
+---
+
+## 20. Pytest nâng cao: fixtures, parametrize, mock, tmp_path
+
+### 20.1 Fixtures cơ bản và scope
+
+```python
+# conftest.py
+import pytest
+
+@pytest.fixture
+def sample_products():
+    return [{"sku": "A1", "price": 10.0}, {"sku": "B2", "price": 5.0}]
+
+@pytest.fixture(scope="session")
+def db_config():
+    return {"url": "sqlite:///:memory:"}
+```
+
+### 20.2 `parametrize`
+
+```python
+import pytest
+
+@pytest.mark.parametrize("qty,price,total", [
+    (1, 10.0, 10.0),
+    (2, 10.0, 20.0),
+    (0, 10.0, 0.0),
+])
+def test_total(qty: int, price: float, total: float):
+    assert qty * price == total
+```
+
+### 20.3 `tmp_path` và `monkeypatch`
+
+```python
+def write_config(path, data: dict) -> None:
+    import json
+    path.write_text(json.dumps(data), encoding="utf-8")
+
+def test_write_config(tmp_path):
+    p = tmp_path / "config.json"
+    write_config(p, {"key": "value"})
+    assert p.read_text() == '{"key": "value"}'
+```
+
+```python
+def get_env(name: str, default: str = "") -> str:
+    import os
+    return os.environ.get(name, default)
+
+def test_get_env(monkeypatch):
+    monkeypatch.setenv("API_TOKEN", "test")
+    assert get_env("API_TOKEN") == "test"
+```
+
+### 20.4 `unittest.mock`
+
+```python
+from unittest.mock import MagicMock, patch
+
+def fetch_data(client):
+    resp = client.get("/items")
+    return resp.json()
+
+def test_fetch_data():
+    client = MagicMock()
+    client.get.return_value.json.return_value = [{"id": 1}]
+    assert fetch_data(client) == [{"id": 1}]
+    client.get.assert_called_once_with("/items")
+```
+
+```python
+def test_with_patch():
+    with patch("httpx.get") as mock_get:
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {}
+        # ... gọi hàm dùng httpx.get
+        mock_get.assert_called()
+```
+
+> ⚠️ Mock đúng biên (boundary): ưu tiên mock I/O (HTTP/DB/filesystem), không mock logic thuần túy không cần thiết.
+
+### 20.5 Kiểm tra exception, warning
+
+```python
+import pytest
+
+def divide(a: float, b: float) -> float:
+    if b == 0:
+        raise ZeroDivisionError("chia cho 0")
+    return a / b
+
+def test_divide_raises():
+    with pytest.raises(ZeroDivisionError):
+        divide(1, 0)
+```
+
+```python
+import warnings
+
+def deprecated_call():
+    warnings.warn("cũ", DeprecationWarning, stacklevel=2)
+    return 1
+
+def test_deprecated():
+    with pytest.warns(DeprecationWarning):
+        deprecated_call()
+```
+
+### 20.6 Chạy pytest hiệu quả
+
+```bash
+pytest -q
+pytest -v -k "total or price"
+pytest -q --maxfail=2
+pytest -q --cov=src --cov-report=term-missing
+pytest -q -x  # dừng tại lỗi đầu
+```
+
+---
+
+## 21. Bài tập thực hành (có lời giải gợi ý)
+
+### Bài 1: Xử lý danh sách đơn hàng
+Viết hàm `total_price(items: list[dict]) -> float` tính tổng (quantity * price). Bỏ qua item không hợp lệ, làm tròn 2 chữ số.
+
+**Gợi ý:** dùng `for`, validate, `round(total, 2)`.
+
+### Bài 2: Cache với decorator
+Viết decorator `timed` đo thời gian thực thi, in ra `func.__name__` và thời gian (ms). Áp dụng cho hàm tính toán.
+
+### Bài 3: Generator pipeline
+Tạo pipeline: đọc số, lọc chẵn, bình phương, lấy 10 đầu tiên — dùng generator (`yield`), không dùng list trung gian lớn.
+
+### Bài 4: Type-safe repository
+Dùng `Protocol` định nghĩa `Repository[T]` với `get(id: int) -> T | None`, `list() -> list[T]`, `add(item: T) -> T`. Implement `InMemoryRepo`.
+
+### Bài 5: Pytest toàn diện
+Viết test cho bài 1–4: `parametrize`, `tmp_path` (nếu ghi file), `pytest.raises`.
+
+### Bài 6: Context manager tùy chỉnh
+Viết `Timer` làm context manager (`__enter__`, `__exit__`) đo thời gian block `with`.
+
+---
+
+## 22. Checklist review code Python
+
+### Cú pháp & thiết kế
+- [ ] Hàm ngắn, single responsibility; tên rõ ràng
+- [ ] Dùng `isinstance`, tránh `type() ==`
+- [ ] Tránh mutable default args
+- [ ] Dùng comprehension hợp lý (không lồng quá sâu)
+- [ ] `with` cho resource (file/network/lock)
+
+### Kiểu & an toàn
+- [ ] Type hints quan trọng, chạy mypy/pyright
+- [ ] Dùng `Protocol` thay kế thừa cứng khi chỉ cần interface
+- [ ] `TypedDict`/`Literal`/`Final` khi phù hợp
+- [ ] Validate input ở boundary
+
+### Hiệu năng & bộ nhớ
+- [ ] Dùng generator thay list nếu chỉ iterate một lần
+- [ ] `"".join` cho nối chuỗi lớn
+- [ ] Tránh copy không cần thiết
+- [ ] Chỉ tối ưu sau khi đo (profiling)
+
+### Test & chất lượng
+- [ ] Có test cho happy path + edge case + error
+- [ ] `pytest -q` xanh, coverage hợp lý
+- [ ] `ruff check` + `ruff format` sạch
+- [ ] Không hardcode secret
+
+### Bảo mật
+- [ ] Không `eval/exec` với input
+- [ ] Không `pickle` dữ liệu không tin cậy
+- [ ] Dùng `secrets` thay `random` cho token
+- [ ] Validate/sanitize trước khi dùng
+
+---
+
+## 23. Câu hỏi tự kiểm tra nhanh
+
+| Câu hỏi | Gợi ý trả lời |
+|---|---|
+| Sự khác biệt `is` vs `==`? | `is` identity, `==` equality; so sánh None với `is`. |
+| `__init__` vs `__new__`? | `__new__` tạo instance, `__init__` khởi tạo. Thường override `__new__` cho singleton/immutable. |
+| Tại sao cần `if __name__ == "__main__":`? | Tránh chạy code khi import module. |
+| Generator vs list comprehension? | Generator lazy, ít bộ nhớ hơn khi xử lý lớn. |
+| GIL ảnh hưởng gì? | Hạn chế CPU-bound đa luồng; I/O-bound hoặc multiprocessing vẫn hiệu quả. |
+| `@staticmethod` vs `@classmethod` vs instance method? | Khác nhau về `cls`/`self` và cách gọi. |
+| Decorator hoạt động thế nào? | Hàm nhận hàm trả về hàm/wrapper (closure). |
+| Context manager dùng để làm gì? | Quản lý resource an toàn với `with` (`__enter__/__exit__`). |
+| Khi nào dùng `Protocol`? | Structural typing, giảm coupling so với kế thừa. |
+| `TypeGuard` vs `TypeIs`? | `TypeIs` chính xác hơn, khuyến nghị 3.13+. |
+
+---
+
+## 24. Tài liệu tham khảo bổ sung
+
+- PEP 695 – Type Parameter Syntax: https://peps.python.org/pep-0695/
+- PEP 698 – Override Decorator: https://peps.python.org/pep-0698/
+- PEP 742 – TypeIs: https://peps.python.org/pep-0742/
+- PEP 750 – Template Strings: https://peps.python.org/pep-0750/
+- typing documentation: https://typing.readthedocs.io/
+- pytest documentation: https://docs.pytest.org/
+- unittest.mock: https://docs.python.org/3/library/unittest.mock.html
+- warnings: https://docs.python.org/3/library/warnings.html

@@ -1,8 +1,9 @@
-# Flutter cho Wedding Guestbook — Bộ tài liệu mobile
+# Flutter — Bộ tài liệu mobile
 
-> Hướng dẫn thực hành Flutter từ con số 0 đến production, gắn trực tiếp với backend
-> wedding guestbook trong repo (`/api/messages`, `/ws`). Ví dụ dùng Dart 3.x/Flutter 3.x
-> ổn định; API/package có rủi ro thay đổi đều ghi rõ điều kiện sử dụng.
+> Hướng dẫn thực hành Flutter từ con số 0 đến production với cách tiếp cận trung lập
+> theo domain (orders/products/customers/todo/notes). Tài liệu tập trung vào nguyên lý,
+> trade-off và thực hành vững chắc. Sử dụng Dart 3.x/Flutter 3.x ổn định; mọi API/package
+> có rủi ro thay đổi đều nêu rõ điều kiện sử dụng.
 
 ---
 
@@ -19,23 +20,25 @@
 9. [Cấu trúc project mặc định](#9-cấu-trúc-project-mặc-định)
 10. [Quy ước code và package](#10-quy-ước-code-và-package)
 11. [Hot reload và vòng lặp phát triển](#11-hot-reload-và-vòng-lặp-phát-triển)
-12. [Checklist môi trường](#12-checklist-môi-trường)
-13. [Lỗi thường gặp khi setup](#13-lỗi-thường-gặp-khi-setup)
-14. [Tài liệu tham khảo](#14-tài-liệu-tham-khảo)
+12. [Kiểm tra chất lượng: analyze, format, lint](#12-kiểm-tra-chất-lượng-analyze-format-lint)
+13. [Checklist môi trường](#13-checklist-môi-trường)
+14. [Lỗi thường gặp khi setup](#14-lỗi-thường-gặp-khi-setup)
+15. [Tài liệu tham khảo](#15-tài-liệu-tham-khảo)
 
 ---
 
 ## 1. Flutter là gì?
 
-Flutter là **UI toolkit mã nguồn mở** của Google: một codebase Dart build app cho
-Android, iOS, web và desktop. Khác React Native, Flutter **tự vẽ toàn bộ UI** bằng
-engine riêng thay vì map sang widget native. Kiến trúc: app Dart → framework (widget,
-layout, animation) → engine C/C++ (Impeller/Skia, Dart VM, text, I/O) → embedder
-(Kotlin/Swift/C++) quản lý vòng đời và input.
+Flutter là **UI toolkit mã nguồn mở** của Google: một codebase Dart dùng để build ứng
+dụng cho Android, iOS, web, desktop và embedded. Khác với cách map widget sang native,
+Flutter **tự vẽ toàn bộ UI** bằng engine riêng. Kiến trúc tổng quan: app Dart →
+framework (widget, layout, animation, gesture) → engine C/C++ (Impeller/Skia, Dart
+runtime, text shaping, I/O) → embedder (Kotlin/Swift/C++/...) quản lý vòng đời, input
+và tích hợp hệ thống.
 
-Trong dự án wedding, Flutter phù hợp cho **guestbook app** (xem lời chúc, gửi RSVP,
-nhận tin realtime), **photo booth/slideshow** trên tablet tại tiệc, và **app nội bộ**
-cho bride/groom kiểm duyệt.
+Flutter phù hợp cho hầu hết ứng dụng đa nền tảng: danh sách, form, điều hướng phức
+tạp, offline/cache, realtime, cùng với khả năng tích hợp native sâu khi cần qua platform
+channel/FFI.
 
 ---
 
@@ -140,9 +143,10 @@ extension Dart/Flutter hoặc Android Studio + plugin Flutter; bật format on s
 ## 8. Tạo project và chạy lần đầu
 
 ```bash
-flutter create --org com.example --project-name wedding_guestbook wedding_guestbook
-cd wedding_guestbook && flutter pub get && flutter devices
-flutter run -d <device-id> --dart-define=API_BASE_URL=http://10.0.2.2:3000 \
+flutter create --org com.example --project-name app_example app_example
+cd app_example && flutter pub get && flutter devices
+flutter run -d <device-id> \
+  --dart-define=API_BASE_URL=http://10.0.2.2:3000 \
   --dart-define=WS_URL=ws://10.0.2.2:3000/ws
 ```
 
@@ -161,10 +165,10 @@ flutter run -d <device-id> --dart-define=API_BASE_URL=http://10.0.2.2:3000 \
 ## 9. Cấu trúc project mặc định
 
 ```text
-wedding_guestbook/
-├── android/ ios/ web/ ...   # native host, manifest, Podfile
-├── lib/main.dart            # entry point
-├── test/ integration_test/  # unit, widget, e2e
+app_example/
+├── android/ ios/ web/ macos/ linux/ windows/  # native host
+├── lib/main.dart                             # entry point
+├── test/ integration_test/                   # unit, widget, e2e
 ├── assets/{images,fonts}/
 └── pubspec.yaml, analysis_options.yaml
 ```
@@ -178,16 +182,14 @@ Quy ước: `lib/` chỉ chứa code app; file `snake_case.dart`, class `PascalC
 ## 10. Quy ước code và package
 
 ```yaml
-name: wedding_guestbook
+name: app_example
 environment:
   sdk: ">=3.4.0 <4.0.0"
 dependencies:
   flutter: {sdk: flutter}
-  http: ^1.2.2
-  web_socket_channel: ^2.4.5
 dev_dependencies:
   flutter_test: {sdk: flutter}
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 flutter:
   uses-material-design: true
 ```
@@ -201,8 +203,9 @@ Bật lint nghiêm trong `analysis_options.yaml`: kế thừa `flutter_lints`, t
 | Plugin | Có code native Android/iOS | `shared_preferences`, `firebase_messaging` |
 
 Trước khi thêm package, kiểm tra pub points, maintenance, license, issue mở và nền
-tảng hỗ trợ. Với guestbook, giữ bộ package nhỏ: HTTP, WebSocket, storage, routing,
-state management.
+tảng hỗ trợ. Giữ bộ package nhỏ và chỉ thêm khi có nhu cầu rõ ràng (networking, routing,
+state management, storage, codegen). Prefer package có null safety, hỗ trợ đa nền tảng
+và duy trì tích cực.
 
 ---
 
@@ -226,8 +229,8 @@ cần restart. Giữ `flutter run` và `flutter test --watch` ở hai terminal �
 - [ ] Android SDK Platform 34+ và Build Tools đã cài.
 - [ ] CocoaPods chạy được trên macOS.
 - [ ] IDE nhận plugin Dart/Flutter, autocomplete hoạt động.
-- [ ] App mẫu `flutter create` chạy được trên cả hai nền tảng mục tiêu.
-- [ ] `flutter test` pass, emulator gọi được backend, Git ignore đúng.
+- [ ] App mẫu `flutter create` chạy được trên các nền tảng mục tiêu.
+- [ ] `flutter test` pass, môi trường dev có thể gọi API, Git ignore đúng.
 
 ---
 
@@ -240,7 +243,7 @@ cần restart. Giữ `flutter run` và `flutter test --watch` ở hai terminal �
 | `CocoaPods not installed` | Chưa cài pod/Ruby sai | `brew install cocoapods` |
 | `Signing ... error` | Thiếu team/provisioning | Xcode → Signing & Capabilities → chọn Team |
 | `Connection refused` | Android emulator dùng `localhost` | Đổi sang `10.0.2.2` |
-| `errno 111` | Server chưa chạy/firewall | Chạy `bun run index.ts`, kiểm tra LAN IP |
+| `errno 111` | Server chưa chạy/firewall | Chạy server local, kiểm tra LAN IP/port |
 | `Cleartext HTTP not permitted` | Android chặn HTTP | Dùng HTTPS hoặc debug manifest |
 | `Version solving failed` | Xung đột constraint | Đọc lỗi, nâng SDK hoặc `flutter pub upgrade` |
 
@@ -254,6 +257,7 @@ cần restart. Giữ `flutter run` và `flutter test --watch` ở hai terminal �
 - Flutter cookbook: https://docs.flutter.dev/cookbook
 - Material 3: https://m3.material.io/
 - Flutter DevTools: https://docs.flutter.dev/tools/devtools/overview
+- Dart 3 documentation: https://dart.dev/guides/language/language-tour
 
 ---
 

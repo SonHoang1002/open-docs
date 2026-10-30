@@ -1,973 +1,812 @@
-# iOS Cơ bản — Swift, SwiftUI và nền tảng phát triển iOS
+# iOS Cơ bản — Swift, kiến trúc UI, mạng, lưu trữ và debugging
 
-> Tài liệu nền tảng để xây dựng ứng dụng iOS từ đầu. Tập trung vào ngôn ngữ Swift, bộ nhớ, concurrency, Xcode, SwiftUI, UIKit, networking, lưu trữ và quy trình phát triển chuẩn. 
-> 
-> Ưu tiên hiểu bản chất thay vì học thuộc, và áp dụng đúng các quy tắc để tránh các lỗi phổ biến trong thực tế.
+> Tài liệu nền tảng độc lập, không phụ thuộc vào stack/backend cụ thể. Tập trung vào bản chất: ngôn ngữ Swift, quản lý bộ nhớ, concurrency, SwiftUI/UIKit, navigation, state management, networking, persistence, testing, debug và quy ước thực tế.
 
-**Môi trường tham khảo:** Swift 6 (Swift 5 language mode), iOS 17.0+, Xcode 16+
+**Môi trường tham khảo:** Swift 5.9+ / 6.x (vẫn tương thích Swift 5 language mode), Xcode 16+, iOS 17.0+. Các API chỉ có từ iOS 18+ sẽ được ghi rõ.
 
 ---
 
 ## Mục lục
 
-- [1. Tổng quan về phát triển iOS](#1-tổng-quan-về-phát-triển-ios)
-- [2. Swift cơ bản](#2-swift-cơ-bản)
-- [3. Kiểu dữ liệu nâng cao: Struct, Class, Enum, Protocol](#3-kiểu-dữ-liệu-nâng-cao-struct-class-enum-protocol)
-- [4. Closures, Higher-Order Functions và Functional Thinking](#4-closures-higher-order-functions-và-functional-thinking)
+- [1. Tổng quan phát triển iOS](#1-tổng-quan-phát-triển-ios)
+- [2. Swift: biến, kiểu, Optional](#2-swift-biến-kiểu-optional)
+- [3. Struct, Class, Enum, Protocol, Extension](#3-struct-class-enum-protocol-extension)
+- [4. Closures, Higher-Order Functions](#4-closures-higher-order-functions)
 - [5. Xử lý lỗi (Error Handling)](#5-xử-lý-lỗi-error-handling)
-- [6. Quản lý bộ nhớ với ARC](#6-quản-lý-bộ-nhớ-với-arc)
-- [7. Swift Concurrency cơ bản](#7-swift-concurrency-cơ-bản)
-- [8. Xcode, Project, Target, Scheme và Build Settings](#8-xcode-project-target-scheme-và-build-settings)
-- [9. SwiftUI cơ bản](#9-swiftui-cơ-bản)
-- [10. UIKit Tổng quan](#10-uikit-tổng-quan)
-- [11. Layout, Auto Layout và Responsive Design](#11-layout-auto-layout-và-responsive-design)
-- [12. Navigation, Sheet, Alert và Presentation](#12-navigation-sheet-alert-và-presentation)
-- [13. Networking với URLSession](#13-networking-với-urlsession)
-- [14. JSON, Codable và Mapping dữ liệu](#14-json-codable-và-mapping-dữ-liệu)
-- [15. Lưu trữ dữ liệu cục bộ](#15-lưu-trữ-dữ-liệu-cục-bộ)
-- [16. App Lifecycle, Scene và State Preservation](#16-app-lifecycle-scene-và-state-preservation)
-- [17. Debugging, Logging và Instruments](#17-debugging-logging-và-instruments)
-- [18. Testing cơ bản với XCTest](#18-testing-cơ-bản-với-xctest)
-- [19. Build, Run, Signing và Distribution căn bản](#19-build-run-signing-và-distribution-căn-bản)
-- [20. Thực hành tổng hợp: Xây dựng màn hình danh sách](#20-thực-hành-tổng-hợp-xây-dựng-màn-hình-danh-sách)
-- [21. Anti-patterns thường gặp và cách tránh](#21-anti-patterns-thường-gặp-và-cách-tránh)
-- [22. Lộ trình học tiếp theo](#22-lộ-trình-học-tiếp-theo)
-- [23. Tài liệu tham khảo](#23-tài-liệu-tham-khảo)
+- [6. ARC, bộ nhớ và vòng tham chiếu](#6-arc-bộ-nhớ-và-vòng-tham-chiếu)
+- [7. Swift Concurrency cơ bản (async/await, Task, MainActor)](#7-swift-concurrency-cơ-bản-asyncawait-task-mainactor)
+- [8. Xcode, Target, Scheme, Build Settings](#8-xcode-target-scheme-build-settings)
+- [9. SwiftUI cơ bản: State, Binding, Observable, View](#9-swiftui-cơ-bản-state-binding-observable-view)
+- [10. UIKit tổng quan và khi nào kết hợp](#10-uikit-tổng-quan-và-khi-nào-kết-hợp)
+- [11. Layout, Auto Layout, Responsive Design](#11-layout-auto-layout-responsive-design)
+- [12. Navigation, Sheet, FullScreenCover, Alert](#12-navigation-sheet-fullscreencover-alert)
+- [13. State Management thực tế](#13-state-management-thực-tế)
+- [14. Networking với URLSession](#14-networking-với-urlsession)
+- [15. Codable, JSON, Mapping và versioning](#15-codable-json-mapping-và-versioning)
+- [16. Lưu trữ cục bộ: UserDefaults, FileManager, Keychain](#16-lưu-trữ-cục-bộ-userdefaults-filemanager-keychain)
+- [17. App Lifecycle, Scene, Background/Foreground](#17-app-lifecycle-scene-backgroundforeground)
+- [18. Debugging, Logging, Instruments cơ bản](#18-debugging-logging-instruments-cơ-bản)
+- [19. Testing cơ bản với XCTest](#19-testing-cơ-bản-với-xctest)
+- [20. Thực hành tổng hợp: Ứng dụng danh sách sản phẩm](#20-thực-hành-tổng-hợp-ứng-dụng-danh-sách-sản-phẩm)
+- [21. Bài tập tự luyện (có gợi ý)](#21-bài-tập-tự-luyện-có-gợi-ý)
+- [22. Checklist tự đánh giá](#22-checklist-tự-đánh-giá)
+- [23. Anti-patterns và cách tránh](#23-anti-patterns-và-cách-tránh)
+- [24. Tài liệu tham khảo](#24-tài-liệu-tham-khảo)
 
 ---
 
-## 1. Tổng quan về phát triển iOS
-
-Trước khi đi vào code, cần nắm rõ quy trình phát triển một ứng dụng iOS:
+## 1. Tổng quan phát triển iOS
 
 | Khái niệm | Giải thích |
 |---|---|
-| **Native iOS** | Ứng dụng được viết bằng Swift/Objective-C, chạy trực tiếp trên hệ điều hành iOS, tận dụng tối đa hiệu năng và API hệ thống. |
-| **UIKit** | Framework cổ điển, imperatively-based. Rất phổ biến, bao phủ hầu hết các tính năng của iOS. |
-| **SwiftUI** | Framework khai báo (declarative), hiện đại, đơn giản hơn cho UI. Được khuyến khích cho dự án mới từ iOS 13+. |
-| **App Sandbox** | Mỗi app chạy trong môi trường bị cô lập, chỉ được truy cập tài nguyên được cấp phép. |
-| **Human Interface Guidelines (HIG)** | Bộ quy tắc thiết kế của Apple giúp app nhất quán, thân thiện và dễ sử dụng. |
+| **Native app** | Viết bằng Swift/Objective-C, chạy trực tiếp trên iOS, tận dụng framework hệ thống, hiệu năng tốt nhất. |
+| **App Sandbox** | Mỗi ứng dụng chạy cô lập. Chỉ truy cập tài nguyên được cấp phép qua entitlements/permissions. |
+| **Bundle ID** | Định danh duy nhất reverse-DNS. Không nên thay đổi sau khi phát hành. |
+| **Target/Scheme** | Target định nghĩa sản phẩm build; Scheme định nghĩa cấu hình chạy/test/archive. |
+| **Human Interface Guidelines (HIG)** | Nguyên tắc thiết kế của Apple về nhất quán, khả năng truy cập, trực quan. |
+
+**Triết lý:** Ưu tiên **an toàn, rõ ràng, dễ test**. Swift được thiết kế để bắt lỗi sớm tại compile-time (type-safe, optional, error handling).
 
 ---
 
-## 2. Swift cơ bản
+## 2. Swift: biến, kiểu, Optional
 
-Swift là ngôn ngữ mạnh mẽ, an toàn về kiểu (type-safe), hiệu năng cao và được thiết kế đặc biệt cho hệ sinh thái Apple.
-
-### 2.1 Biến, hằng và kiểu dữ liệu
-
-- `let`: khai báo hằng số (không thay đổi sau khi gán)
-- `var`: khai báo biến (có thể thay đổi)
-- Swift có khả năng **type inference** (suy luận kiểu), nhưng vẫn khuyến khích khai báo rõ ràng khi giúp code dễ đọc hơn.
+### 2.1 Biến, hằng, type inference
 
 ```swift
-let appName = "MyApp" // String, inferred
-var counter: Int = 0   // Int, explicit
-let version = 1.0      // Double
+let appName = "ExampleApp"  // hằng số
+var count: Int = 0          // biến, khai báo rõ ràng
+count += 1
 ```
 
-Các kiểu cơ bản quan trọng:
+- `let` → immutable. Ưu tiên dùng `let` mặc định, chỉ dùng `var` khi thực sự cần thay đổi.
+- Swift suy luận kiểu tự động, nhưng khai báo rõ ràng giúp code dễ đọc và tránh nhầm lẫn.
 
-| Kiểu | Mô tả |
-|---|---|
-| `Int` | Số nguyên (phụ thuộc nền tảng 64-bit trên thiết bị hiện tại) |
-| `Double` / `Float` | Số thực |
-| `Bool` | `true` / `false` |
-| `String` | Chuỗi ký tự Unicode |
-| `Character` | Ký tự đơn |
-| `Array<Element>` | Mảng có thứ tự |
-| `Set<Element>` | Tập hợp không trùng lặp, không đảm bảo thứ tự |
-| `Dictionary<Key: Hashable, Value>` | Ánh xạ key-value |
+### 2.2 Kiểu dữ liệu cơ bản
 
-### 2.2 Optional
-
-**Optional** đại diện cho một giá trị có thể tồn tại hoặc không (`nil`). Đây là cơ chế quan trọng giúp Swift tránh lỗi "unexpectedly found nil".
-
-Có nhiều cách để unwrap Optional:
-
-| Cách | Mô tả | Ghi chú |
+| Kiểu | Mô tả | Ghi chú |
 |---|---|---|
-| `if let` | Unwrap an toàn nếu có giá trị | Rất phổ biến, giữ phạm vi biến cục bộ |
-| `guard let` | Unwrap an toàn, nếu `nil` thoát khỏi scope hiện tại (`return`, `break`, `throw`) | Ưu tiên dùng khi cần dừng sớm |
-| `??` (Nil-coalescing) | Cung cấp giá trị mặc định nếu `nil` | Ngắn gọn, phù hợp hiển thị UI |
-| Optional chaining `?.` | Gọi thuộc tính/phương thức nếu optional không nil, ngược lại trả về `nil` | Tránh if-let lồng nhau |
-| `!` (Force unwrap) | Ép unwrap, crash nếu `nil` | **Chỉ dùng** khi bạn hoàn toàn chắc chắn giá trị tồn tại (hiếm khi trong code thực tế) |
+| `Int/UInt` | Số nguyên | Thường dùng `Int` trên 64-bit. |
+| `Double/Float` | Số thực | Ưu tiên `Double` trừ khi có lý do đặc biệt. |
+| `Bool` | Boolean | `true`/`false`. |
+| `String` | Chuỗi Unicode | Hỗ trợ interpolation `"\(value)"`. |
+| `Array<T>` | Mảng có thứ tự | Value type. |
+| `Set<T: Hashable>` | Tập không trùng, không thứ tự | Tốt cho lookup nhanh. |
+| `Dictionary<K: Hashable, V>` | Key-Value | Value type. |
+
+### 2.3 Optional - "có hoặc không"
+
+`Optional<T>` biểu thị giá trị có thể `nil`. Mục đích: buộc phải xử lý trường hợp thiếu dữ liệu.
 
 ```swift
-var nickname: String? = "Alex"
+var username: String? = nil
+username = "alex"
 
-// if let
-if let unwrapped = nickname {
-    print("Xin chào \(unwrapped)")
+// Unwrap an toàn
+if let name = username {
+    print("Hello \(name)")
 }
 
-// guard let
+// guard let - thoát sớm
 func greet(_ name: String?) {
-    guard let name else { return } // Thoát nếu nil
-    print("Xin chào \(name)")
+    guard let name else { return }
+    print("Hi \(name)")
 }
 
 // Nil-coalescing
-let displayName = nickname ?? "Khách"
+let display = username ?? "Guest"
 
 // Optional chaining
-let count = nickname?.count // Int?
+let length = username?.count  // Int?
+
+// Implicitly Unwrapped Optional (IUO) - dùng rất hạn chế
+var config: String!  // chỉ khi chắc chắn gán trước khi dùng, tránh trong code mới
 ```
 
-### 2.3 Vòng lặp và rẽ nhánh
+> ⚠️ Tránh force unwrap `!` trừ trường hợp thực sự bắt buộc và đã được bảo đảm bằng logic rõ ràng (hiếm gặp). Force unwrap sai là nguyên nhân crash phổ biến.
+
+### 2.4 String, Collection và kiểm tra
 
 ```swift
-// if-else
-if counter >= 10 {
-    print("Đủ")
-} else if counter >= 5 {
-    print("Gần đủ")
-} else {
-    print("Còn ít")
+let text = "Swift"
+for char in text {
+    // iterate characters
 }
 
-// switch - rất mạnh trong Swift
-enum Status { case idle, loading, success, failure }
-let status: Status = .loading
-switch status {
-case .idle: print("Chưa bắt đầu")
-case .loading: print("Đang tải")
-case .success: print("Thành công")
-case .failure: print("Thất bại")
-}
+var items: [String] = []
+items.append("A")
+items += ["B", "C"]
+items.remove(at: 0)
 
-// for-in
-for i in stride(from: 0, to: 5, by: 1) {
-    print(i)
-}
-
-// while
-var attempts = 0
-while attempts < 3 {
-    attempts += 1
-}
-```
-
-### 2.4 Hàm (Functions)
-
-Hàm trong Swift hỗ trợ tham số mặc định, label tham số, return nhiều giá trị (tuple), và `inout`.
-
-```swift
-// Hàm cơ bản
-func add(_ a: Int, _ b: Int) -> Int {
-    return a + b
-}
-
-// Tham số mặc định
-func greet(name: String, prefix: String = "Xin chào") -> String {
-    return "\(prefix), \(name)!"
-}
-
-// Nhiều giá trị trả về
-func minMax(_ numbers: [Int]) -> (min: Int, max: Int)? {
-    guard let first = numbers.first else { return nil }
-    var min = first, max = first
-    for num in numbers.dropFirst() {
-        if num < min { min = num }
-        if num > max { max = num }
-    }
-    return (min, max)
-}
-
-// inout - thay đổi giá trị bên ngoài
-func increment(_ value: inout Int) {
-    value += 1
-}
+var set: Set<Int> = [1, 2, 2, 3]  // {1,2,3}
+var dict: [String: Int] = ["a": 1]
 ```
 
 ---
 
-## 3. Kiểu dữ liệu nâng cao: Struct, Class, Enum, Protocol
+## 3. Struct, Class, Enum, Protocol, Extension
 
-Việc lựa chọn đúng kiểu dữ liệu là nền tảng để viết code rõ ràng, an toàn và dễ bảo trì.
+### 3.1 Value vs Reference
 
-### 3.1 So sánh Struct, Class, Enum
-
-| Đặc điểm | `struct` | `class` | `enum` |
+| Thuộc tính | `struct` | `class` | `enum` |
 |---|---|---|---|
-| **Kiểu** | Value Type (truyền theo giá trị - copy) | Reference Type (truyền theo tham chiếu - cùng địa chỉ bộ nhớ) | Value Type |
-| **Kế thừa** | Không hỗ trợ | Có thể kế thừa từ class khác | Không hỗ trợ |
-| **`deinit`** | Không có | Có (gọi khi instance bị giải phóng) | Không có |
-| **Identity** | Không quan tâm "cùng object", quan tâm "bằng giá trị" | Quan tâm "cùng một instance" | Không quan tâm identity |
-| **Thread-safety** | An toàn hơn do copy | Cần cẩn thận do shared state | An toàn hơn do value type |
-| **Khi dùng** | Model dữ liệu, state, DTO, cấu trúc nhỏ | Service, Manager, Coordinator, đối tượng có vòng đời phức tạp | Trạng thái hữu hạn, lựa chọn ràng buộc, Result-like type |
+| **Semantics** | Value type (copy) | Reference type (shared) | Value type |
+| **Inheritance** | Không | Có | Không |
+| **deinit** | Không | Có | Không |
+| **Mutability** | `mutating` cần thiết khi thay đổi self trong method | Có thể thay đổi trực tiếp nếu instance mutable | Tùy thuộc |
+| **Identity** | Quan tâm giá trị | Quan tâm instance identity (`===`) | Quan tâm giá trị |
+| **Khuyến nghị** | Mặc định cho model/state đơn giản | Chỉ khi cần reference semantics (shared mutable state, lifecycle phức tạp) | Rất mạnh cho trạng thái hữu hạn |
 
 ```swift
-struct User {
-    var name: String
-    var age: Int
-}
+struct Point { var x: Int, y: Int }
+var p1 = Point(x: 0, y: 0)
+var p2 = p1  // copy
+p2.x = 10
+// p1.x vẫn 0
 
-var user1 = User(name: "An", age: 25)
-var user2 = user1
-user2.name = "Binh"
-print(user1.name) // "An" - user1 không bị ảnh hưởng (copy)
+class Counter { var value = 0 }
+let c1 = Counter()
+let c2 = c1  // cùng reference
+c2.value = 5
+// c1.value == 5
 ```
 
-```swift
-class NetworkManager {
-    var isConnected: Bool = false
-}
-
-let manager1 = NetworkManager()
-let manager2 = manager1
-manager2.isConnected = true
-print(manager1.isConnected) // true - cùng instance
-```
-
-### 3.2 Enum mạnh mẽ trong Swift
-
-Enum không chỉ là tập hằng số như nhiều ngôn ngữ khác. Trong Swift, enum có thể có **raw value**, **associated value**, **computed property**, và **method**.
+### 3.2 Enum với associated values/raw values
 
 ```swift
-// Enum đơn giản
-enum Direction {
-    case north, south, east, west
+enum LoadingState<T> {
+    case idle
+    case loading
+    case success(T)
+    case failure(Error)
 }
 
-// Enum với associated value
-enum NetworkResult {
-    case success(data: Data)
-    case failure(error: Error)
-    case offline
+enum AppTheme: String, CaseIterable {
+    case light, dark, system
 }
 
-// Enum với raw value
-enum HTTPMethod: String {
-    case get = "GET"
-    case post = "POST"
-    case put = "PUT"
-    case delete = "DELETE"
-}
-
-// Sử dụng
-func handle(result: NetworkResult) {
-    switch result {
-    case .success(let data):
-        print("Nhận \(data.count) bytes")
-    case .failure(let error):
-        print("Lỗi: \(error.localizedDescription)")
-    case .offline:
-        print("Không có mạng")
+// Pattern matching
+func render<T>(_ state: LoadingState<T>) {
+    switch state {
+    case .idle: break
+    case .loading: print("Loading...")
+    case .success(let data): print(data)
+    case .failure(let error): print(error.localizedDescription)
     }
 }
 ```
 
-### 3.3 Protocol và Extension
-
-**Protocol** định nghĩa "hợp đồng" về hành vi mà một kiểu phải tuân thủ. **Extension** cho phép mở rộng chức năng của kiểu có sẵn mà không cần kế thừa.
+### 3.3 Protocol, Protocol-Oriented Programming, Extension
 
 ```swift
 protocol Identifiable {
     var id: UUID { get }
 }
 
-struct Article: Identifiable {
+protocol Validatable {
+    func validate() -> Bool
+}
+
+struct User: Identifiable, Validatable {
     let id = UUID()
-    let title: String
-    let content: String
-}
-
-// Extension thêm phương thức
-extension String {
-    var trimmed: String {
-        self.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
+    var email: String
     
-    func isValidEmail() -> Bool {
-        let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
+    func validate() -> Bool {
+        email.contains("@")
     }
 }
 
-// Sử dụng
-let email = " test@example.com ".trimmed
-print(email.isValidEmail()) // true
+// Extension thêm hành vi
+extension String {
+    var trimmed: String { self.trimmingCharacters(in: .whitespacesAndNewlines) }
+    func isValidEmail() -> Bool { self.contains("@") && self.contains(".") }
+}
+
+// Protocol with default implementation
+protocol Describable {
+    var description: String { get }
+}
+extension Describable {
+    var description: String { String(describing: Self.self) }
+}
 ```
+
+**Nguyên tắc POO nhẹ:** Ưu tiên protocol + extension để compose behavior thay vì kế thừa sâu.
 
 ### 3.4 Access Control
 
-Kiểm soát truy cập giúp bảo vệ API nội bộ và thiết kế module rõ ràng.
-
-| Modifier | Phạm vi |
-|---|---|
-| `open` | Chỉ dùng cho class. Cho phép override từ module khác. |
-| `public` | Truy cập từ module khác, nhưng không cho override. |
-| `internal` | Mặc định. Chỉ truy cập trong cùng module. |
-| `fileprivate` | Chỉ truy cập trong cùng file. |
-| `private` | Chỉ truy cập trong cùng declaration/scope. |
-
-**Nguyên tắc:** Bắt đầu với mức hạn chế nhất (`private`) có thể, chỉ mở rộng khi thực sự cần thiết.
+| Level | Phạm vi | Khi dùng |
+|---|---|---|
+| `private` | Chỉ trong declaration/block | Ẩn chi tiết nội bộ |
+| `fileprivate` | Chỉ trong cùng file | Hiếm, chỉ khi cần chia sẻ giữa extensions trong cùng file |
+| `internal` | Trong module (mặc định) | Hầu hết code ứng dụng |
+| `public` | Có thể truy cập từ module khác | Khi xuất framework |
+| `open` | `public` + cho phép override | Rất hiếm, chủ yếu framework thiết kế để subclass |
 
 ---
 
-## 4. Closures, Higher-Order Functions và Functional Thinking
+## 4. Closures, Higher-Order Functions
 
-### 4.1 Closures là gì?
+### 4.1 Closures
 
-**Closure** là một khối code có thể được truyền đi, gán vào biến, và **capture** (bắt giữ) các giá trị từ phạm vi xung quanh.
-
-Cú pháp closure có thể được rút gọn rất mạnh trong Swift:
+Closure là block code có thể capture giá trị từ scope xung quanh.
 
 ```swift
-let numbers = [1, 2, 3, 4, 5]
+let add = { (a: Int, b: Int) -> Int in
+    return a + b
+}
+add(2, 3)
 
-// Dạng đầy đủ
-let doubledFull = numbers.map({ (number: Int) -> Int in
-    return number * 2
-})
+// Trailing closure
+func perform(_ action: () -> Void) {
+    action()
+}
+perform {
+    print("Done")
+}
 
-// Rút gọn: type inference
-let doubled1 = numbers.map({ number in number * 2 })
-
-// Rút gọn: shorthand argument names ($0, $1,...)
-let doubled2 = numbers.map { $0 * 2 }
-
-// Nếu closure là tham số cuối cùng, có thể bỏ ngoặc
-let doubled3 = numbers.map { $0 * 2 }
+// Capture list
+var multiplier = 3
+let multiply = { (x: Int) -> Int in
+    return x * multiplier  // capture by reference
+}
+multiplier = 5
+multiply(2)  // 10
 ```
+
+**Retain cycle nguy hiểm:** closure capture `self` mạnh mẽ. Xem phần 6.
 
 ### 4.2 Higher-Order Functions
 
-Các hàm bậc cao rất hữu ích để xử lý collection một cách ngắn gọn, rõ ràng.
-
 | Hàm | Mục đích | Ví dụ |
 |---|---|---|
-| `map` | Biến đổi mỗi phần tử, trả về mảng mới cùng kích thước | `[1,2,3].map { $0 * 2 }` |
-| `filter` | Lọc phần tử thỏa điều kiện | `[1,2,3,4].filter { $0 % 2 == 0 }` |
-| `reduce` | Gộp toàn bộ thành một giá trị duy nhất | `[1,2,3].reduce(0) { $0 + $1 }` |
-| `compactMap` | Map + loại bỏ `nil` | `["1","a","2"].compactMap(Int.init)` |
-| `flatMap` | Làm phẳng mảng lồng nhau | `[[1,2],[3]].flatMap { $0 }` |
-| `forEach` | Thực thi cho mỗi phần tử (không trả về giá trị) | `items.forEach { print($0) }` |
-| `sorted(by:)` | Sắp xếp theo điều kiện | `items.sorted { $0 < $1 }` |
+| `map` | Biến đổi mỗi phần tử | `[1,2,3].map { $0 * 2 }` |
+| `filter` | Lọc theo điều kiện | `[1,2,3,4].filter { $0 % 2 == 0 }` |
+| `reduce` | Gộp thành một giá trị | `[1,2,3].reduce(0, +)` |
+| `compactMap` | Map + loại `nil` | `["1","a","2"].compactMap(Int.init)` |
+| `flatMap` | Làm phẳng mảng lồng | `[[1,2],[3]].flatMap { $0 }` |
+| `sorted(by:)` | Sắp xếp tùy chỉnh | `items.sorted { $0.name < $1.name }` |
 | `first(where:)` | Tìm phần tử đầu tiên thỏa điều kiện | `items.first { $0.isActive }` |
+| `forEach` | Thực thi side effect | `items.forEach { print($0) }` |
 
 ```swift
-struct Product {
-    let name: String
-    let price: Double
-    let inStock: Bool
-}
-
+struct Product { let name: String, price: Double, inStock: Bool }
 let products = [
-    Product(name: "Bàn phím", price: 899000, inStock: true),
-    Product(name: "Chuột", price: 450000, inStock: false),
-    Product(name: "Tai nghe", price: 1290000, inStock: true)
+    Product(name: "A", price: 10, inStock: true),
+    Product(name: "B", price: 5, inStock: false),
+    Product(name: "C", price: 20, inStock: true)
 ]
 
-// Lấy tên sản phẩm còn hàng, sắp xếp theo giá
-let result = products
+let names = products
     .filter { $0.inStock }
     .sorted { $0.price < $1.price }
     .map { $0.name }
-
-print(result) // ["Bàn phím", "Tai nghe"]
+// ["B", "A", "C"] không đúng thứ tự vì B không inStock - kết quả ["A","C"]
 ```
 
 ---
 
 ## 5. Xử lý lỗi (Error Handling)
 
-Swift phân biệt rõ **lỗi có thể phục hồi** (`throws`) và **lỗi lập trình** (crash).
-
-### 5.1 Định nghĩa và throw lỗi
+### 5.1 Định nghĩa lỗi
 
 ```swift
-enum LoginError: LocalizedError {
-    case emptyEmail
-    case emptyPassword
-    case invalidEmail
-    case weakPassword(minLength: Int)
+enum NetworkError: LocalizedError {
+    case invalidURL
+    case noData
+    case decodingFailed
+    case statusCode(Int)
     
     var errorDescription: String? {
         switch self {
-        case .emptyEmail: return "Email không được để trống"
-        case .emptyPassword: return "Mật khẩu không được để trống"
-        case .invalidEmail: return "Email không hợp lệ"
-        case .weakPassword(let minLength): return "Mật khẩu cần ít nhất \(minLength) ký tự"
+        case .invalidURL: return "URL không hợp lệ"
+        case .noData: return "Không có dữ liệu"
+        case .decodingFailed: return "Không thể phân tích dữ liệu"
+        case .statusCode(let code): return "Lỗi server (mã: \(code))"
         }
     }
 }
-
-func login(email: String, password: String) throws -> String {
-    let emailTrimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !emailTrimmed.isEmpty else { throw LoginError.emptyEmail }
-    guard emailTrimmed.contains("@") else { throw LoginError.invalidEmail }
-    guard !password.isEmpty else { throw LoginError.emptyPassword }
-    guard password.count >= 8 else { throw LoginError.weakPassword(minLength: 8) }
-    return "auth-token-example"
-}
 ```
 
-### 5.2 Bắt và xử lý lỗi
+### 5.2 throw, do-catch, try?, try!
 
 ```swift
+func fetchData() throws -> Data {
+    guard let url = URL(string: "https://example.com") else {
+        throw NetworkError.invalidURL
+    }
+    // ...
+    throw NetworkError.noData
+}
+
 // do-catch
 do {
-    let token = try login(email: "user@test.com", password: "12345678")
-    print("Đăng nhập thành công, token: \(token)")
-} catch LoginError.invalidEmail {
-    print("Vui lòng nhập đúng định dạng email")
+    let data = try fetchData()
+    // xử lý
+} catch NetworkError.statusCode(let code) {
+    print("Status: \(code)")
 } catch {
-    print("Lỗi khác: \(error.localizedDescription)")
+    print(error.localizedDescription)
 }
 
-// try? - trả về Optional, bỏ qua chi tiết lỗi
-if let token = try? login(email: "user@test.com", password: "12345678") {
-    print(token)
+// try? - chuyển thành Optional, bỏ qua chi tiết lỗi
+if let data = try? fetchData() {
+    // xử lý
 }
 
-// try! - force try, CRASH nếu throw. Chỉ dùng khi tuyệt đối không thể xảy ra lỗi
-// let token = try! login(email: "admin@test.com", password: "veryStrongPass123")
+// try! - chỉ dùng nếu CHẮC CHẮN không throw (hiếm)
+let data = try! Data(contentsOf: URL(fileURLWithPath: "/dev/null"))
 ```
 
-**Quy tắc quan trọng:**
-
-- Dùng `throws` cho lỗi **có thể dự đoán và phục hồi** (validation, network, file)
-- **Không bao giờ** dùng `try!` cho input người dùng, response mạng, hoặc dữ liệu bên ngoài
-- Luôn hiện thông báo thân thiện với người dùng, log chi tiết cho dev/debug
+**Quy tắc:** Ưu tiên `do-catch` hoặc propagate lỗi (`throws`). Tránh `try!` trong production code.
 
 ---
 
-## 6. Quản lý bộ nhớ với ARC
+## 6. ARC, bộ nhớ và vòng tham chiếu
 
-Swift sử dụng **Automatic Reference Counting (ARC)** để tự động theo dõi và giải phóng bộ nhớ cho các **reference type** (`class`). **Value type** (`struct`, `enum`) không bị ARC quản lý vì chúng được copy thay vì tham chiếu.
+### 6.1 ARC là gì?
 
-### 6.1 Strong, Weak, Unowned
+**Automatic Reference Counting** tự động quản lý bộ nhớ: tăng `retain count` khi giữ reference, giảm khi không còn. Object bị giải phóng khi `retain count = 0`. `deinit` được gọi trước khi giải phóng.
 
-Khi một instance được tham chiếu, ARC tăng bộ đếm. Khi không còn tham chiếu mạnh, bộ đếm về 0 và instance được giải phóng (`deinit` được gọi).
+### 6.2 Strong, Weak, Unowned
 
-| Tham chiếu | Hành vi | Khi sử dụng |
+| Reference | Hành vi | Khi dùng |
 |---|---|---|
-| `strong` (mặc định) | Tăng retain count, giữ instance sống | Quan hệ sở hữu thông thường (cha -> con) |
-| `weak` | Không tăng retain count, tự động trở thành `nil` khi instance bị giải phóng | Quan hệ sở hữu ngược, tránh retain cycle. Thường dùng với `var` và `Optional` |
-| `unowned` | Không tăng retain count, **KHÔNG** tự động trở thành `nil` | Khi chắc chắn 100% instance tham chiếu vẫn còn sống suốt thời gian sử dụng. Nếu không, gây **crash** `EXC_BAD_ACCESS` |
-
-### 6.2 Retain Cycle (Vòng tham chiếu giữ nhau)
-
-**Retain cycle** xảy ra khi hai object giữ lẫn nhau bằng `strong reference`, khiến cả hai không bao giờ về 0 và không bị giải phóng (memory leak).
+| **strong** (mặc định) | Tăng retain count, giữ object sống | Hầu hết trường hợp |
+| **weak** | Không tăng retain count, tự động set `nil` khi object bị giải phóng | Delegate, parent-child tránh cycle, tránh giữ mạnh |
+| **unowned** | Không tăng retain count, **không** tự động set nil → crash nếu truy cập sau khi giải phóng | Chỉ khi chắc chắn object tồn tại cùng/longer lifetime (hiếm, cần cẩn thận) |
 
 ```swift
-class Owner {
-    var pet: Pet?
-    deinit { print("Owner deinit") }
+class Person {
+    var name: String
+    var apartment: Apartment?
+    init(name: String) { self.name = name }
+    deinit { print("\(name) deinit") }
 }
 
-class Pet {
-    var owner: Owner? // strong mặc định -> gây retain cycle
-    deinit { print("Pet deinit") }
+class Apartment {
+    var number: String
+    weak var tenant: Person?  // tránh strong cycle
+    init(number: String) { self.number = number }
+    deinit { print("Apt \(number) deinit") }
 }
-
-var owner: Owner? = Owner()
-var pet: Pet? = Pet()
-owner?.pet = pet
-pet?.owner = owner
-
-owner = nil
-pet = nil
-// KHÔNG in ra deinit -> leak
-```
-
-**Khắc phục bằng `weak`:**
-
-```swift
-class Pet {
-    weak var owner: Owner? // weak reference
-    deinit { print("Pet deinit") }
-}
-
-// Sau khi gán nil: cả hai đều in deinit
 ```
 
 ### 6.3 Retain Cycle với Closure
 
-Closures cũng là reference type và có thể capture `self` mạnh mẽ.
+Closure capture `self` theo strong reference → có thể tạo cycle giữa object và closure.
 
 ```swift
 class ViewModel {
-    var onUpdate: (() -> Void)?
+    var name = "VM"
+    var onComplete: (() -> Void)?
     
     func setup() {
-        // Sai: closure capture self mạnh -> retain cycle
-        // onUpdate = { self.refresh() }
+        // SAI - retain cycle nếu closure giữ self lâu dài
+        // onComplete = { print(self.name) }
         
-        // Đúng: dùng capture list [weak self]
-        onUpdate = { [weak self] in
+        // ĐÚNG - weak self
+        onComplete = { [weak self] in
             guard let self else { return }
-            self.refresh()
+            print(self.name)
         }
     }
     
-    func refresh() { print("Đã refresh") }
     deinit { print("ViewModel deinit") }
 }
 ```
 
-**Lời khuyên:**
+**Khi nào dùng `[weak self]`:** closure được store (property), passed async, hoặc có thể sống lâu hơn object sở hữu.
 
-- Luôn nghĩ về **vòng đời** giữa các object khi dùng `class`
-- Ưu tiên `struct` cho model/state để tránh hoàn toàn vấn đề tham chiếu
-- Dùng `[weak self]` trong closure trừ khi bạn có lý do rất rõ ràng để dùng `[unowned self]`
-- Theo dõi memory bằng **Instruments > Leaks** trong quá trình phát triển
+**Khi nào dùng `[unowned self]`:** cực hiếm, chỉ khi lifecycle closure **chắc chắn ngắn hơn hoặc bằng** và không bao giờ nil. Nếu sai → crash.
+
+### 6.4 Debug memory leaks
+
+- Dùng **Instruments → Leaks** để phát hiện
+- Quan sát `deinit` có được gọi không (thêm print tạm thời)
+- Chú ý delegate, Timer, NotificationCenter, closure capture
+- Với SwiftUI, tránh giữ strong reference không cần thiết giữa ViewModel/Coordinator
 
 ---
 
-## 7. Swift Concurrency cơ bản
+## 7. Swift Concurrency cơ bản (async/await, Task, MainActor)
 
-Từ Swift 5.5+, **Swift Concurrency** được tích hợp native, giúp viết code bất đồng bộ an toàn, dễ đọc hơn rất nhiều so với `GCD` truyền thống.
+Swift Concurrency giúp viết async code tuần tự, an toàn hơn GCD.
 
 ### 7.1 async/await
 
-- `async` đánh dấu hàm có thể bị tạm dừng (suspend) trong khi chờ
-- `await` đánh dấu điểm tạm dừng, cho phép thread khác làm việc trong lúc chờ
-
 ```swift
-func fetchUser() async throws -> User {
-    // Giả lập gọi mạng
-    try await Task.sleep(for: .seconds(1))
-    return User(name: "Minh", age: 28)
+func fetchData() async throws -> [String] {
+    // mô phỏng network
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    return ["A", "B", "C"]
 }
 
-// Gọi async function
-Task {
+func load() async {
     do {
-        let user = try await fetchUser()
-        print("Người dùng: \(user.name)")
+        let items = try await fetchData()
+        print(items)
     } catch {
-        print("Lỗi: \(error)")
+        print(error)
     }
 }
 ```
 
-### 7.2 async let - Chạy song song
-
-Khi có nhiều tác vụ **độc lập** với nhau, dùng `async let` để chạy song song thay vì tuần tự.
+### 7.2 async let - chạy song song
 
 ```swift
-func fetchProfile() async throws -> Profile { ... }
-func fetchSettings() async throws -> Settings { ... }
-
-func loadDashboard() async throws {
-    async let profile = fetchProfile()
-    async let settings = fetchSettings()
-    
-    // Chờ cả hai hoàn thành
-    let (p, s) = try await (profile, settings)
-    print(p, s)
+func loadAll() async throws {
+    async let users = fetchUsers()
+    async let products = fetchProducts()
+    let (u, p) = try await (users, products)  // chờ cả hai
 }
 ```
 
 ### 7.3 Task
 
-`Task` cho phép chạy code `async` từ ngữ cảnh đồng bộ (ví dụ: action button trong SwiftUI).
-
 ```swift
-Button("Tải dữ liệu") {
-    Task {
-        await viewModel.loadData()
-    }
+// Tạo task từ synchronous context
+Task {
+    await load()
 }
+
+// Task với priority
+Task(priority: .userInitiated) {
+    // ...
+}
+
+// Hủy task
+let task = Task {
+    try await Task.sleep(nanoseconds: 5_000_000_000)
+    print("Done")
+}
+// task.cancel()
 ```
 
-**Quan trọng:** `Task` được huỷ tự động nếu không còn cần thiết, đặc biệt hiệu quả khi dùng với `.task` modifier trong SwiftUI (sẽ nói ở phần sau).
+### 7.4 MainActor - cập nhật UI
 
-### 7.4 MainActor
-
-UI **chỉ được cập nhật trên Main Thread**. `@MainActor` đảm bảo code chạy trên main thread ở cấp độ compiler.
+UI chỉ được cập nhật trên main thread.
 
 ```swift
 @MainActor
-class HomeViewModel: ObservableObject {
-    @Published var items: [Item] = []
+class ViewModel: ObservableObject {
+    @Published var items: [String] = []
     @Published var isLoading = false
     
     func load() async {
         isLoading = true
         defer { isLoading = false }
-        // Mọi thay đổi @Published ở đây đều an toàn cho UI
-        items = try? await api.fetchItems() ?? []
-    }
-}
-```
-
-**Lời khuyên:**
-
-- Ưu tiên `async/await` thay vì completion handler khi có thể
-- Chỉ chạy song song những thứ **thực sự độc lập**
-- Luôn cập nhật UI trên `@MainActor`
-- Hiểu sự khác biệt giữa "tạm dừng" (suspend) và "block thread". `await` **không block** thread hiện tại
-
----
-
-## 8. Xcode, Project, Target, Scheme và Build Settings
-
-Hiểu cấu trúc project giúp bạn điều hướng, debug và build đúng cách.
-
-### 8.1 Các khái niệm cốt lõi
-
-| Thành phần | Giải thích |
-|---|---|
-| **Project** | Toàn bộ cấu trúc, chứa targets, settings, file references. |
-| **Target** | Đại diện cho một sản phẩm build (App, Widget, Unit Test, UI Test). Mỗi target có build settings riêng. |
-| **Scheme** | Định nghĩa cách chạy/build/test/profile/archive. Thường có Debug/Release. |
-| **Build Configuration** | `Debug` (phát triển, có debug symbol, nhanh build) vs `Release` (tối ưu, cho TestFlight/App Store). |
-| **Bundle Identifier** | Định danh duy nhất dạng reverse-DNS: `com.tencongty.tenapp` |
-| **Info.plist** | File metadata: quyền truy cập (Camera, Location), URL scheme, display name,... |
-| **Assets.xcassets** | Quản lý App Icon, màu sắc, hình ảnh, hỗ trợ dark mode. |
-
-### 8.2 Thư mục quan trọng trong project
-
-```
-MyApp/
-├── MyAppApp.swift      // Entry point (@main)
-├── ContentView.swift   // Root View
-├── Models/             // Data models
-├── Views/              // UI components/screens
-├── ViewModels/         // Business logic / state
-├── Services/           // Networking, storage,...
-├── Extensions/         // Swift extensions
-└── Assets.xcassets     // Resources
-```
-
-> Cấu trúc trên chỉ mang tính tham khảo. Quan trọng nhất là **nhất quán** trong toàn bộ project.
-
-### 8.3 Các thao tác hữu ích trong Xcode
-
-| Phím tắt | Chức năng |
-|---|---|
-| `⌘+R` | Build và Run |
-| `⌘+.` | Dừng app đang chạy |
-| `⌘+B` | Chỉ Build |
-| `⌘+U` | Chạy Unit Test |
-| `⌘+Shift+O` | Open Quickly (tìm file/class nhanh) |
-| `⌘+Shift+F` | Tìm toàn bộ project |
-| `⌘+/` | Comment/Uncomment |
-| `⌥+Click` | Quick Help / Documentation |
-
----
-
-## 9. SwiftUI cơ bản
-
-SwiftUI dùng mô hình **declarative UI**: bạn mô tả *UI trông như thế nào* với trạng thái hiện tại, còn framework tự cập nhật khi trạng thái thay đổi.
-
-### 9.1 View, Body và Modifier
-
-Mọi UI đều là `View`. `body` trả về mô tả UI, và **modifier** trả về một `View` mới (không sửa view gốc).
-
-```swift
-struct GreetingView: View {
-    let name: String
-    
-    var body: some View {
-        Text("Xin chào, \(name)!")
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundColor(.blue)
-            .padding()
-            .background(Color.yellow.opacity(0.2))
-            .cornerRadius(12)
-    }
-}
-```
-
-**Lưu ý về thứ tự modifier:** Thứ tự rất quan trọng. `.padding().background()` sẽ khác với `.background().padding()`.
-
-### 9.2 Layout cơ bản: VStack, HStack, ZStack
-
-| Stack | Hướng | Ứng dụng |
-|---|---|---|
-| `VStack` | Dọc (vertical) | Form, danh sách dọc |
-| `HStack` | Ngang (horizontal) | Icon + text, hàng hành động |
-| `ZStack` | Chồng lên nhau (z-axis) | Overlay, badge, background |
-
-```swift
-struct CardView: View {
-    var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.blue.gradient)
-                .frame(height: 200)
-            
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Tiêu đề")
-                    .font(.headline)
-                Text("Mô tả ngắn")
-                    .font(.subheadline)
-            }
-            .foregroundStyle(.white)
-            .padding()
+        do {
+            items = try await fetchData()
+        } catch {
+            // xử lý lỗi
         }
-        .padding()
+    }
+}
+
+// Gọi từ bất kỳ đâu
+Task { @MainActor in
+    // cập nhật UI
+}
+
+// Hoặc dùng MainActor.run
+await MainActor.run {
+    // UI update
+}
+```
+
+**Khái niệm quan trọng:** `actor` bảo vệ mutable state khỏi data race. Trong Swift 6, kiểm tra concurrency chặt chẽ hơn. Luôn ưu tiên chạy UI update trên `@MainActor`.
+
+---
+
+## 8. Xcode, Target, Scheme, Build Settings
+
+### 8.1 Khái niệm cốt lõi
+
+| Khái niệm | Giải thích |
+|---|---|
+| **Project** | Container chứa targets, settings, files |
+| **Target** | Một sản phẩm (App, WidgetExtension, Test). Có signing, capabilities riêng |
+| **Scheme** | Cấu hình Run/Test/Profile/Analyze/Archive (thường map Debug/Release) |
+| **Build Configuration** | Debug (không optimize, debug symbols), Release (optimize, strip) |
+| **Info.plist** | Metadata app (Bundle ID, version, permissions) |
+| **Capabilities** | Quyền hệ thống (Push, Background Modes, Keychain Sharing...) |
+
+### 8.2 Cấu trúc file quan trọng
+
+```text
+YourApp.xcodeproj/      # project config
+YourApp/                # source code
+  ├── App/              # @main entry
+  ├── Assets.xcassets   # images/colors
+  └── Info.plist
+YourAppTests/           # unit tests
+YourAppUITests/         # UI tests
+```
+
+### 8.3 Các thao tác hữu ích
+
+- **Build**: ⌘B
+- **Run**: ⌘R
+- **Test**: ⌘U
+- **Clean Build Folder**: Shift+⌘K
+- **Product → Archive**: để xuất build phát hành
+- **Report Navigator** (⌘9): xem build log, warning, error chi tiết
+
+### 8.4 Build Settings cần lưu ý
+
+| Setting | Ghi chú |
+|---|---|
+| **Deployment Target** | iOS tối thiểu app hỗ trợ. Ảnh hưởng API khả dụng |
+| **Signing & Capabilities** | Quản lý certificate/provisioning/entitlements |
+| **Swift Language Version** | Thường để mặc định theo Xcode, hoặc đặt rõ khi migrate |
+| **Other Linker Flags** | Hiếm chỉnh trừ trường hợp đặc biệt |
+
+---
+
+## 9. SwiftUI cơ bản: State, Binding, Observable, View
+
+### 9.1 View là gì?
+
+`View` là struct mô tả UI. `body` trả về view hierarchy. SwiftUI diffing để cập nhật hiệu quả.
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, World!")
+            .padding()
     }
 }
 ```
 
-### 9.3 State Management
-
-| Property Wrapper | Chủ sở hữu | Khi dùng |
-|---|---|---|
-| `@State` | View hiện tại | Dữ liệu nội bộ, tạm thời của view (toggle, text field, sheet) |
-| `@Binding` | Truyền từ cha | Cho view con đọc/ghi dữ liệu của view cha |
-| `@StateObject` | View hiện tại | Tạo và giữ `ObservableObject` suốt vòng đời view |
-| `@ObservedObject` | View nhận từ bên ngoài | Nhận object được tạo ở nơi khác |
-| `@EnvironmentObject` | Inject từ ancestor | Chia sẻ object xuyên suốt cây view |
-| `@Environment` | Hệ thống/App | Truy cập giá trị môi trường (`\.dismiss`, `\.colorScheme`) |
+### 9.2 @State, @Binding
 
 ```swift
 struct CounterView: View {
     @State private var count = 0
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Số lần: \(count)")
-                .font(.largeTitle)
-            
-            Button("Tăng") {
-                count += 1
-            }
-            .buttonStyle(.borderedProminent)
+        VStack {
+            Text("Count: \(count)")
+            Button("Increment") { count += 1 }
+            ChildView(count: $count)
         }
+    }
+}
+
+struct ChildView: View {
+    @Binding var count: Int
+    
+    var body: some View {
+        Button("Decrement") { count -= 1 }
     }
 }
 ```
 
-**Quy tắc quan trọng:** Luôn dùng `private` với `@State` trừ khi có lý do đặc biệt.
+- `@State`: nguồn dữ liệu riêng của view
+- `@Binding`: tham chiếu đến state bên ngoài (two-way)
 
-### 9.4 List, ForEach, LazyVStack
+### 9.3 @Observable (iOS 17+) vs ObservableObject
 
-- `List` tối ưu sẵn cho danh sách, hỗ trợ edit, delete, section
-- `ForEach` dùng để lặp dữ liệu với `id` duy nhất
-- `LazyVStack/LazyHStack` chỉ render item khi hiển thị (hiệu quả hơn với danh sách dài)
-
-```swift
-struct Item: Identifiable {
-    let id = UUID()
-    let name: String
-}
-
-struct ItemListView: View {
-    let items: [Item] = [
-        Item(name: "Mục 1"),
-        Item(name: "Mục 2"),
-        Item(name: "Mục 3")
-    ]
-    
-    var body: some View {
-        List(items) { item in
-            Text(item.name)
-        }
-        .navigationTitle("Danh sách")
-    }
-}
-```
-
-### 9.5 .task và vòng đời View
-
-`.task` là cách an toàn và hiện đại để chạy async code khi view xuất hiện, và **tự động huỷ** khi view bị ẩn/biến mất.
+**Khuyến nghị dùng `@Observable` cho dự án mới (iOS 17+):**
 
 ```swift
-struct DataView: View {
-    @State private var data: [String] = []
-    @State private var isLoading = false
+import Observation
+
+@Observable
+class ProductStore {
+    var products: [Product] = []
+    var isLoading = false
     
-    var body: some View {
-        Group {
-            if isLoading {
-                ProgressView("Đang tải...")
-            } else {
-                List(data, id: \.self) { Text($0) }
-            }
-        }
-        .task {
-            await loadData()
-        }
-    }
-    
-    func loadData() async {
+    func load() async {
         isLoading = true
-        // Giả lập
-        try? await Task.sleep(for: .seconds(1))
-        data = ["A", "B", "C"]
+        // ...
         isLoading = false
     }
 }
-```
 
-### 9.6 Preview
-
-`#Preview` giúp xem nhanh UI mà không cần build chạy toàn bộ app.
-
-```swift
-#Preview {
-    GreetingView(name: "Học viên iOS")
+struct ProductListView: View {
+    @State private var store = ProductStore()
+    
+    var body: some View {
+        List(store.products) { product in
+            Text(product.name)
+        }
+        .task { await store.load() }
+    }
 }
 ```
 
-Có thể truyền mock data, environment để test nhiều trạng thái khác nhau.
+**ObservableObject (tương thích rộng):**
+
+```swift
+class LegacyStore: ObservableObject {
+    @Published var items: [String] = []
+}
+struct View: View {
+    @StateObject private var store = LegacyStore()
+    @ObservedObject var shared: LegacyStore
+    @EnvironmentObject var global: LegacyStore
+}
+```
+
+**Quy tắc đơn giản:**
+- Tạo object sở hữu: `@State` với `@Observable`, hoặc `@StateObject` với `ObservableObject`
+- Quan sát object được truyền: `@Bindable` (với `@Observable`), hoặc `@ObservedObject`
+- Chia sẻ toàn cục: `@Environment`/`@EnvironmentObject` cẩn thận, tránh lạm dụng
+
+### 9.4 Common modifiers hữu ích
+
+```swift
+Text("Title")
+    .font(.headline)
+    .foregroundStyle(.primary)
+    .padding()
+    .background(.gray.opacity(0.1))
+    .clipShape(RoundedRectangle(cornerRadius: 8))
+
+Image(systemName: "star.fill")
+    .imageScale(.large)
+    .foregroundStyle(.yellow)
+```
+
+### 9.5 .task, .onAppear, lifecycle
+
+```swift
+struct DataView: View {
+    @State private var store = Store()
+    
+    var body: some View {
+        List(store.items) { item in Text(item.title) }
+            .task {
+                // chạy khi view xuất hiện, tự hủy khi view biến mất
+                await store.load()
+            }
+            .refreshable {
+                await store.load()
+            }
+    }
+}
+```
+
+> Ưu tiên `.task` hơn `.onAppear` cho async work (tự động cancel, rõ ràng hơn).
 
 ---
 
-## 10. UIKit Tổng quan
+## 10. UIKit tổng quan và khi nào kết hợp
 
-Mặc dù SwiftUI là hiện tại, hiểu UIKit vẫn rất quan trọng vì nhiều project legacy, third-party component, và một số API nâng cao vẫn hoạt động tốt trên UIKit.
+### 10.1 Khi nào dùng UIKit
 
-### 10.1 UIViewController và UIView
+- Cần `UITableView`/`UICollectionView` với behavior cực kỳ tùy chỉnh
+- Tích hợp thư viện UIKit-only cũ
+- Custom transition phức tạp
+- Một số API chỉ có UIKit
+- Cần kiểm soát chi tiết về view lifecycle/performance
 
-| Thành phần | Vai trò |
-|---|---|
-| `UIView` | Nền tảng cho mọi UI element (button, label, view tùy chỉnh) |
-| `UIViewController` | Quản lý view, xử lý sự kiện, điều hướng giữa màn hình |
-| `UIViewControllerLifeCycle` | `viewDidLoad`, `viewWillAppear`, `viewDidAppear`, `viewWillDisappear`, `viewDidDisappear` |
+### 10.2 Kết hợp SwiftUI + UIKit
 
-```swift
-import UIKit
-
-class DetailViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        title = "Chi tiết"
-        setupUI()
-    }
-    
-    private func setupUI() {
-        let label = UILabel()
-        label.text = "Nội dung chi tiết"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-    }
-}
-```
-
-### 10.2 UITableView và UICollectionView
-
-Đây là 2 component quan trọng nhất để hiển thị danh sách/lưới dữ liệu lớn.
-
-- `UITableView`: Danh sách dọc (phổ biến nhất)
-- `UICollectionView`: Lưới, layout tùy biến cao
-
-Cần implement ít nhất: `numberOfSections`, `numberOfRowsInSection`, `cellForRowAt`.
-
-### 10.3 Kết hợp UIKit với SwiftUI
-
-Dùng `UIViewControllerRepresentable` để nhúng UIKit vào SwiftUI, hoặc `UIHostingController` để nhúng SwiftUI vào UIKit.
+**UIViewRepresentable (SwiftUI → UIKit view):**
 
 ```swift
 import SwiftUI
 import UIKit
 
-struct UIKitViewRepresentable: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> DetailViewController {
-        return DetailViewController()
+struct MapView: UIViewRepresentable {
+    func makeUIView(context: Context) -> MKMapView {
+        MKMapView()
     }
     
-    func updateUIViewController(_ uiViewController: DetailViewController, context: Context) {
-        // Cập nhật nếu cần
+    func updateUIView(_ uiView: MKMapView, context: Context) {
+        // cập nhật khi state thay đổi
     }
 }
 ```
 
----
-
-## 11. Layout, Auto Layout và Responsive Design
-
-### 11.1 Auto Layout nguyên tắc
-
-Auto Layout dùng **constraints** để xác định vị trí và kích thước view dựa trên quan hệ với view khác.
-
-Các khái niệm:
-
-- **Leading/Trailing** thay vì Left/Right (hỗ trợ RTL tốt hơn)
-- **Safe Area**: vùng an toàn không bị che bởi notch, status bar, home indicator
-- **Intrinsic Content Size**: kích thước tự nhiên của view (Label, Button)
-- **Priority**: ưu tiên khi constraints xung đột
-
-### 11.2 Responsive với Size Classes
-
-iOS phân biệt `horizontalSizeClass` và `verticalSizeClass`: `.compact` và `.regular`.
-
-- **iPhone dọc**: thường compact x compact
-- **iPhone ngang**: compact x regular
-- **iPad**: thường regular x regular
+**UIViewControllerRepresentable:**
 
 ```swift
-struct AdaptiveView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
+struct MailComposer: UIViewControllerRepresentable {
+    @Environment(\.dismiss) var dismiss
     
-    var body: some View {
-        if sizeClass == .compact {
-            VStack { /* Layout cho điện thoại */ }
-        } else {
-            HStack { /* Layout cho tablet */ }
+    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+        let vc = MFMailComposeViewController()
+        vc.mailComposeDelegate = context.coordinator
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator { Coordinator(dismiss: dismiss) }
+    
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+        let dismiss: DismissAction
+        init(dismiss: DismissAction) { self.dismiss = dismiss }
+        func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+            dismiss()
         }
     }
 }
 ```
 
-### 11.3 Dynamic Type
+**Nguyên tắc:** Chỉ bọc khi thực sự cần. Giữ adapter mỏng, truyền dữ liệu rõ ràng.
 
-Người dùng có thể thay đổi cỡ chữ hệ thống. App cần hỗ trợ để tăng khả năng truy cập.
+---
+
+## 11. Layout, Auto Layout, Responsive Design
+
+### 11.1 SwiftUI Layout hệ thống
+
+SwiftUI có layout algorithm: parent đề xuất size → child tự quyết → parent đặt vị trí.
+
+Công cụ quan trọng:
+- `VStack`, `HStack`, `ZStack`
+- `LazyVStack`, `LazyHStack`, `Grid` (iOS 16+)
+- `Spacer`, `Divider`
+- `Frame`, `Padding`, `Alignment`
+- `GeometryReader` (dùng cẩn thận - có thể gây layout phức tạp)
 
 ```swift
-Text("Tiêu đề")
-    .font(.title) // Tự động scale theo Dynamic Type
-
-// Với custom font
-Text("Nội dung")
-    .font(.custom("Helvetica", size: 16, relativeTo: .body))
+VStack(alignment: .leading, spacing: 12) {
+    Text("Title").font(.headline)
+    Text("Subtitle").font(.subheadline).foregroundStyle(.secondary)
+    Spacer()
+}
+.padding()
+.frame(maxWidth: .infinity, alignment: .leading)
 ```
 
-**Quy tắc:** Tránh dùng `frame(width:height:)` cứng cho text. Ưu tiên padding và để text tự co giãn.
+### 11.2 Auto Layout (UIKit) - khái niệm cần biết
 
-### 11.4 Dark Mode
+- **Constraints**: quan hệ giữa views
+- **Safe Area**: tránh notch, home indicator
+- **Intrinsic Content Size**: kích thước tự nhiên
+- **Compression Resistance / Hugging Priority**: xử lý khi không đủ/ thừa không gian
+- **Stack View**: đơn giản hóa layout
 
-Dùng **semantic color** thay vì hardcode màu.
+Dù chủ yếu dùng SwiftUI, hiểu Auto Layout giúp debug và khi kết hợp UIKit.
+
+### 11.3 Responsive Design
+
+| Kỹ thuật | Mục đích |
+|---|---|
+| **Safe Area** | Tôn trọng vùng an toàn thiết bị |
+| **Dynamic Type** | Hỗ trợ cài đặt font người dùng |
+| **Size Classes** | Thích ứng portrait/landscape, iPhone/iPad |
+| **Accessibility** | Đủ hit target (>=44x44), semantic, VoiceOver |
+| **Dark Mode** | Dùng semantic color (`.primary`, `.background`, asset colors) |
+| **Adaptive layout** | `GeometryReader` hoặc `ViewThatFits` (iOS 16+) |
 
 ```swift
-Text("Nội dung")
-    .foregroundStyle(.primary) // Tự động theo light/dark
-
-// Hoặc Asset Catalog: Colors set với Appearances = Any, Light, Dark
-Color("BrandColor")
+Text("Content")
+    .font(.body)
+    .dynamicTypeSize(...DynamicTypeSize.xxxLarge...) // giới hạn nếu cần
 ```
 
 ---
 
-## 12. Navigation, Sheet, Alert và Presentation
+## 12. Navigation, Sheet, FullScreenCover, Alert
 
 ### 12.1 NavigationStack (iOS 16+)
 
-`NavigationStack` thay thế `NavigationView` cũ, hỗ trợ navigation theo path mạnh mẽ hơn.
-
 ```swift
-struct HomeView: View {
+struct RootView: View {
+    @State private var path = NavigationPath()
+    
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             List {
-                NavigationLink("Đi tới chi tiết") {
-                    DetailView()
-                }
+                NavigationLink("Chi tiết", value: "detail-id")
             }
             .navigationTitle("Trang chủ")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("Thêm") { }
-                }
+            .navigationDestination(for: String.self) { id in
+                DetailView(id: id)
             }
         }
     }
 }
 ```
+
+**Lợi ích:** programmatic navigation, deep link dễ dàng hơn.
 
 ### 12.2 Sheet, FullScreenCover
 
@@ -976,316 +815,384 @@ struct ContentView: View {
     @State private var showSheet = false
     
     var body: some View {
-        Button("Mở Sheet") {
-            showSheet = true
-        }
-        .sheet(isPresented: $showSheet) {
-            SheetView()
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-        }
+        Button("Mở form") { showSheet = true }
+            .sheet(isPresented: $showSheet) {
+                FormView()
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
     }
 }
 ```
 
-### 12.3 Alert và ConfirmationDialog
+### 12.3 Alert, ConfirmationDialog
 
 ```swift
-@State private var showAlert = false
-
-Button("Xóa") { showAlert = true }
-    .alert("Xác nhận", isPresented: $showAlert) {
-        Button("Hủy", role: .cancel) { }
-        Button("Xóa", role: .destructive) { /* action */ }
+Button("Xóa", role: .destructive) { showAlert = true }
+    .alert("Xác nhận xóa?", isPresented: $showAlert) {
+        Button("Hủy", role: .cancel) {}
+        Button("Xóa", role: .destructive) { delete() }
     } message: {
-        Text("Hành động này không thể hoàn tác")
+        Text("Hành động này không thể hoàn tác.")
     }
 ```
 
-### 12.4 Dismiss
+### 12.4 Navigation patterns
+
+- **Push**: hierarchy thông thường
+- **Sheet/Modal**: flow độc lập, ngắn
+- **FullScreenCover**: trải nghiệm immersive
+- **TabView**: top-level navigation
+- **Coordinator/Router**: hữu ích khi navigation phức tạp, testable
+
+---
+
+## 13. State Management thực tế
+
+### 13.1 Quy tắc nguồn chân lý
+
+Mỗi dữ liệu quan trọng chỉ có **một nguồn chân lý**. UI chỉ đọc và phát hành action.
+
+### 13.2 Các công cụ
+
+| Công cụ | Phạm vi | Ghi chú |
+|---|---|---|
+| `@State` | View-local | Đơn giản, đủ cho UI state |
+| `@Binding` | Parent-child | Chia sẻ state hai chiều |
+| `@Observable` + `@State` | Feature state | Khuyến nghị cho iOS 17+ |
+| `ObservableObject` | Tương thích rộng | Vẫn phổ biến, cần hiểu rõ `@Published` |
+| `Environment` | Dependency xuyên suốt cây view | Dùng cho theme/router/service, tránh truyền prop quá nhiều |
+| `AppStorage` | UserDefaults binding | Chỉ cho setting đơn giản |
+
+### 13.3 Anti-pattern state
+
+- Lưu derived value vào state (tính toán lại thay vì lưu)
+- Đồng bộ nhiều `@State` gây mâu thuẫn
+- Dùng global singleton mutable khắp nơi (khó test)
+- Truyền object qua quá nhiều level thay vì dùng `Environment`
+
+### 13.4 Single Source of Truth ví dụ
 
 ```swift
-struct SheetView: View {
-    @Environment(\.dismiss) private var dismiss
+@Observable
+class CartStore {
+    private(set) var items: [CartItem] = []
     
-    var body: some View {
-        NavigationStack {
-            Text("Nội dung")
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Đóng") { dismiss() }
-                    }
-                }
+    var total: Decimal {
+        items.reduce(0) { $0 + $1.price * Decimal($1.quantity) }
+    }
+    
+    func add(_ item: Product) {
+        // cập nhật state tại một nơi
+    }
+    
+    func remove(id: UUID) {
+        items.removeAll { $0.id == id }
+    }
+}
+```
+
+---
+
+## 14. Networking với URLSession
+
+### 14.1 Cấu trúc NetworkClient cơ bản
+
+```swift
+enum HTTPMethod: String {
+    case get = "GET", post = "POST", put = "PUT", patch = "PATCH", delete = "DELETE"
+}
+
+struct APIRequest {
+    var baseURL: URL
+    var path: String
+    var method: HTTPMethod = .get
+    var headers: [String: String] = [:]
+    var body: Data? = nil
+    var queryItems: [URLQueryItem] = []
+}
+
+final class NetworkClient {
+    private let session: URLSession
+    private let decoder = JSONDecoder()
+    
+    init(session: URLSession = .shared) {
+        self.session = session
+        decoder.dateDecodingStrategy = .iso8601
+    }
+    
+    func send<T: Decodable>(_ request: APIRequest) async throws -> T {
+        var components = URLComponents(url: request.baseURL.appendingPathComponent(request.path), resolvingAgainstBaseURL: false)!
+        if !request.queryItems.isEmpty { components.queryItems = request.queryItems }
+        guard let url = components.url else { throw NetworkError.invalidURL }
+        
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = request.method.rawValue
+        urlRequest.allHTTPHeaderFields = request.headers
+        urlRequest.httpBody = request.body
+        urlRequest.timeoutInterval = 30
+        
+        let (data, response) = try await session.data(for: urlRequest)
+        guard let http = response as? HTTPURLResponse else { throw NetworkError.invalidResponse }
+        guard (200..<300).contains(http.statusCode) else { throw NetworkError.statusCode(http.statusCode) }
+        guard !data.isEmpty else { throw NetworkError.noData }
+        
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            throw NetworkError.decodingFailed
         }
     }
 }
 ```
 
----
+### 14.2 Error handling đầy đủ
 
-## 13. Networking với URLSession
+```swift
+enum NetworkError: LocalizedError, Equatable {
+    case invalidURL
+    case invalidResponse
+    case noData
+    case statusCode(Int)
+    case decodingFailed
+    case offline
+    case timeout
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL: return "URL không hợp lệ"
+        case .invalidResponse: return "Phản hồi không hợp lệ"
+        case .noData: return "Không có dữ liệu"
+        case .statusCode(let code): return "Lỗi máy chủ (\(code))"
+        case .decodingFailed: return "Lỗi phân tích dữ liệu"
+        case .offline: return "Không có kết nối mạng"
+        case .timeout: return "Hết thời gian chờ"
+        }
+    }
+}
+```
 
-`URLSession` là framework chuẩn của Apple để thực hiện HTTP request.
+### 14.3 Thực hành quan trọng
 
-### 13.1 Các thành phần cơ bản
-
-| Thành phần | Mô tả |
+| Thực hành | Lý do |
 |---|---|
-| `URL` | Địa chỉ endpoint |
-| `URLRequest` | Cấu hình request (method, header, body) |
-| `URLSession` | Thực thi request, quản lý connection |
-| `URLSessionDataTask` | Task cho data request (GET/POST/...) |
-| `URLResponse` / `HTTPURLResponse` | Phản hồi từ server |
+| **Tách endpoint** | Dễ test, dễ thay đổi base URL |
+| **Interceptor** | Thêm auth header, logging (chỉ dev), retry |
+| **Timeout hợp lý** | Tránh treo UI vô thời hạn |
+| **Cancellation** | Với `Task` tự động cancel khi view biến mất |
+| **HTTPS only** | Bảo mật, ATS yêu cầu |
+| **Không log body chứa secret** | An toàn |
+| **Handle offline** | Kiểm tra kết nối hoặc bắt lỗi phù hợp |
 
-### 13.2 GET Request cơ bản
-
-```swift
-func fetchData() async throws -> [String] {
-    guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else {
-        throw URLError(.badURL)
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "GET"
-    request.setValue("application/json", forHTTPHeaderField: "Accept")
-    
-    let (data, response) = try await URLSession.shared.data(for: request)
-    
-    guard let httpResponse = response as? HTTPURLResponse else {
-        throw URLError(.badServerResponse)
-    }
-    
-    guard (200...299).contains(httpResponse.statusCode) else {
-        throw URLError(.badServerResponse)
-    }
-    
-    // Decode sau (xem phần 14)
-    return []
-}
-```
-
-### 13.3 POST Request với JSON Body
+### 14.4 GET/POST ví dụ
 
 ```swift
-struct PostRequest: Codable {
-    let title: String
-    let body: String
-    let userId: Int
+struct Product: Codable, Identifiable {
+    let id: UUID
+    let name: String
+    let price: Double
 }
 
-func createPost() async throws {
-    guard let url = URL(string: "https://jsonplaceholder.typicode.com/posts") else { return }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    
-    let post = PostRequest(title: "Hello", body: "World", userId: 1)
-    request.httpBody = try JSONEncoder().encode(post)
-    
-    let (_, response) = try await URLSession.shared.data(for: request)
-    print((response as? HTTPURLResponse)?.statusCode ?? 0)
+func fetchProducts() async throws -> [Product] {
+    let client = NetworkClient()
+    var req = APIRequest(baseURL: URL(string: "https://api.example.com")!, path: "/products")
+    req.headers = ["Accept": "application/json"]
+    return try await client.send(req)
+}
+
+struct CreateProductRequest: Codable {
+    let name: String, price: Double
+}
+
+func createProduct(_ body: CreateProductRequest) async throws -> Product {
+    let client = NetworkClient()
+    var req = APIRequest(baseURL: URL(string: "https://api.example.com")!, path: "/products", method: .post)
+    req.headers = ["Content-Type": "application/json", "Accept": "application/json"]
+    req.body = try JSONEncoder().encode(body)
+    return try await client.send(req)
 }
 ```
-
-### 13.4 Cấu hình URLSession nâng cao
-
-```swift
-let configuration = URLSessionConfiguration.default
-configuration.timeoutIntervalForRequest = 30  // Timeout cho request
-configuration.timeoutIntervalForResource = 60 // Timeout tổng
-configuration.allowsCellularAccess = true
-configuration.waitsForConnectivity = true      // Chờ mạng thay vì fail ngay
-
-let session = URLSession(configuration: configuration)
-```
-
-**Lời khuyên:** Dùng `URLSession.shared` cho hầu hết trường hợp đơn giản. Tạo custom session khi cần cấu hình đặc biệt.
 
 ---
 
-## 14. JSON, Codable và Mapping dữ liệu
+## 15. Codable, JSON, Mapping và versioning
 
-### 14.1 Codable protocol
-
-`Codable` là hợp nhất của `Encodable` và `Decodable`, giúp chuyển đổi giữa JSON và Swift type một cách tự động.
+### 15.1 Codable cơ bản
 
 ```swift
-struct User: Codable, Identifiable {
+struct UserDTO: Codable {
     let id: Int
-    let name: String
+    let firstName: String
+    let lastName: String
     let email: String
-    let phone: String?
 }
+
+// JSONDecoder
+let decoder = JSONDecoder()
+decoder.keyDecodingStrategy = .useDefaultKeys  // hoặc .convertFromSnakeCase
+let user = try decoder.decode(UserDTO.self, from: data)
 ```
 
-### 14.2 Decoding với JSONDecoder
+### 15.2 Custom CodingKeys
 
 ```swift
-func decodeUsers(from data: Data) throws -> [User] {
-    let decoder = JSONDecoder()
-    // Nếu API dùng snake_case: user_name
-    decoder.keyDecodingStrategy = .convertFromSnakeCase
-    // Nếu dùng date format riêng
-    // decoder.dateDecodingStrategy = .iso8601
-    return try decoder.decode([User].self, from: data)
-}
-```
-
-### 14.3 Encoding với JSONEncoder
-
-```swift
-func encodeUser(_ user: User) throws -> Data {
-    let encoder = JSONEncoder()
-    encoder.keyEncodingStrategy = .convertToSnakeCase
-    encoder.outputFormatting = .prettyPrinted // Chỉ dùng cho debug
-    return try encoder.encode(user)
-}
-```
-
-### 14.4 Custom CodingKeys
-
-Khi tên field trong JSON khác hoàn toàn với Swift, dùng `CodingKeys`.
-
-```swift
-struct Product: Codable {
-    let productId: Int
-    let productName: String
-    let priceInVnd: Double
+struct APIUser: Codable {
+    let userId: Int
+    let displayName: String
     
     enum CodingKeys: String, CodingKey {
-        case productId = "product_id"
-        case productName = "product_name"
-        case priceInVnd = "price_in_vnd"
+        case userId = "user_id"
+        case displayName = "display_name"
     }
 }
 ```
 
-### 14.5 Xử lý Date
+### 15.3 Mapping DTO → Domain/UI model
+
+**Không bao giờ dùng DTO trực tiếp trong View nếu có khả năng thay đổi.**
 
 ```swift
+struct UserDTO: Codable {
+    let userId: Int
+    let firstName: String
+    let lastName: String
+}
+
+struct User: Identifiable {
+    let id: Int
+    let fullName: String
+}
+
+extension User {
+    init(dto: UserDTO) {
+        self.id = dto.userId
+        self.fullName = "\(dto.firstName) \(dto.lastName)"
+    }
+}
+```
+
+### 15.4 Xử lý optional, default, dates
+
+```swift
+struct PostDTO: Codable {
+    let id: Int
+    let title: String
+    let body: String?
+    let createdAt: Date
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(Int.self, forKey: .id)
+        title = try container.decode(String.self, forKey: .title)
+        body = try container.decodeIfPresent(String.self, forKey: .body)
+        createdAt = try container.decode(Date.self, forKey: .createdAt)
+    }
+}
+
 let decoder = JSONDecoder()
 decoder.dateDecodingStrategy = .custom { decoder in
-    let container = try decoder.singleValueContainer()
-    let string = try container.decode(String.self)
-    
-    // Thử ISO8601
-    let formatter = ISO8601DateFormatter()
-    formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-    if let date = formatter.date(from: string) { return date }
-    
-    formatter.formatOptions = [.withInternetDateTime]
-    if let date = formatter.date(from: string) { return date }
-    
-    throw DecodingError.dataCorruptedError(in: container, debugDescription: "Invalid date")
+    // custom parsing nếu cần
+    throw DecodingError.dataCorrupted(...)
 }
+// hoặc .iso8601, .secondsSince1970
 ```
 
-**Lời khuyên:**
+### 15.5 Versioning API
 
-- Luôn dùng `Codable` thay vì parse JSON thủ công bằng Dictionary
-- Ưu tiên `let` cho properties không thay đổi
-- Dùng `Optional` cho field có thể `null` trong JSON
-- Tránh force unwrap khi decode
+- Thêm field mới: backend có thể thêm optional → client phải dùng `decodeIfPresent`
+- Thay đổi tên field: dùng `CodingKeys`
+- Không giả định field luôn tồn tại
+- Viết decoder resilient: xử lý thiếu dữ liệu, type mismatch cẩn thận
+- Có thể dùng wrapper hoặc fallback
 
 ---
 
-## 15. Lưu trữ dữ liệu cục bộ
+## 16. Lưu trữ cục bộ: UserDefaults, FileManager, Keychain
 
-Tùy vào mục đích sử dụng mà chọn công cụ lưu trữ phù hợp.
+### 16.1 So sánh
 
-| Công cụ | Phù hợp cho | Ghi chú |
-|---|---|---|
-| **UserDefaults** | Cài đặt đơn giản, preference, flag nhỏ | Không lưu dữ liệu lớn, không mã hóa, đồng bộ không đảm bảo |
-| **FileManager (Documents/Cache)** | JSON, ảnh, file tùy chỉnh | Linh hoạt, cần tự quản lý |
-| **Keychain** | Thông tin nhạy cảm (token, password) | Được hệ thống mã hóa, an toàn nhất cho dữ liệu bảo mật |
-| **Core Data** | Dữ liệu quan hệ phức tạp, query mạnh, offline lớn | Boilerplate nhiều, học đường cong cao |
-| **SwiftData** | Dữ liệu đơn giản đến trung bình, iOS 17+ | Hiện đại, gọn hơn Core Data, API rất Swift-native |
+| Storage | Dùng cho | An toàn | Giới hạn | Ghi chú |
+|---|---|---|---|---|
+| **UserDefaults** | Cài đặt đơn giản (bool/string/int) | Thấp (không mã hóa) | Nhỏ | Không lưu token/secret |
+| **FileManager** | File lớn, cache, JSON offline | Tùy thuộc thư mục | Lớn hơn | Dùng `Documents/` (user data), `Library/Caches/` (cache có thể bị xóa) |
+| **Keychain** | Thông tin nhạy cảm (token, credential) | Cao (mã hóa hệ thống) | Phù hợp nhỏ | Khuyến nghị cho secret |
+| **SwiftData/Core Data** | Dữ liệu quan hệ phức tạp, offline-first | Tùy | Lớn | Xem chi tiết ở advanced |
 
-### 15.1 UserDefaults
-
-```swift
-// Lưu
-UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-UserDefaults.standard.set("dark", forKey: "theme")
-
-// Đọc
-let hasSeen = UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
-let theme = UserDefaults.standard.string(forKey: "theme")
-
-// Xóa
-UserDefaults.standard.removeObject(forKey: "theme")
-```
-
-### 15.2 Lưu/đọc file JSON
+### 16.2 UserDefaults
 
 ```swift
-struct Settings: Codable {
-    var notificationsEnabled: Bool
-    var language: String
+enum DefaultsKey {
+    static let hasSeenOnboarding = "hasSeenOnboarding"
 }
 
-class StorageManager {
-    static let shared = StorageManager()
-    private let fileName = "settings.json"
+extension UserDefaults {
+    var hasSeenOnboarding: Bool {
+        get { bool(forKey: DefaultsKey.hasSeenOnboarding) }
+        set { set(newValue, forKey: DefaultsKey.hasSeenOnboarding) }
+    }
+}
+
+// Dùng
+UserDefaults.standard.hasSeenOnboarding = true
+```
+
+### 16.3 FileManager - lưu JSON
+
+```swift
+struct CacheManager {
+    static let shared = CacheManager()
+    private let fileName = "products.json"
     
     private var fileURL: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(fileName)
+        let urls = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return urls[0].appendingPathComponent(fileName)
     }
     
-    func save(_ settings: Settings) throws {
-        let data = try JSONEncoder().encode(settings)
-        try data.write(to: fileURL)
+    func save(_ products: [Product]) throws {
+        let data = try JSONEncoder().encode(products)
+        try data.write(to: fileURL, options: .atomic)
     }
     
-    func load() throws -> Settings {
+    func load() throws -> [Product] {
         let data = try Data(contentsOf: fileURL)
-        return try JSONDecoder().decode(Settings.self, from: data)
+        return try JSONDecoder().decode([Product].self, from: data)
+    }
+    
+    func clear() {
+        try? FileManager.default.removeItem(at: fileURL)
     }
 }
 ```
 
-### 15.3 Keychain cơ bản (ý tưởng)
+> **Lưu ý:** `Caches/` có thể bị hệ thống dọn khi thiếu dung lượng. `Documents/` được backup bởi iCloud (nếu bật). Chỉ lưu dữ liệu user-generated vào `Documents/`.
 
-Keychain phức tạp hơn với API C, nhưng nguyên tắc rất quan trọng: **không bao giờ lưu token vào UserDefaults**.
+### 16.4 Keychain (khái quát)
 
-Nếu cần dùng nhanh, có thể tham khảo thư viện như `KeychainSwift`, nhưng vẫn nên hiểu khái niệm để bảo mật đúng đắn.
+Không lưu token dài hạn trong `UserDefaults`. Dùng Keychain. Có nhiều wrapper (vd. KeychainAccess) hoặc implement đơn giản. Nguyên tắc:
+- Chỉ lưu thông tin cần thiết
+- Xóa khi logout
+- Tránh log
+- Cân nhắc `kSecAttrAccessible` phù hợp (thường `afterFirstUnlock` hoặc nghiêm ngặt hơn tùy yêu cầu)
 
 ---
 
-## 16. App Lifecycle, Scene và State Preservation
+## 17. App Lifecycle, Scene, Background/Foreground
 
-### 16.1 @main và App Protocol
+### 17.1 Khái niệm
 
-Từ iOS 14+, ứng dụng SwiftUI dùng `@main` với protocol `App`.
+Từ iOS 13+, dùng **Scene** thay vì single app delegate cho multi-window. Vẫn cần hiểu cả hai.
 
-```swift
-import SwiftUI
+**Trạng thái app quan trọng:**
+- `active`: đang chạy tương tác
+- `inactive`: chuyển đổi trạng thái (incoming call, notification)
+- `background`: chạy nền (giới hạn thời gian)
+- `terminated`: bị kill
 
-@main
-struct MyApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
-```
-
-### 16.2 ScenePhase
-
-`@Environment(\.scenePhase)` theo dõi trạng thái scene:
-
-| Phase | Ý nghĩa |
-|---|---|
-| `.active` | App đang hiển thị và tương tác được |
-| `.inactive` | App đang chuyển trạng thái (ví dụ: mở Control Center, nhận cuộc gọi) |
-| `.background` | App không hiển thị, chạy ngầm. Có thể bị hệ thống suspend bất cứ lúc nào |
+### 17.2 SwiftUI App lifecycle
 
 ```swift
 @main
-struct MyApp: App {
+struct ExampleApp: App {
     @Environment(\.scenePhase) private var scenePhase
     
     var body: some Scene {
@@ -1294,266 +1201,178 @@ struct MyApp: App {
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
             switch newPhase {
-            case .active:
-                print("App đã active")
-            case .inactive:
-                print("App đang inactive")
-            case .background:
-                print("App vào background - lưu dữ liệu quan trọng")
-            @unknown default:
-                break
+            case .active: print("Active")
+            case .inactive: print("Inactive")
+            case .background: print("Background")
+            @unknown default: break
             }
         }
     }
 }
 ```
 
-### 16.3 Quy tắc khi vào Background
+### 17.3 Thực hành
 
-- **Lưu state quan trọng** ngay lập tức (draft, form chưa lưu)
-- **Dừng animation không cần thiết**
-- **Không giữ connection dài hạn** nếu không cần thiết
-- **Hoàn tất thao tác ghi ngắn** trước khi hệ thống suspend
-- **Tránh** chạy task nặng, không đảm bảo hoàn thành
+| Sự kiện | Hành động phù hợp |
+|---|---|
+| **Vào foreground** | Refresh dữ liệu nếu stale, resume timer/realtime |
+| **Vào background** | Lưu state quan trọng, ngừng timer không cần thiết, chuẩn bị cho kill |
+| **Inactive** | Tạm dừng animation nặng, tránh UI updates không cần thiết |
+| **Terminate** | Chỉ có thể lưu nhanh trong các hook, không phụ thuộc vào đây |
+
+> ⚠️ App có thời gian rất hạn chế khi vào background. Đừng thực hiện network dài. Nếu cần xử lý nền dài hạn, xem **Background Tasks** ở advanced.
 
 ---
 
-## 17. Debugging, Logging và Instruments
+## 18. Debugging, Logging, Instruments cơ bản
 
-### 17.1 Debugging cơ bản
+### 18.1 Debug cơ bản
 
 | Công cụ | Sử dụng |
 |---|---|
-| **Breakpoint** | Dừng tại dòng code để kiểm tra biến, stack trace |
-| **Condition Breakpoint** | Chỉ dừng khi điều kiện đúng (VD: `id == 123`) |
-| **Exception Breakpoint** | Dừng ngay khi có exception/crash |
-| **Print/Debug** | Nhanh cho kiểm tra đơn giản |
-| **LLDB Console** | `po`, `p`, `v`, `bt` để inspect runtime |
+| **Breakpoints** | Dừng execution, inspect biến |
+| **LLDB** | `po`, `p`, `expr`, debug runtime |
+| **View Debugger** | Inspect view hierarchy, constraints |
+| **Debug Navigator** | Theo dõi threads, memory, CPU |
+| **Console** | Xem log/crash |
 
-```swift
-// Trong LLDB
-po variableName  // Print object description
-p count           // Print raw value
-bt                // Backtrace
-```
+### 18.2 Logging
 
-### 17.2 Logging với OSLog
-
-`OSLog` hiệu quả hơn `print` rất nhiều: có mức log, filter được trong Console app, không ảnh hưởng hiệu năng nhiều.
+Tránh `print` trong production. Dùng `os.Logger`:
 
 ```swift
 import OSLog
 
-let logger = Logger(subsystem: "com.example.myapp", category: "network")
+struct Log {
+    static let network = Logger(subsystem: "com.example.app", category: "Network")
+    static let ui = Logger(subsystem: "com.example.app", category: "UI")
+}
 
-logger.debug("Bắt đầu request")
-logger.info("Request thành công")
-logger.warning("Timeout sắp xảy ra")
-logger.error("Request thất bại: \(error.localizedDescription)")
+// Dùng
+Log.network.debug("Request started")
+Log.network.error("Failed: \(error.localizedDescription)")
 ```
 
-**Quy tắc:** Không log dữ liệu nhạy cảm (password, token đầy đủ, thông tin cá nhân).
+**Lợi ích:** filter theo category/subsystem, không spam console không cần thiết, hiệu quả hơn.
 
-### 17.3 Instruments
+### 18.3 Instruments cơ bản
 
-Truy cập: `Product > Profile` (`⌘+I`)
-
-| Template | Mục đích |
+| Instrument | Mục đích |
 |---|---|
-| **Time Profiler** | Tìm code tốn CPU nhất (hotspot) |
-| **Allocations** | Theo dõi cấp phát bộ nhớ |
+| **Time Profiler** | Tìm hot path, function chậm |
 | **Leaks** | Phát hiện memory leak/retain cycle |
-| **Network** | Theo dõi request/response, latency |
-| **Core Animation** | Kiểm tra FPS, layout, rendering |
-| **Energy Log** | Đánh giá tiêu thụ pin |
+| **Allocations** | Theo dõi allocation, object graph |
+| **Network** | Debug request/response (thường dùng proxy như Proxyman/Charles) |
+| **Core Animation** | Kiểm tra FPS, offscreen rendering |
 
-**Nguyên tắc tối ưu:** **Đo trước, tối ưu sau**. Không tối ưu theo cảm tính.
+**Quy trình debug hiệu quả:** reproduce → isolate → breakpoint/log → measure (Instruments) → fix → verify.
 
 ---
 
-## 18. Testing cơ bản với XCTest
+## 19. Testing cơ bản với XCTest
 
-Testing giúp phát hiện lỗi sớm, tự tin refactor và đảm bảo logic quan trọng hoạt động đúng.
-
-### 18.1 Các loại test
-
-| Loại | Phạm vi | Mục đích |
-|---|---|---|
-| **Unit Test** | Logic thuần (function, ViewModel, validation) | Nhanh, nhiều nhất, quan trọng nhất |
-| **Integration Test** | Tương tác giữa nhiều component | Kiểm tra luồng hoàn chỉnh |
-| **UI Test (XCUITest)** | Toàn bộ app từ góc người dùng | Kiểm tra flow quan trọng, chạy chậm hơn |
-
-### 18.2 Viết Unit Test cơ bản
+### 19.1 Unit Test
 
 ```swift
 import XCTest
-@testable import MyApp
+@testable import ExampleApp
 
-final class ValidationTests: XCTestCase {
-    func testEmailIsValid() {
+final class ValidatorTests: XCTestCase {
+    func testValidEmail() {
         XCTAssertTrue("test@example.com".isValidEmail())
     }
     
-    func testEmailIsInvalidWithoutAtSymbol() {
-        XCTAssertFalse("testexample.com".isValidEmail())
+    func testInvalidEmail() {
+        XCTAssertFalse("invalid".isValidEmail())
     }
     
-    func testEmptyEmailIsInvalid() {
+    func testEmptyString() {
         XCTAssertFalse("".isValidEmail())
     }
 }
 ```
 
-### 18.3 Test async
+### 19.2 Test async/throws
 
 ```swift
-final class APIServiceTests: XCTestCase {
-    func testFetchUsersReturnsData() async throws {
-        let service = MockAPIService()
-        let users = try await service.fetchUsers()
-        XCTAssertFalse(users.isEmpty)
-        XCTAssertEqual(users.count, 3)
+final class ServiceTests: XCTestCase {
+    func testFetch() async throws {
+        let service = MockService()
+        let items = try await service.fetch()
+        XCTAssertEqual(items.count, 2)
     }
 }
 ```
 
-### 18.4 Setup và Teardown
+### 19.3 Mock/Stub
 
 ```swift
-final class ViewModelTests: XCTestCase {
-    var sut: HomeViewModel!
-    
-    override func setUp() {
-        super.setUp()
-        sut = HomeViewModel()
-    }
-    
-    override func tearDown() {
-        sut = nil
-        super.tearDown()
-    }
-    
-    func testInitialState() {
-        XCTAssertTrue(sut.items.isEmpty)
-        XCTAssertFalse(sut.isLoading)
+protocol ProductServiceProtocol {
+    func fetch() async throws -> [Product]
+}
+
+final class MockProductService: ProductServiceProtocol {
+    var result: Result<[Product], Error> = .success([])
+    func fetch() async throws -> [Product] {
+        try result.get()
     }
 }
 ```
 
-**Lời khuyên:**
+### 19.4 Nguyên tắc test
 
-- Ưu tiên **unit test** cho business logic/validation
-- Dùng **mock/stub** thay vì gọi API thực trong unit test
-- Đặt tên test rõ ràng: `test<Condition>_<ExpectedResult>`
-- Giữ test **độc lập**, không phụ thuộc thứ tự chạy
-- Chạy test thường xuyên (`⌘+U`)
+- **AAA**: Arrange - Act - Assert
+- **Test một điều** mỗi test function
+- **Đặt tên rõ ràng**: `test_method_scenario_expectedResult`
+- **Ưu tiên test logic** (validator, formatter, mapper, ViewModel) trước UI test
+- **Dùng `@testable import`** để truy cập internal
+- **Tránh test implementation details** quá sâu
 
----
-
-## 19. Build, Run, Signing và Distribution căn bản
-
-### 19.1 Chạy trên Simulator vs Thiết bị thật
-
-| Tiêu chí | Simulator | Thiết bị thật |
-|---|---|---|
-| **Tốc độ** | Nhanh để test UI/layout | Chính xác nhất về hiệu năng |
-| **Camera/Push/Location một số case** | Hạn chế | Hoàn chỉnh |
-| **Network** | Thường dùng mạng Mac | Dùng mạng thiết bị |
-| **Debug** | Rất tiện | Cần kết nối/cấp phép |
-
-### 19.2 Code Signing cơ bản
-
-Để chạy trên thiết bị thật, Xcode cần cấp phép:
-
-1. **Apple ID**: Đăng nhập trong `Xcode > Settings > Accounts`
-2. **Team**: Chọn team trong `Target > Signing & Capabilities`
-3. **Automatically manage signing**: Phù hợp hầu hết người mới
-4. **Bundle Identifier**: Phải unique
-
-### 19.3 Build Configuration
-
-- **Debug**: Dùng khi phát triển. Chứa debug info, không tối ưu.
-- **Release**: Dùng khi archive. Tối ưu compiler, strip debug symbol.
-
-### 19.4 Archive và phân phối
-
-| Phương thức | Khi dùng |
-|---|---|
-| **Run on Device** | Test nhanh cá nhân |
-| **Archive (Product > Archive)** | Tạo bản build để phân phối |
-| **TestFlight** | Beta test với người khác (cần App Store Connect) |
-| **Ad Hoc** | Phân phối giới hạn thiết bị đăng ký |
-| **App Store** | Phát hành công khai |
-
-**Lưu ý quan trọng:** Luôn tăng **Build Number** trước mỗi lần archive gửi đi.
+**Chạy test:** ⌘U hoặc **Product → Test**
 
 ---
 
-## 20. Thực hành tổng hợp: Xây dựng màn hình danh sách
+## 20. Thực hành tổng hợp: Ứng dụng danh sách sản phẩm
 
-Mục tiêu: Áp dụng hầu hết kiến thức cơ bản vào một bài thực hành hoàn chỉnh.
+Mục tiêu: xây dựng app đơn giản, chạy được, áp dụng hầu hết kiến thức trên. **Không dùng backend thực** - dùng mock/local data để tập trung vào nền tảng.
 
 ### 20.1 Yêu cầu
 
-Xây dựng màn hình hiển thị danh sách sản phẩm đơn giản với:
-
-- Hiển thị danh sách bằng `List`
-- Loading state
-- Error state
-- Navigation tới màn hình chi tiết
-- Tải dữ liệu bất đồng bộ
+- [ ] Hiển thị danh sách sản phẩm
+- [ ] Loading state
+- [ ] Error state + retry
+- [ ] Pull-to-refresh
+- [ ] Điều hướng sang màn hình chi tiết
+- [ ] Tách Model/ViewModel/Service
+- [ ] Test cơ bản cho ViewModel
 
 ### 20.2 Model
 
 ```swift
-struct Product: Codable, Identifiable, Hashable {
-    let id: Int
-    let title: String
+struct Product: Identifiable, Codable, Hashable {
+    let id: UUID
+    let name: String
     let price: Double
     let description: String
-    let category: String
-    let image: String
+    let imageName: String
 }
 ```
 
-### 20.3 Service
+### 20.3 Service (mock)
 
 ```swift
-enum APIError: LocalizedError {
-    case invalidURL
-    case invalidResponse
-    case server(status: Int)
-    
-    var errorDescription: String? {
-        switch self {
-        case .invalidURL: return "URL không hợp lệ"
-        case .invalidResponse: return "Phản hồi không hợp lệ"
-        case .server(let status): return "Lỗi máy chủ (\(status))"
-        }
-    }
+protocol ProductService {
+    func fetchProducts() async throws -> [Product]
 }
 
-class ProductService {
-    static let shared = ProductService()
-    private init() {}
-    
+final class MockProductService: ProductService {
     func fetchProducts() async throws -> [Product] {
-        guard let url = URL(string: "https://fakestoreapi.com/products") else {
-            throw APIError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let http = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
-        }
-        
-        guard (200...299).contains(http.statusCode) else {
-            throw APIError.server(status: http.statusCode)
-        }
-        
-        let decoder = JSONDecoder()
-        return try decoder.decode([Product].self, from: data)
+        try await Task.sleep(nanoseconds: 500_000_000)
+        // Mô phỏng lỗi ngẫu nhiên nếu muốn test
+        return [
+            Product(id: UUID(), name: "Sản phẩm A", price: 100000, description: "Mô tả A", imageName: "photo"),
+            Product(id: UUID(), name: "Sản phẩm B", price: 200000, description: "Mô tả B", imageName: "photo")
+        ]
     }
 }
 ```
@@ -1561,78 +1380,87 @@ class ProductService {
 ### 20.4 ViewModel
 
 ```swift
-import Foundation
+enum ViewState<T> {
+    case idle, loading, loaded(T), error(String)
+}
 
-@MainActor
-class ProductListViewModel: ObservableObject {
-    @Published var products: [Product] = []
-    @Published var isLoading = false
-    @Published var errorMessage: String?
+@Observable
+class ProductListViewModel {
+    private let service: ProductService
+    var state: ViewState<[Product]> = .idle
+    
+    init(service: ProductService = MockProductService()) {
+        self.service = service
+    }
     
     func load() async {
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-        
+        state = .loading
         do {
-            products = try await ProductService.shared.fetchProducts()
+            let products = try await service.fetchProducts()
+            state = .loaded(products)
         } catch {
-            errorMessage = error.localizedDescription
+            state = .error(error.localizedDescription)
         }
+    }
+    
+    func retry() async {
+        await load()
     }
 }
 ```
 
-### 20.5 View
+### 20.5 Views
 
 ```swift
-import SwiftUI
-
 struct ProductListView: View {
-    @StateObject private var viewModel = ProductListViewModel()
+    @State private var viewModel = ProductListViewModel()
     
     var body: some View {
         NavigationStack {
-            Group {
-                if viewModel.isLoading {
-                    ProgressView("Đang tải sản phẩm...")
-                } else if let error = viewModel.errorMessage {
-                    VStack(spacing: 16) {
-                        Image(systemName: "exclamationmark.triangle")
-                            .font(.largeTitle)
-                            .foregroundStyle(.orange)
-                        Text(error)
-                            .multilineTextAlignment(.center)
-                        Button("Thử lại") {
-                            Task { await viewModel.load() }
-                        }
-                        .buttonStyle(.borderedProminent)
-                    }
-                    .padding()
-                } else {
-                    List(viewModel.products) { product in
-                        NavigationLink(value: product) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(product.title)
-                                    .font(.headline)
-                                    .lineLimit(2)
-                                Text("\(product.price, format: .currency(code: "USD"))")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
+            content
+                .navigationTitle("Sản phẩm")
+                .task { await viewModel.load() }
+                .refreshable { await viewModel.load() }
+        }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .idle:
+            EmptyView()
+        case .loading:
+            ProgressView("Đang tải...")
+        case .loaded(let products):
+            List(products) { product in
+                NavigationLink(value: product) {
+                    ProductRowView(product: product)
                 }
             }
-            .navigationTitle("Sản phẩm")
             .navigationDestination(for: Product.self) { product in
                 ProductDetailView(product: product)
             }
-            .task {
-                await viewModel.load()
+        case .error(let message):
+            VStack(spacing: 16) {
+                Text(message).multilineTextAlignment(.center)
+                Button("Thử lại") {
+                    Task { await viewModel.retry() }
+                }
             }
-            .refreshable {
-                await viewModel.load()
+            .padding()
+        }
+    }
+}
+
+struct ProductRowView: View {
+    let product: Product
+    var body: some View {
+        HStack {
+            Image(systemName: product.imageName)
+                .frame(width: 40, height: 40)
+            VStack(alignment: .leading) {
+                Text(product.name).font(.headline)
+                Text("\(Int(product.price)) VNĐ").font(.subheadline).foregroundStyle(.secondary)
             }
         }
     }
@@ -1640,24 +1468,16 @@ struct ProductListView: View {
 
 struct ProductDetailView: View {
     let product: Product
-    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text(product.title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                
-                Text(product.category.capitalized)
-                    .font(.caption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(.blue.opacity(0.1))
-                    .cornerRadius(8)
-                
-                Text(product.description)
-                    .font(.body)
-                
+                Image(systemName: product.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 200)
+                Text(product.name).font(.title2).bold()
+                Text("\(Int(product.price)) VNĐ").font(.title3)
+                Text(product.description).font(.body)
                 Spacer()
             }
             .padding()
@@ -1668,62 +1488,93 @@ struct ProductDetailView: View {
 }
 ```
 
-### 20.6 Kiểm tra sau khi hoàn thành
+### 20.6 Kiểm tra
 
-- [ ] Danh sách hiển thị đúng khi có mạng
-- [ ] Hiển thị loading khi đang tải
-- [ ] Hiển thị lỗi + nút "Thử lại" khi mất mạng
+- [ ] Chạy trên simulator không crash
+- [ ] Loading hiển thị đúng
+- [ ] Danh sách render đúng
+- [ ] Navigation hoạt động
 - [ ] Pull-to-refresh hoạt động
-- [ ] Điều hướng sang màn hình chi tiết thành công
-- [ ] Không crash khi rotate màn hình
-- [ ] Hoạt động tốt trên cả iPhone và iPad
+- [ ] Error + retry hoạt động (test bằng cách throw lỗi)
+- [ ] Không cập nhật UI trên background thread
+- [ ] Code tách rõ Model/ViewModel/View/Service
 
 ---
 
-## 21. Anti-patterns thường gặp và cách tránh
+## 21. Bài tập tự luyện (có gợi ý)
+
+| # | Bài tập | Mức độ | Gợi ý |
+|---|---|---|---|
+| **1** | **Validation** | Cơ bản | Viết hàm validate email/password. Unit test đầy đủ. |
+| **2** | **Todo App** | Cơ bản | CRUD, lưu `UserDefaults`/file. Dùng `@Observable`. |
+| **3** | **Notes App** | Cơ bản | Thêm sửa xóa, search, empty state. |
+| **4** | **API Client** | Trung bình | Xây dựng `NetworkClient` generic + error mapping + test với mock. |
+| **5** | **Weather UI** | Trung bình | Sử dụng mock data, loading/error, pull-to-refresh. |
+| **6** | **Form phức tạp** | Trung bình | Validation realtime, disable button, focus handling. |
+| **7** | **Image Cache đơn giản** | Trung bình | Download ảnh + cache in-memory/file, tránh duplicate request. |
+| **8** | **Navigation sâu** | Trung bình | Dùng `NavigationStack` với path, hỗ trợ deep link mô phỏng. |
+
+**Quy tắc:** Làm **từ đầu không copy** bài 20. Sau khi xong, so sánh, refactor.
+
+---
+
+## 22. Checklist tự đánh giá
+
+### Ngôn ngữ & Bộ nhớ
+- [ ] Hiểu Optional, unwrap an toàn
+- [ ] Phân biệt struct vs class vs enum
+- [ ] Biết protocol, extension, access control
+- [ ] Hiểu ARC, weak/unowned, retain cycle
+- [ ] Biết phát hiện leak đơn giản
+
+### Concurrency & UI
+- [ ] Dùng được `async/await`, `Task`, `MainActor`
+- [ ] Thành thạo `@State`, `@Binding`, `@Observable`
+- [ ] Biết NavigationStack, Sheet, Alert
+- [ ] Hiểu state management đơn giản, rõ ràng
+
+### Networking & Storage
+- [ ] Viết `URLSession` cơ bản, xử lý lỗi
+- [ ] Dùng `Codable` + mapping DTO→Domain
+- [ ] Phân biệt UserDefaults/FileManager/Keychain
+- [ ] Biết khi nào cache offline
+
+### Thực tế
+- [ ] Đọc được build error/log
+- [ ] Viết unit test cho logic
+- [ ] Debug bằng breakpoint + View Debugger
+- [ ] Biết dùng Instruments sơ bộ (Leaks/Time Profiler)
+
+---
+
+## 23. Anti-patterns và cách tránh
 
 | Anti-pattern | Tại sao sai | Cách thay thế |
 |---|---|---|
-| **Force unwrap `!` tùy tiện** | Gây crash không kiểm soát | `guard let`, `if let`, `??` |
-| **Gọi API trong `body` của SwiftUI View** | Body có thể được gọi nhiều lần, gây gọi API lặp | Dùng `.task`, ViewModel method |
-| **Cập nhật UI trên background thread** | Gây crash hoặc UI không cập nhật | Dùng `@MainActor`, `DispatchQueue.main.async` chỉ khi cần thiết |
-| **Tạo `@StateObject` mới trong body** | Bị tạo lại mỗi lần view re-render | Tạo một lần ở nơi sở hữu view |
-| **Retain cycle với closure** | Memory leak khó phát hiện | Dùng `[weak self]` với `guard let self` |
-| **Lưu token trong UserDefaults** | Không an toàn | Dùng Keychain |
-| **Dùng `print` thay vì Logger** | Khó filter, ảnh hưởng performance | Dùng `OSLog/Logger` |
-| **Viết toàn bộ logic trong View** | Khó test, khó tái sử dụng, code rối | Tách ViewModel/Service theo trách nhiệm |
-| **Force try `try!` cho dữ liệu bên ngoài** | Rất dễ crash | Luôn xử lý lỗi bằng `do-catch` hoặc `try?` cẩn thận |
-| **Bỏ qua accessibility** | Loại trừ người dùng | Hỗ trợ Dynamic Type, VoiceOver, semantic color |
+| **Force unwrap `!`** | Crash không dự đoán | `guard let`, `if let`, `??`, optional chaining |
+| **Gọi async trong `body`** | Body re-evaluate nhiều lần | `.task { await ... }` |
+| **Tạo `@StateObject`/`@State` không đúng** | Mất state hoặc tạo lại | Tạo object ở nơi sở hữu đúng |
+| **Capture `self` mạnh trong closure** | Retain cycle/leak | `[weak self]` + `guard let self` |
+| **Lưu secret trong UserDefaults** | Không an toàn | Keychain |
+| **Logic nặng trên MainActor không cần** | Block UI | Chuyển xuống background, quay lại MainActor để update UI |
+| **Dùng `print` vô tội vạ** | Khó lọc, log rác | `os.Logger` theo category |
+| **Force cast `as!`** | Crash runtime | `as?` + xử lý |
+| **Trộn UI và networking trực tiếp** | Khó test, khó bảo trì | Tách Service/Repository/ViewModel |
+| **Bỏ qua optional/throws** | Mất kiểm soát lỗi | Luôn xử lý rõ ràng |
 
 ---
 
-## 22. Lộ trình học tiếp theo
+## 24. Tài liệu tham khảo
 
-Sau khi nắm vững tài liệu này, bạn nên học theo thứ tự sau để tiến xa hơn:
+- [Swift Book](https://docs.swift.org/swift-book/) — Ngôn ngữ chính thức
+- [Swift Concurrency](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/) — async/await, Task, actor
+- [SwiftUI](https://developer.apple.com/documentation/swiftui) — API và guides
+- [UIKit](https://developer.apple.com/documentation/uikit) — Tham khảo khi cần
+- [Foundation/URLSession](https://developer.apple.com/documentation/foundation/urlsession) — Networking
+- [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) — Thiết kế chuẩn Apple
+- [Xcode Docs](https://developer.apple.com/documentation/xcode) — Build/debug/test/archive
+- [Instruments](https://developer.apple.com/documentation/instruments) — Profiling
+- [OSLog/Logger](https://developer.apple.com/documentation/os/logger) — Logging hiệu quả
+- [WWDC Videos](https://developer.apple.com/videos/) — Cập nhật mới nhất
 
-| Giai đoạn | Nội dung | Ghi chú |
-|---|---|---|
-| **Giai đoạn 1** | Ôn lại toàn bộ bài thực hành (phần 20) | Viết lại từ đầu không nhìn code, đảm bảo hiểu từng dòng |
-| **Giai đoạn 2** | Chuyển sang `ios-advanced.md` | Học kiến trúc, Dependency Injection, Observation, Offline-first |
-| **Giai đoạn 3** | Thực hành project thực tế nhỏ | VD: To-Do app, Weather app, Notes app (hoàn chỉnh CRUD) |
-| **Giai đoạn 4** | Đọc Human Interface Guidelines | Học cách thiết kế UI đúng chuẩn Apple |
-| **Giai đoạn 5** | Làm quen Instruments & Performance | Học cách đo và tối ưu thực tế |
-| **Giai đoạn 6** | Viết test cho project cá nhân | Bắt đầu từ unit test cho ViewModel/Validation |
-
-**Lời khuyên quan trọng:** **Code nhiều hơn đọc**. Mỗi khái niệm bạn học, hãy mở Xcode và thử ngay thay vì chỉ đọc lý thuyết.
-
----
-
-## 23. Tài liệu tham khảo
-
-- [Swift Documentation](https://docs.swift.org/swift-book/) - Ngôn ngữ Swift chính thức, đầy đủ và chính xác nhất
-- [Apple Developer Documentation](https://developer.apple.com/documentation/) - Tất cả framework của Apple
-- [SwiftUI Documentation](https://developer.apple.com/documentation/swiftui/) - Tài liệu SwiftUI chính thức
-- [Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/) - Quy chuẩn thiết kế iOS
-- [WWDC Videos](https://developer.apple.com/videos/) - Các bài giảng mới nhất từ Apple
-- [Hacking with Swift](https://www.hackingwithswift.com/) - Rất phù hợp cho người mới, bài tập thực tế
-- [Swift.org](https://www.swift.org/) - Thông tin cộng đồng và cập nhật Swift
-
----
-
-*Hãy hoàn thành bài thực hành phần 20 một cách độc lập trước khi chuyển sang tài liệu nâng cao. Hiểu sâu nền tảng luôn quan trọng hơn học quá nhiều framework cùng lúc.*
+*Học chậm mà chắc. Viết code, debug, refactor. Đó là cách nhanh nhất để tiến bộ.*

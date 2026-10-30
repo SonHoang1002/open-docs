@@ -58,22 +58,31 @@ môi trường dễ lệch, dynamic typing đòi hỏi test + type checker kỷ 
 |---|---|---|
 | 3.9 | Hết hỗ trợ | `zoneinfo`, `dict \|`; không dùng cho dự án mới |
 | 3.10 | Bảo trì hạn chế | `match/case`, `X \| Y`, `zip(strict=True)` |
-| 3.11 | Ổn định, phổ biến | `ExceptionGroup`/`except*`, `TaskGroup`, nhanh hơn 3.10 |
-| 3.12 | **Baseline khuyến nghị** | PEP 695 generics, f-string linh hoạt, `itertools.batched`, `override` |
-| 3.13 | Ổn định | REPL mới, free-threaded **experimental**, JIT thử nghiệm, `TypeIs` |
-| 3.14 | Ổn định | Template strings (t-string), annotations trì hoãn, free-threading chính thức |
+| 3.11 | Ổn định, phổ biến | `ExceptionGroup`/`except*`, `TaskGroup`, nhanh hơn 3.10, `tomllib` |
+| 3.12 | **Baseline khuyến nghị** | PEP 695 generics (`type` statement), PEP 698 `@override`, f-string linh hoạt, `itertools.batched`, cải thiện typing/errors |
+| 3.13 | Ổn định | REPL cải tiến, `copy.replace`, `dbm.sqlite3` mặc định, `warnings.deprecated`, `TypeIs` (PEP 742), free-threaded **experimental**, JIT thử nghiệm |
+| 3.14 | Ổn định | Template strings (t-string, PEP 750), annotations trì hoãn theo mặc định, free-threading tiến bộ, cải thiện hiệu năng và debugging |
+
+### Tính năng đáng quan tâm (3.12–3.14)
+
+| Tính năng | Phiên bản | Ghi chú sử dụng |
+|---|---|---|
+| `type` alias generics (PEP 695) | 3.12+ | Thay thế `TypeAlias` + `TypeVar` phức tạp cho nhiều trường hợp; rõ ràng hơn. |
+| `@override` (PEP 698) | 3.12+ | Phát hiện lỗi override khi refactor, dùng với `mypy`/`pyright`. |
+| `except*` + `ExceptionGroup` | 3.11+ | Quan trọng với `asyncio.TaskGroup`, concurrent.futures nâng cao. |
+| `zip(strict=True)` | 3.10+ | Tránh bug khi iterable có độ dài khác nhau. |
+| `TypeIs` (PEP 742) | 3.13+ | Chính xác hơn `TypeGuard` cho type narrowing trong hầu hết trường hợp. |
+| `warnings.deprecated` | 3.13+ | Đánh dấu API ngừng dùng rõ ràng, dễ theo dõi. |
+| t-string (template string, PEP 750) | 3.14+ | An toàn hơn f-string khi cần kiểm soát interpolation (log/SQL/HTML). |
 
 Khuyến nghị:
 
-- **Dự án mới:** Python 3.12+ (hoặc 3.13 nếu hạ tầng đã hỗ trợ). Ghim phiên bản trong
-  `.python-version`, `pyproject.toml` và Docker image.
+- **Dự án mới:** Python 3.12+ (hoặc 3.13 nếu hạ tầng đã hỗ trợ). Ghim phiên bản trong `.python-version`, `pyproject.toml` và Docker image.
 - **Thư viện public:** hỗ trợ tối thiểu 3.10–3.11, test matrix nhiều phiên bản.
-- **Free-threaded (3.13/3.14):** chỉ dùng khi đã benchmark và toàn bộ dependency tương
-  thích; bản free-threaded chậm hơn bản thường ở tác vụ single-thread.
+- **Free-threaded (3.13/3.14):** chỉ dùng khi đã benchmark, toàn bộ dependency tương thích và hiểu trade-off; thường chậm hơn bản GIL ở single-thread.
 - Không dùng 3.8/3.9 cho code mới: thiếu typing hiện đại, bảo mật hết hạn.
 
-> ⚠️ Tính năng mới phải kiểm tra lại docs tại thời điểm dùng. Ví dụ `except*` cần 3.11+,
-> `type` alias cần 3.12+, t-string cần 3.14+.
+> ⚠️ Tính năng mới phải kiểm tra lại docs tại thời điểm dùng. `except*` cần 3.11+, PEP 695 cần 3.12+, `TypeIs` 3.13+, t-string 3.14+. Luôn đọc changelog khi nâng phiên bản.
 
 ---
 

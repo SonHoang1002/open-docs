@@ -87,11 +87,11 @@ t = (1, 2); x, y = t
 tự chèn từ Python 3.7. Dùng khi cần tra cứu theo khóa, đếm, nhóm, cấu hình.
 
 ```python
-rsvp = {"Hoa": "yes"}
-rsvp["Minh"] = "no"
-rsvp.get("Lan", "pending")     # không KeyError
-for name, status in rsvp.items():
-    print(name, status)
+orders = {"A001": "paid"}
+orders["A002"] = "pending"
+orders.get("A003", "unknown")     # không KeyError
+for order_id, status in orders.items():
+    print(order_id, status)
 ```
 
 **Bẫy:** key phải hashable; không sửa kích thước dict khi đang duyệt.
@@ -122,7 +122,7 @@ list(dict.fromkeys([1, 2, 1]))   # giữ thứ tự: [1, 2]
 
 ```python
 def find(name):
-    return None if name not in guests else name
+    return None if name not in customers else name
 
 if result is None:
     print("không thấy")
@@ -464,17 +464,17 @@ def call(f, *args, **kwargs):
 được chia sẻ giữa các lần gọi.
 
 ```python
-def add_bad(name, guests=[]):
-    guests.append(name)
-    return guests
+def add_bad(name, items=[]):
+    items.append(name)
+    return items
 
 add_bad("Hoa")     # ['Hoa']
 add_bad("Minh")    # ['Hoa', 'Minh']
 
-def add(name, guests=None):
-    guests = [] if guests is None else guests
-    guests.append(name)
-    return guests
+def add(name, items=None):
+    items = [] if items is None else items
+    items.append(name)
+    return items
 ```
 
 **Điểm cộng:** áp dụng tương tự cho `dict`, `set`, object; dùng sentinel nếu cần phân biệt
@@ -513,7 +513,7 @@ def outer():
 `key=` khi sắp xếp; không dùng cho logic nhiều bước.
 
 ```python
-sorted(guests, key=lambda g: g["name"])
+sorted(customers, key=lambda c: c["name"])
 pairs = [(1, "a"), (2, "b")]
 pairs.sort(key=lambda p: p[1])
 ```
@@ -819,7 +819,7 @@ chạy code top-level một lần, cache trong `sys.modules`.
 ```python
 import json
 from pathlib import Path
-from guestbook.models import Guest
+from orders.models import Order
 ```
 
 **Bẫy:** import chạy side effect; đừng mở DB/gọi API ở top-level. Tránh đặt tên module trùng
@@ -833,12 +833,12 @@ stdlib (`json.py`, `random.py`) làm shadow.
 `__init__.py`). Package lồng nhau tạo namespace.
 
 ```text
-guestbook/
+orders/
 ├── __init__.py
 ├── models.py        # module
 └── api/
     ├── __init__.py
-    └── guests.py    # module trong package con
+    └── orders.py    # module trong package con
 ```
 
 ---
@@ -915,10 +915,10 @@ thể re-export API, đặt `__all__`, `__version__`. Từ 3.3 có namespace pac
 này, nhưng app thường vẫn dùng để rõ ràng.
 
 ```python
-# guestbook/__init__.py
-from .models import Guest
+# orders/__init__.py
+from .models import Order
 
-__all__ = ["Guest"]
+__all__ = ["Order"]
 __version__ = "0.1.0"
 ```
 
@@ -979,7 +979,7 @@ bằng `externally-managed-environment`.
 `open()`/`close()` thủ công.
 
 ```python
-with open("guests.txt", encoding="utf-8") as f:
+with open("customers.txt", encoding="utf-8") as f:
     for line in f:
         print(line.rstrip("\n"))
 ```
@@ -1034,14 +1034,14 @@ with open("guest.json", "w", encoding="utf-8") as f:
 ```python
 import csv
 
-with open("guests.csv", encoding="utf-8", newline="") as f:
+with open("customers.csv", encoding="utf-8", newline="") as f:
     for row in csv.DictReader(f):
         print(row["name"])
 
 with open("out.csv", "w", encoding="utf-8", newline="") as f:
-    writer = csv.DictWriter(f, fieldnames=["name", "side"])
+    writer = csv.DictWriter(f, fieldnames=["name", "email"])
     writer.writeheader()
-    writer.writerow({"name": "Hoa", "side": "bride"})
+    writer.writerow({"name": "Hoa", "email": "hoa@example.com"})
 ```
 
 **Bẫy:** không xử lý dấu phẩy/quote bằng `split(",")`; dùng csv module hoặc pandas.
@@ -1055,7 +1055,7 @@ with open("out.csv", "w", encoding="utf-8", newline="") as f:
 ```python
 from pathlib import Path
 
-p = Path("data") / "guests.json"
+p = Path("data") / "orders.json"
 p.parent.mkdir(parents=True, exist_ok=True)
 p.write_text("[]", encoding="utf-8")
 print(p.stem, p.suffix, p.name)
@@ -1113,13 +1113,13 @@ finally:
 **Trả lời:** Kế thừa `Exception` (hoặc base của domain), thêm thông tin ngữ cảnh.
 
 ```python
-class GuestbookError(Exception):
+class OrderError(Exception):
     """Base lỗi nghiệp vụ."""
 
-class DuplicateGuest(GuestbookError):
-    def __init__(self, name: str) -> None:
-        self.name = name
-        super().__init__(f"Khách đã tồn tại: {name}")
+class DuplicateOrder(OrderError):
+    def __init__(self, order_id: str) -> None:
+        self.order_id = order_id
+        super().__init__(f"Đơn hàng đã tồn tại: {order_id}")
 ```
 
 **Điểm cộng:** tầng API map domain error → HTTP status; không lộ traceback ra client.
@@ -1217,7 +1217,7 @@ có thể tắt/bật theo môi trường, tích hợp monitoring. `print` khôn
 ```python
 import logging
 logger = logging.getLogger(__name__)
-logger.info("loaded %d guests", len(guests))
+logger.info("loaded %d orders", len(orders))
 logger.exception("failed")
 ```
 
@@ -1286,7 +1286,7 @@ import pytest
 
 @pytest.fixture
 def repo(tmp_path):
-    r = Repo(tmp_path / "guests.json")
+    r = Repo(tmp_path / "orders.json")
     yield r
     r.close()
 ```
@@ -1348,7 +1348,7 @@ của bạn. Các frame phía trên là chuỗi gọi hàm.
 ```text
 Traceback (most recent call last):
   File "app.py", line 8, in main
-    print(guests[3])
+    print(orders[3])
 IndexError: list index out of range
 ```
 
@@ -1440,17 +1440,17 @@ và suggestion, tôn trọng.
 **Trả lời:**
 
 ```sql
-SELECT side, count(*) AS total
-FROM guests
+SELECT status, count(*) AS total
+FROM orders
 WHERE created_at >= '2026-01-01'
-GROUP BY side
+GROUP BY status
 HAVING count(*) > 10
 ORDER BY total DESC
 LIMIT 10;
 
-SELECT g.name, r.status
-FROM guests g
-LEFT JOIN rsvps r ON r.guest_id = g.id;
+SELECT c.name, o.status
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id;
 ```
 
 `WHERE` lọc trước group; `HAVING` lọc sau group; `LEFT JOIN` giữ mọi dòng bên trái.
@@ -1491,10 +1491,10 @@ Hay dùng: 200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 500, 502, 503.
 ### Q88. REST là gì? Nêu nguyên tắc chính. [F]
 
 **Trả lời:** Phong cách kiến trúc API dựa trên resource + HTTP. Nguyên tắc: URL danh từ
-(`/guests/1`), dùng method/status đúng, stateless, response cacheable, uniform interface,
+(`/orders/1`), dùng method/status đúng, stateless, response cacheable, uniform interface,
 HATEOAS tùy mức.
 
-**Bẫy:** đặt động từ trong URL (`/getGuests`) hoặc trả 200 cho mọi lỗi.
+**Bẫy:** đặt động từ trong URL (`/getOrders`) hoặc trả 200 cho mọi lỗi.
 
 ---
 
@@ -1537,9 +1537,9 @@ dữ liệu phi cấu trúc/cache/log. Chọn theo access pattern, không theo t
 bảng khác, đảm bảo toàn vẹn quan hệ; có thể có `ON DELETE`/`ON UPDATE`.
 
 ```sql
-CREATE TABLE rsvps (
+CREATE TABLE payments (
   id bigserial PRIMARY KEY,
-  guest_id bigint NOT NULL REFERENCES guests(id) ON DELETE CASCADE,
+  order_id bigint NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   status text NOT NULL
 );
 ```
@@ -1855,7 +1855,7 @@ bằng `items=None` + khởi tạo trong hàm. Viết regression test.
 **Trả lời:**
 
 ```python
-sorted(guests, key=lambda g: (g["side"], -g["age"]))
+sorted(orders, key=lambda o: (o["status"], -o["amount"]))
 ```
 
 Nêu ổn định (stable), O(n log n), không mutate list gốc; `list.sort` nếu muốn tại chỗ.
@@ -1941,7 +1941,7 @@ test. Không bảo vệ quan điểm bằng cảm tính.
 | HTTP 401 vs 403? | Chưa auth vs không có quyền |
 | HTTP 409? | Conflict |
 | Idempotent method? | GET, PUT, DELETE |
-| REST URL đúng? | `/guests/1` |
+| REST URL đúng? | `/orders/1` |
 | Transaction là gì? | All-or-nothing |
 | Index đánh đổi gì? | Nhanh đọc, chậm ghi, tốn disk |
 | `LEFT JOIN` giữ gì? | Mọi dòng bảng trái |

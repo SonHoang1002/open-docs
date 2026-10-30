@@ -1,8 +1,9 @@
 # WebSocket — Kiến thức toàn diện từ cơ bản đến nâng cao
 
 > Tài liệu tham khảo đầy đủ về WebSocket: nguyên lý hoạt động, giao thức, kiến trúc,
-> bảo mật, scaling, mã nguồn ví dụ (Node.js/Bun, TypeScript, Python, Go) và các mẫu
-> thiết kế thực tế.
+> bảo mật, scaling, mã nguồn ví dụ (Node.js/TypeScript, Python, Go) và các mẫu thiết kế
+> thực tế. Ví dụ dùng domain **orders/notifications** để minh hoạ, không phụ thuộc một
+> backend cụ thể.
 
 ---
 
@@ -25,10 +26,14 @@
 15. [Rate limiting & chống lạm dụng](#15-rate-limiting--chống-lạm-dụng)
 16. [WebSocket vs các giải pháp thay thế](#16-websocket-vs-các-giải-pháp-thay-thế)
 17. [Bảo mật WebSocket — checklist đầy đủ](#17-bảo-mật-websocket--checklist-đầy-đủ)
-18. [Ví dụ dự án thực tế: Wedding Guestbook Realtime](#18-ví-dụ-dự-án-thực-tế-wedding-guestbook-realtime)
-19. [Debugging & công cụ hỗ trợ](#19-debugging--công-cụ-hỗ-trợ)
-20. [Anti-patterns thường gặp](#20-anti-patterns-thường-gặp)
-21. [Tài liệu tham khảo](#21-tài-liệu-tham-khảo)
+18. [Presence & trạng thái online](#18-presence--trạng-thái-online)
+19. [Delivery guarantees, ordering & idempotency](#19-delivery-guarantees-ordering--idempotency)
+20. [Backpressure & flow control](#20-backpressure--flow-control)
+21. [Testing, observability & load testing](#21-testing-observability--load-testing)
+22. [Ví dụ dự án thực tế: Order Notifications Realtime](#22-ví-dụ-dự-án-thực-tế-order-notifications-realtime)
+23. [Debugging & công cụ hỗ trợ](#23-debugging--công-cụ-hỗ-trợ)
+24. [Anti-patterns thường gặp](#24-anti-patterns-thường-gặp)
+25. [Tài liệu tham khảo](#25-tài-liệu-tham-khảo)
 
 ---
 
@@ -57,7 +62,8 @@ cho nhau mà không cần client phải hỏi lại (khác HTTP request/response
 - Thông báo (notification), badge đồng bộ
 - IoT telemetry (nhận dữ liệu cảm biến liên tục)
 - Live comment / reaction trên livestream
-- Cập nhật RSVP, guestbook của wedding website (áp dụng cho dự án hiện tại)
+- Theo dõi trạng thái đơn hàng, tồn kho hoặc giá sản phẩm theo thời gian thực
+- Presence (ai đang online), typing indicator, trạng thái tài xế/giao vận
 
 ---
 
@@ -183,6 +189,25 @@ HTTP server ngẫu nhiên nào cũng phản hồi đúng), và gắn kết respo
 > ⚠️ **Lưu ý bảo mật**: `Sec-WebSocket-Key` KHÔNG phải là khóa mã hóa. Nó chỉ là
 > nonce chống cache/confusion. **Bảo mật thực sự đến từ TLS (`wss://`)**.
 
+### 4.4 Handshake thất bại — đọc log thế nào
+
+| Triển khai server | Status khi từ chối | Dấu hiệu |
+|---|---|---|
+| Đúng chuẩn | `400`, `401`, `403`, `404` | Client nhận HTTP error, không có `101` |
+| Sai `Sec-WebSocket-Accept` | `101` rồi đóng ngay | Browser báo lỗi handshake, frame đầu không tới |
+| Thiếu `Upgrade`/`Connection` | `400` | Proxy có thể đã strip header |
+| `Sec-WebSocket-Version` khác 13 | `426 Upgrade Required` + `Sec-WebSocket-Version: 13` | Chỉ gặp ở client cũ/IoT |
+| Proxy không hỗ trợ upgrade | `200` HTML hoặc `502` | Kiểm tra `X-Forwarded-*`, cấu hình proxy |
+
+Checklist debug handshake:
+
+1. `curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Sec-WebSocket-Version: 13" -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" https://host/ws`
+   phải trả `101`.
+2. Nếu qua Nginx: cần `proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection "upgrade";` và `proxy_read_timeout` đủ lớn.
+3. Nếu qua Cloudflare/ALB: kiểm tra idle timeout (thường 60s) — heartbeat phải ngắn hơn.
+4. Nếu browser báo `403` ngay: thường do `Origin` allowlist hoặc cookie `SameSite`.
+5. Nếu Node nhận `req.headers.upgrade` rỗng: có middleware/proxy đã xử lý request trước đó.
+
 ---
 
 ## 5. Cấu trúc khung tin (Frame) của WebSocket
@@ -255,6 +280,23 @@ Thông điệp lớn (> frame size của OS) được chia thành nhiều frame:
                  ──── receiver ghép lại thành "Hello World!" ────
 ```
 
+### 5.3 Những cạm bẫy ở tầng frame
+
+| Cạm bẫy | Hậu quả | Cách tránh |
+|---|---|---|
+| Gửi frame > `maxPayload` | Server đóng `1009` | Chunk dữ liệu hoặc tăng giới hạn có kiểm soát |
+| Text frame chứa byte không phải UTF-8 | Đóng `1007` | Encode đúng; binary dùng opcode `0x2` |
+| Client gửi frame không mask | Server phải đóng `1002` | Dùng thư viện chuẩn, không tự viết frame |
+| Control frame > 125 byte | Vi phạm RFC | Ping/pong chỉ chứa metadata nhỏ |
+| Fragment control frame | Vi phạm RFC | Control frame luôn `FIN=1` |
+| Bật RSV bit khi không negotiate extension | `1002` | Chỉ bật sau khi handshake đồng ý |
+| Giả định 1 `message` = 1 frame | Xử lý sai message lớn | Thư viện thường ghép sẵn; nếu tự viết phải ghép |
+| Không giới hạn tổng message sau fragmentation | Memory DoS | Giới hạn tổng byte và số fragment |
+
+> 💡 `ws` (Node.js) và hầu hết thư viện đã xử lý masking, fragmentation, UTF-8 validation.
+> Chỉ tự viết parser khi thật sự cần (IoT, embedded) và luôn chạy bộ test RFC 6455
+> (Autobahn TestSuite).
+
 ---
 
 ## 6. Các loại nút (Opcode) & Control Frames
@@ -311,7 +353,7 @@ wss:// → mã hóa TLS    (tương đương https://)   ← BẮT BUỘC cho pr
 - Trình duyệt **bắt buộc** dùng `wss://` khi trang web đang ở `https://`
   (**Mixed Content** sẽ chặn `ws://`).
 
-### 7.2 Mã hóa server (Node.js / Bun, TypeScript)
+### 7.2 Mã hóa server (Node.js + TypeScript)
 
 ```ts
 import { WebSocketServer } from "ws";
@@ -450,7 +492,7 @@ const ws = new WebSocket(`wss://${location.host}/ws`);
 - **Origin check** — kiểm tra `req.headers.origin` chống WebSocket Hijacking:
 
 ```ts
-const ALLOWED = new Set(["https://wedding.example.com"]);
+const ALLOWED = new Set(["https://app.example.com"]);
 
 wss.on("connection", (socket, req) => {
   const origin = req.headers.origin;
@@ -590,8 +632,74 @@ async function sendToUser(userId: string, payload: unknown) {
 | Kafka | Replay, throughput lớn | Overkill cho WebSocket app thông thường |
 | Postgres `LISTEN/NOTIFY` | Không cần thêm hạ tầng | Throughput thấp |
 
-**Nhắc nhở:** dùng **Redis pub/sub + database cho message history** (như dự án
-wedding này lưu tin nhắn vào Supabase) — pub/sub chỉ để đẩy realtime, DB lưu vĩnh viễn.
+**Nhắc nhở:** pub/sub chỉ là **kênh đẩy realtime**, không phải nơi lưu sự thật. Luôn lưu
+event/message vào database (PostgreSQL, MySQL, DynamoDB…) hoặc event log trước khi publish;
+khi client reconnect, đọc lại từ nguồn bền vững rồi mới bật lại luồng push.
+
+### 10.1 NATS JetStream — lựa chọn khi cần nhẹ và nhanh
+
+Redis Pub/Sub phù hợp để bắt đầu, nhưng không replay được message khi subscriber offline.
+NATS + JetStream bổ sung stream bền vững, consumer group và replay theo sequence:
+
+```ts
+import { connect, StringCodec, AckPolicy } from "nats";
+
+const nc = await connect({ servers: process.env.NATS_URL });
+const js = nc.jetstream();
+const sc = StringCodec();
+
+// Tạo stream một lần (idempotent ở tầng hạ tầng)
+await js.streams.add({
+  name: "ORDERS",
+  subjects: ["orders.updated"],
+  retention: "limits",
+  max_age: 24 * 60 * 60 * 1_000_000_000, // 24h (nanosecond)
+});
+
+// Publish sau khi DB commit thành công
+await js.publish("orders.updated", sc.encode(JSON.stringify({
+  orderId: "ord_123",
+  status: "shipped",
+  version: 7,
+})));
+
+// Mỗi node WebSocket có consumer riêng, chỉ nhận event cần thiết
+const sub = await js.subscribe("orders.updated", {
+  durable: `ws-node-${process.env.NODE_ID}`,
+  ack_policy: AckPolicy.Explicit,
+});
+for await (const msg of sub) {
+  const event = JSON.parse(sc.decode(msg.data));
+  broadcastToRoom(`order:${event.orderId}`, event);
+  msg.ack();
+}
+```
+
+| Tiêu chí | Redis Pub/Sub | Redis Streams | NATS JetStream | Kafka |
+|---|---|---|---|---|
+| Replay khi offline | Không | Có (giới hạn) | Có | Có |
+| Độ trễ | Rất thấp | Thấp | Rất thấp | Trung bình |
+| Vận hành | Đơn giản | Trung bình | Trung bình | Phức tạp |
+| Throughput | Cao | Cao | Rất cao | Rất cao |
+| Phù hợp | Broadcast tức thời | Event ngắn hạn | Realtime + replay vừa | Data pipeline lớn |
+
+> ⚠️ Đừng publish trước khi transaction DB commit. Nếu publish xong rồi rollback, client
+> nhận event cho dữ liệu không tồn tại. Dùng **transactional outbox** hoặc publish sau
+> commit với cơ chế retry.
+
+### 10.2 Chọn khóa routing khi scale
+
+Khi có nhiều node, cần biết event nào đi tới node nào. Ba cách phổ biến:
+
+| Cách | Cơ chế | Ưu điểm | Nhược điểm |
+|---|---|---|---|
+| Broadcast toàn bộ | Mọi node nhận mọi event, tự lọc client local | Đơn giản, không mất event | Tốn băng thông khi nhiều node/room |
+| Sharding theo room | Hash `roomId` → node, chỉ node đó subscribe | Hiệu quả | Rebalance khi thêm/bớt node phức tạp |
+| Presence registry | Lưu `userId → nodeId` trong Redis, publish đích danh | Chính xác cho direct message | Cần TTL/heartbeat để tránh stale |
+
+Với chat/notification quy mô vừa (< 50 node), broadcast + lọc local thường kinh tế hơn
+sharding vì đơn giản và ít lỗi khi node chết. Chỉ shard khi băng thông pub/sub trở thành
+điểm nghẽn đo được.
 
 ---
 
@@ -679,6 +787,32 @@ ws.on("message", (raw) => {
 
 > Pattern này quan trọng: **WebSocket là kênh push, database là nguồn sự thật.**
 
+### 11.4 Ping/Pong đúng cách và close handshake
+
+- **Ping/pong là control frame**, không phải message ứng dụng. Đừng dùng JSON `{type:"ping"}`
+  thay thế nếu muốn tương thích mọi client/proxy.
+- Server nên ping định kỳ (25–30s) và coi client “chết” nếu không pong sau 1–2 chu kỳ.
+- Browser không cho JS gửi ping thủ công; browser tự trả lời pong. Vì vậy heartbeat do
+  server chủ động là chuẩn.
+- Client có thể gửi ping nếu runtime hỗ trợ (Node, Go); browser thì dùng message ứng dụng
+  hoặc dựa vào server ping.
+- Khi đóng, gửi close frame với code/reason hợp lệ rồi chờ peer đóng; đừng `destroy()`
+  ngay nếu muốn đối phương biết lý do. `terminate()` chỉ dùng cho socket zombie.
+
+```ts
+// Close đúng cách: gửi code + reason, đợi tối đa 5s rồi terminate
+function gracefulClose(ws: WebSocket, code = 1000, reason = "bye") {
+  if (ws.readyState !== WebSocket.OPEN) return;
+  ws.close(code, reason);
+  setTimeout(() => {
+    if (ws.readyState !== WebSocket.CLOSED) ws.terminate();
+  }, 5_000).unref();
+}
+```
+
+> ⚠️ Nếu server đóng kết nối do token hết hạn, dùng close code ứng dụng (4001) + reason
+> ngắn. Client nhận code này phải **không reconnect vô hạn** mà chuyển sang luồng đăng nhập.
+
 ---
 
 ## 12. Nhận diện & phân loại client (Rooms/Channels)
@@ -687,11 +821,11 @@ ws.on("message", (raw) => {
 
 ```ts
 // Socket.IO
-socket.join(`wedding:${weddingId}`);
-socket.join(`table:${tableNo}`);
+socket.join(`tenant:${tenantId}`);
+socket.join(`order:${orderId}`);
 
-io.to(`wedding:${weddingId}`).emit("rsvp:update", stats);
-io.to(`table:${tableNo}`).emit("toast", { from: guestName });
+io.to(`tenant:${tenantId}`).emit("order:stats", stats);
+io.to(`order:${orderId}`).emit("order:status", { status: "shipped" });
 ```
 
 ### 12.2 Tự viết room bằng Map
@@ -795,7 +929,7 @@ ws.on("message", (raw, isBinary) => {
 {
   "v": 1,                       // version protocol
   "id": "01HXYZ...",            // ULID/UUID — để ack/deduplicate
-  "type": "rsvp.create",        // định danh loại sự kiện (namespaced)
+  "type": "order.created",      // định danh loại sự kiện (namespaced)
   "ts": 1730000000000,          // timestamp client
   "payload": { ... }            // dữ liệu riêng của loại này
 }
@@ -805,24 +939,29 @@ ws.on("message", (raw, isBinary) => {
 { "v": 1, "type": "error", "ref": "01HXYZ...", "code": "VALIDATION", "message": "..." }
 ```
 
-### 14.2 Bảng type cho ứng dụng wedding (gợi ý)
+### 14.2 Bảng type cho ứng dụng chat/notification (gợi ý)
 
 ```text
 Client → Server:
-  auth.token          { token }
-  rsvp.create         { name, will_attend, guest_of, number_attend }
-  message.send        { content }
-  typing.start / stop { room }
-  ping                {}
+  auth.token            { token }
+  room.join / room.leave{ room_id }
+  message.send          { client_msg_id, room_id, content }
+  typing.start / stop   { room_id }
+  sync.request          { since_cursor }
+  ping                  {}
 
 Server → Client:
   auth.ok / auth.fail
-  rsvp.created        { ...rsvp }
-  rsvp.stats          { total, attending, declined }
-  message.created     { id, content, sender_name, created_at }
-  system.notice       { text }
-  pong                {}
+  message.created       { id, client_msg_id, room_id, content, sender, created_at }
+  message.updated       { id, content, edited_at }
+  order.status.changed  { order_id, status, version }
+  presence.changed      { user_id, status, last_seen }
+  error                 { code, ref?, message }
+  pong                  {}
 ```
+
+Quy ước đặt tên `resource.action` giúp client route bằng một bảng `switch` duy nhất và
+giúp log/metrics dễ aggregate. Tránh tên mơ hồ kiểu `update`, `data`, `event`.
 
 ### 14.3 So sánh định dạng
 
@@ -976,8 +1115,8 @@ const wss = new WebSocketServer({ port: 8080, maxPayload: 4 * 1024 }); // 4KB
 
 ```ts
 const ALLOWED_ORIGINS = new Set([
-  "https://wedding.example.com",
-  "https://admin.wedding.example.com",
+  "https://app.example.com",
+  "https://admin.example.com",
 ]);
 
 wss.on("connection", (ws, req) => {
@@ -1008,24 +1147,396 @@ setInterval(async () => {
 
 ---
 
-## 18. Ví dụ dự án thực tế: Wedding Guestbook Realtime
+## 18. Presence & trạng thái online
 
-> Áp dụng trực tiếp cho repo `wedding-server` hiện tại: khách mời gửi tin nhắn/chúc
-> phúc, mọi người thấy ngay lập tức, dữ liệu lưu vào Supabase.
+**Presence** trả lời câu hỏi “ai đang online?”, “user này đang ở phòng nào?”, “thiết bị
+nào đang hoạt động?”. Đây là loại dữ liệu **tạm thời, có TTL**, khác với dữ liệu nghiệp
+vụ cần lưu bền vững.
 
-### 18.1 Server — `server.ts`
+### 18.1 Mô hình lưu presence
+
+| Cách | Ví dụ | Phù hợp |
+|---|---|---|
+| In-memory per node | `Map<userId, Set<WebSocket>>` | Một node, đơn giản |
+| Redis key + TTL | `SET presence:{userId}:{nodeId} 1 EX 60` | Nhiều node, cần TTL |
+| Redis Hash | `HSET presence:{userId} status online node n1 last_seen ts` | Cần nhiều thuộc tính |
+| Database | `UPDATE users SET last_seen_at = now()` | Không cần realtime chính xác |
+
+```ts
+// Mỗi node cập nhật TTL định kỳ; key tự hết hạn nếu node chết
+async function markOnline(redis: RedisClient, userId: string, nodeId: string) {
+  await redis.set(`presence:${userId}:${nodeId}`, "1", { EX: 60 });
+}
+
+// Đọc trạng thái tổng hợp từ mọi node
+async function getPresence(redis: RedisClient, userId: string) {
+  const keys = await redis.keys(`presence:${userId}:*`);
+  return keys.length > 0 ? "online" : "offline";
+}
+```
+
+> ⚠️ `KEYS` quét toàn bộ keyspace và rất chậm khi dữ liệu lớn. Production dùng `SCAN`
+> theo batch, hoặc lưu một Set `presence:user:{id}:nodes` cạnh các key TTL.
+
+### 18.2 Presence theo phòng và typing indicator
+
+- Presence theo room nên là **derived state**: đếm connection đang join room, không lưu
+  một bản ghi riêng cho từng cặp user/room nếu không cần.
+- Typing indicator là **ephemeral**: gửi `typing.start`/`typing.stop`, server broadcast
+  cho room, client tự hết hạn sau 3–5 giây nếu không nhận thêm.
+- Không lưu typing vào DB. Không gửi cho người đang không mở cuộc trò chuyện.
+
+```ts
+const typingTimers = new Map<string, NodeJS.Timeout>();
+
+function handleTyping(ws: WebSocket, userId: string, roomId: string, active: boolean) {
+  const key = `${roomId}:${userId}`;
+  clearTimeout(typingTimers.get(key));
+  broadcastToRoom(roomId, {
+    type: active ? "typing.started" : "typing.stopped",
+    user_id: userId,
+    room_id: roomId,
+  });
+  if (active) {
+    typingTimers.set(key, setTimeout(() => {
+      broadcastToRoom(roomId, { type: "typing.stopped", user_id: userId, room_id: roomId });
+      typingTimers.delete(key);
+    }, 5_000));
+  }
+}
+```
+
+### 18.3 Multi-device và last-seen
+
+- Một user có thể mở nhiều thiết bị. Chỉ chuyển `offline` khi **tất cả** connection đóng.
+- Dùng connection id (`connId`) thay vì `userId` làm khóa chính cho socket.
+- `last_seen_at` chỉ nên cập nhật theo interval (ví dụ 30s), không mỗi message, để tránh
+  ghi DB quá nhiều.
+- Khi app mobile vào background, OS có thể giữ socket thêm vài chục giây; đừng coi
+  “socket còn mở” là “user đang thực sự xem app”.
+
+---
+
+## 19. Delivery guarantees, ordering & idempotency
+
+WebSocket chạy trên TCP nên **trong một kết nối** frame đến đúng thứ tự và không mất.
+Nhưng khi kết nối đứt, message đang trên đường có thể mất; khi reconnect, server không tự
+biết client đã nhận tới đâu. Vì vậy cần thiết kế delivery ở tầng ứng dụng.
+
+### 19.1 Các mức đảm bảo
+
+| Mức | Ý nghĩa | Cách làm |
+|---|---|---|
+| At-most-once | Gửi một lần, có thể mất | `socket.send` không retry |
+| At-least-once | Có thể trùng, không mất | Retry + `event_id`/`message_id` để dedupe |
+| Exactly-once (logic) | Client chỉ xử lý hiệu ứng một lần | At-least-once + idempotent consumer |
+
+> ⚠️ Không có “exactly-once” thật sự trên mạng. Cái ta làm được là **at-least-once +
+> dedupe**, để *hiệu ứng* chỉ xảy ra một lần.
+
+### 19.2 Event envelope có sequence
+
+```json
+{
+  "v": 1,
+  "event_id": "evt_01J9Z4K2",
+  "sequence": 1024,
+  "type": "order.status.changed",
+  "occurred_at": "2026-10-25T10:00:00.000Z",
+  "data": { "order_id": "ord_123", "status": "shipped" }
+}
+```
+
+- `event_id`: ULID/UUID, dùng để dedupe.
+- `sequence`: số tăng dần theo room/aggregate, giúp phát hiện mất event.
+- `occurred_at`: do server sinh; không tin đồng hồ client.
+- Client giữ `last_sequence`; nếu nhận `sequence` nhảy cóc → gọi REST để sync lại.
+
+### 19.3 Resume sau reconnect
+
+```ts
+// Server: lưu event gần đây theo room (Redis Stream/DB outbox)
+async function replaySince(ws: WebSocket, roomId: string, sinceSeq: number) {
+  const events = await eventStore.list({ roomId, after: sinceSeq, limit: 500 });
+  for (const event of events) {
+    safeSend(ws, event);
+  }
+  if (events.length === 500) {
+    safeSend(ws, { type: "sync.truncated", room_id: roomId });
+  }
+}
+```
+
+Nếu không muốn lưu replay buffer, client phải **tải lại trạng thái từ REST** sau mỗi lần
+reconnect. Đây là lựa chọn hợp lý cho app nhỏ, miễn là contract nói rõ.
+
+### 19.4 Ordering và race condition
+
+- Không giả định event từ nhiều nguồn đến đúng thứ tự. Hai event update cùng một order
+  có thể đến lệch nhau.
+- Gắn `version` (optimistic locking) vào aggregate; client bỏ qua event có version cũ hơn
+  version đang giữ.
+- Với chat, thứ tự hiển thị nên dựa trên `created_at` + `id`, không dựa vào thứ tự nhận.
+- Khi create và update đến gần nhau, update có thể tới trước create. Client nên giữ
+  “pending update” hoặc gọi lại `GET` resource đó.
+
+### 19.5 Transactional outbox
+
+Để không mất event giữa DB và broker:
+
+```text
+BEGIN;
+  INSERT INTO orders (...) VALUES (...);
+  INSERT INTO outbox (id, topic, payload, created_at) VALUES (...);
+COMMIT;
+-- Worker riêng đọc outbox chưa publish → publish broker → mark published
+```
+
+Worker phải idempotent: publish lại cùng `event_id` là an toàn nếu consumer dedupe.
+Outbox cũng cho phép replay khi broker mất dữ liệu.
+
+---
+
+## 20. Backpressure & flow control
+
+WebSocket không có built-in flow control ở tầng ứng dụng. Nếu server `send()` nhanh hơn
+client đọc, buffer trong process hoặc kernel tăng dần → RAM tăng → OOM. Đây là lỗi
+production phổ biến khi broadcast cho nhiều client chậm.
+
+### 20.1 Phát hiện consumer chậm
+
+```ts
+const MAX_BUFFERED = 1 * 1024 * 1024; // 1 MB
+
+function sendWithBackpressure(ws: WebSocket, payload: string): boolean {
+  if (ws.readyState !== WebSocket.OPEN) return false;
+  if (ws.bufferedAmount > MAX_BUFFERED) {
+    ws.close(1013, "Client too slow"); // 1013 = try again later
+    return false;
+  }
+  ws.send(payload);
+  return true;
+}
+```
+
+`bufferedAmount` là số byte đã đưa vào socket nhưng chưa gửi hết. Với Node `ws` còn có
+`ws._socket.writableLength` để xem buffer tầng TCP.
+
+### 20.2 Các chiến lược khi client chậm
+
+| Chiến lược | Cách làm | Phù hợp |
+|---|---|---|
+| Drop oldest | Giữ queue có giới hạn, bỏ event cũ | Ticker giá, telemetry |
+| Coalesce | Gộp nhiều update thành snapshot mới nhất | Trạng thái đơn hàng, dashboard |
+| Disconnect | Đóng client quá chậm | Chat, tài chính, cần đúng |
+| Slow producer | Không đọc source nhanh hơn consumer | Stream hiếm, ít client |
+| Per-client queue | Queue riêng + worker gửi | Broadcast lớn, cần kiểm soát |
+
+```ts
+// Coalesce: chỉ giữ trạng thái mới nhất cho mỗi order
+const pending = new Map<string, unknown>();
+
+function queueOrderUpdate(orderId: string, payload: unknown) {
+  pending.set(orderId, payload);
+}
+
+setInterval(() => {
+  for (const [orderId, payload] of pending) {
+    broadcastToRoom(`order:${orderId}`, payload);
+  }
+  pending.clear();
+}, 100);
+```
+
+### 20.3 Backpressure từ phía client
+
+- Client không nên xử lý nặng trong `onmessage`; đẩy vào queue/worker.
+- Client nên giới hạn số message xử lý mỗi frame (`requestAnimationFrame` cho UI).
+- Khi tab background, trình duyệt có thể throttle timer; đừng dựa vào timer chính xác.
+- Mobile: khi app background, nên đóng socket hoặc chuyển sang push notification.
+
+> 💡 Đo **độ trễ từ lúc event phát sinh đến lúc client render** (end-to-end latency),
+> không chỉ đo throughput. Một hệ thống 100k msg/s nhưng client trễ 30s là hệ thống hỏng.
+
+---
+
+## 21. Testing, observability & load testing
+
+### 21.1 Test pyramid cho WebSocket
+
+| Tầng | Test gì | Công cụ |
+|---|---|---|
+| Unit | Parse envelope, auth, rate limit, backoff | Vitest/Jest, pytest |
+| Integration | Handshake, auth thất bại, join room, broadcast | `ws` client, Testcontainers |
+| Contract | Schema event, version, field bắt buộc | JSON Schema, Zod, Pydantic |
+| E2E | Hai client chat qua server thật | Playwright, custom harness |
+| Load | N connection, M message/s, p95 latency | k6, Artillery, autocannon |
+
+### 21.2 Ví dụ integration test (Node + Vitest)
+
+```ts
+import { afterAll, beforeAll, expect, test } from "vitest";
+import { WebSocketServer } from "ws";
+import WebSocket from "ws";
+
+let wss: WebSocketServer;
+let port: number;
+
+beforeAll(async () => {
+  wss = new WebSocketServer({ port: 0 });
+  port = (wss.address() as { port: number }).port;
+  wss.on("connection", (ws) => {
+    ws.on("message", (raw) => {
+      const msg = JSON.parse(raw.toString());
+      if (msg.type === "echo") ws.send(JSON.stringify({ type: "echo", data: msg.data }));
+    });
+  });
+});
+
+afterAll(() => wss.close());
+
+test("echo round-trip", async () => {
+  const ws = new WebSocket(`ws://127.0.0.1:${port}`);
+  await new Promise((resolve) => ws.on("open", resolve));
+  const reply = new Promise((resolve) => ws.on("message", (m) => resolve(JSON.parse(m.toString()))));
+  ws.send(JSON.stringify({ type: "echo", data: "hello" }));
+  await expect(reply).resolves.toEqual({ type: "echo", data: "hello" });
+  ws.close();
+});
+```
+
+Test quan trọng nhất thường bị bỏ quên:
+
+- Auth fail → đóng với đúng close code.
+- Message sai schema → trả lỗi, **không crash process**.
+- Client ngắt giữa broadcast → server không throw.
+- Reconnect → không nhận trùng event (dedupe hoạt động).
+- Slow consumer → bị disconnect/coalesce theo chính sách.
+- Token hết hạn giữa phiên → bị đóng hoặc re-auth.
+
+### 21.3 Observability: metric, log, trace
+
+| Loại | Cần đo |
+|---|---|
+| Gauge | Số connection hiện tại, số room, số client chậm |
+| Counter | Connection mở/đóng, message in/out, auth fail, rate limit |
+| Histogram | Độ trễ xử lý message, kích thước payload, thời gian broadcast |
+| Log | `conn_id`, `user_id` (hash), `event_type`, `close_code`, `duration` |
+| Trace | Span cho `ws.message` → DB → broker → broadcast |
+
+```ts
+import { metrics } from "@opentelemetry/api";
+
+const meter = metrics.getMeter("ws-server");
+const connections = meter.createUpDownCounter("ws.connections.active");
+const messages = meter.createCounter("ws.messages.total");
+const latency = meter.createHistogram("ws.message.duration_ms");
+
+wss.on("connection", (ws) => {
+  connections.add(1);
+  ws.on("close", () => connections.add(-1));
+  ws.on("message", async (raw) => {
+    const start = performance.now();
+    messages.add(1, { direction: "in" });
+    try {
+      await handle(raw);
+    } finally {
+      latency.record(performance.now() - start);
+    }
+  });
+});
+```
+
+**Log mẫu có cấu trúc:**
+
+```json
+{
+  "level": "warn",
+  "event": "ws.close",
+  "conn_id": "c_01J9",
+  "user_hash": "9f2c",
+  "close_code": 1006,
+  "duration_ms": 48213,
+  "node": "ws-3"
+}
+```
+
+Không log token, cookie, nội dung tin nhắn đầy đủ. Nếu cần debug, log độ dài và hash.
+
+### 21.4 Load testing
+
+Công cụ:
+
+- **k6** (`k6/ws`) — script JS, tốt cho scenario nhiều bước, có threshold.
+- **Artillery** — YAML/JS, hỗ trợ WebSocket engine.
+- **autocannon** — chủ yếu HTTP, có plugin WebSocket không mạnh bằng.
+- **Custom harness** (`ws` + worker_threads) — kiểm soát hoàn toàn, tốt để test protocol.
+
+```js
+// k6 load test: 1.000 VU, mỗi VU giữ 1 connection, gửi 1 msg/5s
+import ws from "k6/ws";
+import { check, sleep } from "k6";
+
+export const options = {
+  scenarios: {
+    steady: {
+      executor: "ramping-vus",
+      startVUs: 100,
+      stages: [
+        { duration: "1m", target: 1000 },
+        { duration: "3m", target: 1000 },
+        { duration: "1m", target: 0 },
+      ],
+    },
+  },
+  thresholds: {
+    ws_connecting: ["p(95)<500"],
+    ws_msgs_received: ["rate>0.99"],
+  },
+};
+
+export default function () {
+  const url = "wss://api.example.com/ws";
+  const res = ws.connect(url, {}, (socket) => {
+    socket.on("open", () => socket.send(JSON.stringify({ type: "ping" })));
+    socket.on("message", (data) => check(data, { "có dữ liệu": (d) => d.length > 0 }));
+    socket.setInterval(() => socket.send(JSON.stringify({ type: "ping" })), 5000);
+    socket.setTimeout(() => socket.close(), 60_000);
+  });
+  check(res, { "handshake 101": (r) => r && r.status === 101 });
+  sleep(1);
+}
+```
+
+**Đo gì khi load test:**
+
+1. Số connection tối đa trước khi CPU/RAM/file descriptor chạm trần.
+2. p50/p95/p99 end-to-end latency khi broadcast cho N client.
+3. Tỷ lệ drop/disconnect, close code 1006/1013.
+4. Throughput broker (Redis/NATS) và độ trễ publish → consume.
+5. Hành vi khi một node chết giữa test (chaos).
+
+> ⚠️ Load test trên môi trường staging, không production. Tăng tải từ từ và theo dõi
+> file descriptor (`ulimit -n`), ephemeral port, và giới hạn connection của load balancer.
+
+---
+
+## 22. Ví dụ dự án thực tế: Order Notifications Realtime
+
+> Domain minh hoạ: khách đặt hàng, admin cập nhật trạng thái, mọi client đang xem đơn
+> nhận thông báo ngay. Dữ liệu lưu ở database quan hệ; WebSocket chỉ là kênh đẩy.
+
+### 22.1 Server — `server.ts`
 
 ```ts
 import { WebSocketServer, WebSocket } from "ws";
-import { createClient } from "@supabase/supabase-js";
 import { parse as parseCookie } from "cookie";
-
-const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!);
+import { db } from "./db";          // repository nội bộ, không phụ thuộc vendor
 
 const wss = new WebSocketServer({ port: 8080, path: "/ws", maxPayload: 4 * 1024 });
-const ALLOWED_ORIGINS = new Set(["https://wedding.example.com", "http://localhost:3000"]);
+const ALLOWED_ORIGINS = new Set(["https://app.example.com", "http://localhost:3000"]);
 
-type Session = { name: string; joinedAt: number; bucket: TokenBucket };
+type Session = { userId: string; joinedAt: number; bucket: TokenBucket };
 const sessions = new WeakMap<WebSocket, Session>();
 
 // --- Rate limiter ---
@@ -1058,20 +1569,19 @@ wss.on("connection", async (ws, req) => {
   const origin = req.headers.origin;
   if (origin && !ALLOWED_ORIGINS.has(origin)) return ws.close(4003, "Forbidden origin");
 
-  // 2. Auth bằng cookie
+  // 2. Auth bằng cookie / session
   const cookies = parseCookie(req.headers.cookie ?? "");
-  const displayName = cookies["guest_name"];
-  if (!displayName) return ws.close(4001, "Missing session");
+  const userId = await verifySession(cookies["sid"]);
+  if (!userId) return ws.close(4001, "Missing session");
 
-  sessions.set(ws, { name: displayName, joinedAt: Date.now(), bucket: new TokenBucket() });
-  ws.send(JSON.stringify({ v: 1, type: "system.notice", payload: { text: `Chào ${displayName}!` } }));
+  sessions.set(ws, { userId, joinedAt: Date.now(), bucket: new TokenBucket() });
+  ws.send(JSON.stringify({ v: 1, type: "system.notice", payload: { text: "Đã kết nối" } }));
 
-  // 3. Gửi 20 tin mới nhất khi vừa kết nối
-  const { data: recent } = await supabase
-    .from("messages").select("*").order("created_at", { ascending: false }).limit(20);
-  ws.send(JSON.stringify({ v: 1, type: "message.history", payload: recent ?? [] }));
+  // 3. Gửi 20 thông báo mới nhất khi vừa kết nối
+  const recent = await db.notifications.listRecent({ userId, limit: 20 });
+  ws.send(JSON.stringify({ v: 1, type: "notification.history", payload: recent }));
 
-  // 4. Nhận tin nhắn
+  // 4. Nhận message
   ws.on("message", async (raw, isBinary) => {
     if (isBinary) return ws.close(1003, "Text only");
     const session = sessions.get(ws)!;
@@ -1084,25 +1594,14 @@ wss.on("connection", async (ws, req) => {
     try { msg = JSON.parse(raw.toString()); }
     catch { return ws.send(JSON.stringify({ v: 1, type: "error", code: "BAD_JSON" })); }
 
-    if (msg.type === "message.send") {
-      const content = String(msg.payload?.content ?? "").trim().slice(0, 500);
-      if (!content) return;
-
-      const { data: row, error } = await supabase
-        .from("messages")
-        .insert([{
-          sender_name: session.name,
-          content,
-          will_attend: Boolean(msg.payload?.will_attend),
-          guest_of: msg.payload?.guest_of ?? "Khách",
-          number_attend: Number(msg.payload?.number_attend ?? 0),
-        }])
-        .select().single();
-
-      if (error) return ws.send(JSON.stringify({ v: 1, type: "error", code: "DB" }));
-
-      const out = JSON.stringify({ v: 1, type: "message.created", payload: row });
-      wss.clients.forEach((c) => c.readyState === WebSocket.OPEN && c.send(out));
+    if (msg.type === "order.subscribe") {
+      // Kiểm tra quyền trên server trước khi join room
+      const orderId = String(msg.payload?.order_id ?? "");
+      if (!(await db.orders.canView(orderId, session.userId))) {
+        return ws.send(JSON.stringify({ v: 1, type: "error", code: "FORBIDDEN" }));
+      }
+      joinRoom(ws, `order:${orderId}`);
+      ws.send(JSON.stringify({ v: 1, type: "order.subscribed", payload: { order_id: orderId } }));
     }
   });
 
@@ -1112,44 +1611,70 @@ wss.on("connection", async (ws, req) => {
 process.on("SIGINT", () => { clearInterval(interval); wss.close(); process.exit(0); });
 ```
 
-### 18.2 Client — `client.ts` (browser)
+### 22.2 Client — `client.ts` (browser)
 
 ```ts
-function connectGuestbook() {
+function connectOrderFeed() {
   const proto = location.protocol === "https:" ? "wss" : "ws";
-  let lastSeen = Number(localStorage.getItem("lastSeen") ?? 0);
+  let attempt = 0;
+  let lastSequence = Number(localStorage.getItem("lastSequence") ?? 0);
 
   const ws = new WebSocket(`${proto}://${location.host}/ws`);
 
-  ws.onopen = () => ws.send(JSON.stringify({ v: 1, type: "sync", payload: { since: lastSeen } }));
+  ws.onopen = () => {
+    attempt = 0;
+    ws.send(JSON.stringify({
+      v: 1,
+      type: "sync.request",
+      payload: { since_sequence: lastSequence },
+    }));
+  };
 
   ws.onmessage = (e) => {
     const msg = JSON.parse(e.data);
     switch (msg.type) {
-      case "message.history":
-      case "message.created":
-        renderMessage(msg.payload);
+      case "notification.history":
+      case "order.status.changed":
+        for (const event of Array.isArray(msg.payload) ? msg.payload : [msg.payload]) {
+          if (event.sequence <= lastSequence) continue; // dedupe + chống event cũ
+          renderOrder(event);
+          lastSequence = event.sequence;
+          localStorage.setItem("lastSequence", String(lastSequence));
+        }
+        break;
+      case "sync.truncated":
+        // Quá nhiều event bị lỡ → tải lại toàn bộ từ REST
+        void refetchOrders();
         break;
       case "error":
-        if (msg.code === "RATE_LIMITED") showToast("Bạn gửi hơi nhanh, chờ chút nhé!");
+        if (msg.code === "RATE_LIMITED") showToast("Thao tác quá nhanh, thử lại sau.");
         break;
     }
   };
 
   ws.onclose = (e) => {
-    if (e.code === 4001 || e.code === 4003) return;
-    const delay = Math.min(30_000, 1000 * 2 ** (attempt++)) + Math.random() * 500;
-    setTimeout(connectGuestbook, delay);
+    if (e.code === 4001 || e.code === 4003) return; // lỗi auth/origin, không retry
+    const delay = Math.min(30_000, 1000 * 2 ** attempt++) + Math.random() * 500;
+    setTimeout(connectOrderFeed, delay);
   };
-
-  (window as any).sendGuestbook = (data: object) =>
-    ws.send(JSON.stringify({ v: 1, type: "message.send", payload: data }));
 }
 ```
 
+### 22.3 Những điểm cần giữ khi adapt ví dụ
+
+1. **Auth trước, join room sau.** Không cho client join room dựa trên `room_id` do client
+   gửi mà chưa kiểm tra quyền.
+2. **DB là nguồn sự thật.** Không broadcast dữ liệu chưa commit.
+3. **Mọi event có `event_id` và `sequence`.** Client dedupe và phát hiện mất event.
+4. **Giới hạn payload và rate.** `maxPayload`, token bucket, timeout.
+5. **Backpressure.** Kiểm tra `bufferedAmount` trước khi broadcast cho client chậm.
+6. **Reconnect có jitter.** Tránh reconnect storm sau sự cố hạ tầng.
+7. **Tách transport khỏi business logic.** `handle(msg, ctx)` nên test được mà không cần
+   socket thật.
+
 ---
 
-## 19. Debugging & công cụ hỗ trợ
+## 23. Debugging & công cụ hỗ trợ
 
 | Công cụ | Công dụng |
 |---|---|
@@ -1164,8 +1689,8 @@ function connectGuestbook() {
 ```bash
 # wscat với header Origin + cookie
 wscat -c ws://localhost:8080/ws \
-  -H "Origin: https://wedding.example.com" \
-  -H "Cookie: guest_name=A"
+  -H "Origin: https://app.example.com" \
+  -H "Cookie: sid=<session-id>"
 ```
 
 **Log gợi ý cho server:**
@@ -1179,11 +1704,11 @@ ws.on("error",   (e) => console.error("[ERR ]", e));
 
 ---
 
-## 20. Anti-patterns thường gặp
+## 24. Anti-patterns thường gặp
 
 | ❌ Anti-pattern | ✅ Thay thế |
 |---|---|
-| Lưu `message history` chỉ trong RAM của server | Lưu DB (Supabase/Postgres), WS chỉ để push |
+| Lưu `message history` chỉ trong RAM của server | Lưu DB (PostgreSQL/MySQL), WS chỉ để push |
 | Tin tưởng `client.id`/`room` do client gửi | Server xác định identity từ session, kiểm tra quyền |
 | Gửi JSON.stringify cho mọi client mọi lúc | Chỉ gửi cho room liên quan (broadcast hẹp) |
 | Không có heartbeat → socket zombie giữ RAM | Ping/Pong 30s, terminate nếu chết |
@@ -1193,10 +1718,18 @@ ws.on("error",   (e) => console.error("[ERR ]", e));
 | Bỏ qua kiểm tra `readyState` trước khi gửi | `safeSend()` wrapper |
 | Log toàn bộ payload chứa PII/token | Che token, giới hạn log payload |
 | Cho phép mọi Origin (`*`) | Allowlist Origin cụ thể |
+| Broadcast cho mọi client rồi client tự lọc | Server lọc theo room/subscription |
+| Không giới hạn `bufferedAmount` | Ngắt/coalesce client chậm, đặt queue cap |
+| Dùng WebSocket cho request/response CRUD | Dùng HTTP; WS chỉ cho push/low-latency |
+| Retry vô hạn khi auth fail | Phân loại close code, dừng retry với 4001/4003 |
+| Publish event trước khi DB commit | Outbox hoặc publish sau commit |
+| Không có `event_id` | Client không dedupe được, hiển thị trùng |
+| Tin vào `sequence` của client | Server sinh sequence, client chỉ đọc |
+| Giữ socket khi app mobile background | Đóng socket, dùng push notification |
 
 ---
 
-## 21. Tài liệu tham khảo
+## 25. Tài liệu tham khảo
 
 - **RFC 6455** — The WebSocket Protocol: https://datatracker.ietf.org/doc/html/rfc6455
 - **RFC 7692** — Compression Extensions: https://datatracker.ietf.org/doc/html/rfc7692

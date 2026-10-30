@@ -165,10 +165,10 @@ for x in range(1000):
 object unhashable. Object dùng làm dict key phải immutable trong thời gian sống.
 
 ```python
-class Guest:
+class Customer:
     def __init__(self, name): self.name = name
     def __eq__(self, other):
-        if not isinstance(other, Guest):
+        if not isinstance(other, Customer):
             return NotImplemented
         return self.name == other.name
     def __hash__(self):
@@ -408,8 +408,8 @@ def add(item, xs=None):
 module import một lần và cache trong `sys.modules`. Trong package nên dùng absolute import.
 
 ```python
-from guestbook.models import Guest     # absolute
-from .models import Guest              # relative
+from orders.models import Order       # absolute
+from .models import Order             # relative
 ```
 
 **Bẫy:** chạy file trực tiếp trong package gây relative import error; dùng `python -m package.module`.
@@ -422,7 +422,7 @@ from .models import Guest              # relative
 trực tiếp. Hữu ích cho package/library.
 
 ```python
-__all__ = ["Guest", "GuestService"]
+__all__ = ["Order", "OrderService"]
 ```
 
 **Điểm cộng:** giữ `__init__.py` nhẹ, chỉ re-export API chính; tránh import nặng/circular.
@@ -506,20 +506,20 @@ tái lập.
 
 ## 3. Web API và framework
 
-### Q29. Thiết kế URL REST cho resource `guest`? [J]
+### Q29. Thiết kế URL REST cho resource `order`? [J]
 
 **Trả lời:** Dùng danh từ số nhiều, không động từ:
 
 ```text
-GET    /guests          # list
-POST   /guests          # create
-GET    /guests/{id}     # detail
-PATCH  /guests/{id}     # partial update
-DELETE /guests/{id}     # delete
-GET    /guests/{id}/rsvps
+GET    /orders          # list
+POST   /orders          # create
+GET    /orders/{id}     # detail
+PATCH  /orders/{id}     # partial update
+DELETE /orders/{id}     # delete
+GET    /orders/{id}/items
 ```
 
-**Bẫy:** `/getGuests`, `/guests/delete/1`; trả 200 cho lỗi.
+**Bẫy:** `/getOrders`, `/orders/delete/1`; trả 200 cho lỗi.
 
 ---
 
@@ -540,8 +540,8 @@ quả quan sát được.
 startup/shutdown (DB pool, Redis).
 
 ```python
-@router.post("", response_model=GuestOut, status_code=201)
-async def create(payload: GuestCreate, session: SessionDep): ...
+@router.post("", response_model=OrderOut, status_code=201)
+async def create(payload: OrderCreate, session: SessionDep): ...
 ```
 
 **Điểm cộng:** dependency có thể lồng, cache theo request; đừng mở connection trong handler
@@ -552,12 +552,12 @@ nếu có thể dùng dependency/lifespan.
 ### Q32. Pydantic validate gì và không validate gì? [J]
 
 **Trả lời:** Validate/coerce kiểu, giới hạn, format, nested model; sinh JSON Schema. Không
-validate business rule phức tạp (unique email, quyền) — phải kiểm tra ở service/DB.
+validate business rule phức tạp (unique constraint, quyền) — phải kiểm tra ở service/DB.
 
 ```python
-class GuestIn(BaseModel):
-    name: str = Field(min_length=1, max_length=100)
-    email: EmailStr | None = None
+class OrderIn(BaseModel):
+    customer_id: int
+    items: list[dict]
 ```
 
 **Bẫy:** tin `model_validate` là đủ; vẫn cần kiểm tra uniqueness/authorization.
@@ -686,9 +686,9 @@ dùng cho docs, SDK generation, contract test, gateway.
 RIGHT ngược lại; FULL giữ cả hai.
 
 ```sql
-SELECT g.name, r.status
-FROM guests g
-LEFT JOIN rsvps r ON r.guest_id = g.id;
+SELECT c.name, o.status
+FROM customers c
+LEFT JOIN orders o ON o.customer_id = c.id;
 ```
 
 **Bẫy:** đặt điều kiện bảng phải trong `WHERE` biến LEFT JOIN thành INNER.

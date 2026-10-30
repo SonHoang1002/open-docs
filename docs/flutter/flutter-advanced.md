@@ -1,8 +1,8 @@
 # Flutter nâng cao — Kiến trúc, state, offline và vận hành
 
-> Dành cho app wedding guestbook đã chạy được bản cơ bản. Mục tiêu: tách lớp rõ ràng,
-> chọn state management có kỷ luật, cache offline, tối ưu hiệu năng và đưa được app
-> vào CI. Code dùng Dart 3.4+/Flutter 3.24 stable; package ghi kèm version đã kiểm tra.
+> Dành cho ứng dụng Flutter đã có nền tảng cơ bản. Mục tiêu: tách lớp rõ ràng (domain/data/presentation),
+> chọn state management có kỷ luật, cache offline-first, tối ưu hiệu năng và chuẩn bị đưa app
+> vào CI. Code dùng Dart 3.x/Flutter 3.x stable; ví dụ trung lập theo domain.
 
 ---
 
@@ -68,7 +68,7 @@ Luồng chuẩn của guestbook:
 
 Riverpod 2.x (`flutter_riverpod: ^2.5.1`) phù hợp guestbook: compile-safe, không cần
 `BuildContext`, override dễ trong test. Bọc app bằng `ProviderScope`:
-`runApp(const ProviderScope(child: WeddingApp()));`
+`runApp(const ProviderScope(child: AppRoot()));`
 
 Khai báo provider theo vai trò, tránh một provider ôm toàn bộ app:
 
@@ -253,10 +253,10 @@ trong một `ConsumerWidget`; router tự rebuild khi session đổi.
 
 Deep link cần cấu hình native, không chỉ route:
 
-- **Android**: `<intent-filter>` với `VIEW`/`BROWSABLE`, host `wedding.example.com`,
-  và `android:autoVerify="true"` cho App Links.
-- **iOS**: Associated Domains `applinks:wedding.example.com` + file
-  `apple-app-site-association` trên domain.
+  - **Android**: `<intent-filter>` với `VIEW`/`BROWSABLE`, host `app.example.com`,
+    và `android:autoVerify="true"` cho App Links.
+- **iOS**: Associated Domains `applinks:app.example.com` + file
+   `apple-app-site-association` trên domain.
 - **Web**: bật path URL strategy để `/wish/42` không thành `/#/wish/42`.
 - **Fallback**: nếu id không tồn tại, hiển thị empty state thay vì crash.
 
@@ -603,7 +603,7 @@ fallback cùng isolate). `compute()` là wrapper cũ, vẫn dùng được cho h
 Platform channel khi plugin chưa có hoặc cần API nội bộ:
 
 ```dart
-const _channel = MethodChannel('wedding/native');
+const _channel = MethodChannel('app/native');
 
 Future<String?> installSource() async {
   try {
@@ -847,9 +847,9 @@ Future<void> main() async {
     (options) {
       options.dsn = const String.fromEnvironment('SENTRY_DSN');
       options.tracesSampleRate = 0.2;
-      options.release = 'wedding-app@1.4.0+14';
+      options.release = 'app-example@1.0.0+1';
     },
-    appRunner: () => runApp(const ProviderScope(child: WeddingApp())),
+    appRunner: () => runApp(const ProviderScope(child: AppRoot())),
   );
   FlutterError.onError = (details) {
     FlutterError.presentError(details);

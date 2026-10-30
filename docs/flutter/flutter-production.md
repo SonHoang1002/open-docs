@@ -1,8 +1,8 @@
-# Flutter production — Phát hành app wedding guestbook
+# Flutter production — Phát hành app lên Google Play/App Store
 
 > Checklist thực chiến để đưa app từ `flutter run` ra Google Play/App Store: flavor,
 > signing, build, store listing, privacy, push, monitoring, rollout và rollback. Ví dụ
-> gắn với backend `/api/messages` + `/ws`; mọi thao tác phải dùng HTTPS/WSS.
+> dùng API REST + WebSocket trung lập; mọi thao tác production phải dùng HTTPS/WSS.
 
 ---
 
@@ -34,17 +34,17 @@ Tối thiểu ba môi trường, tách biệt dữ liệu và signing:
 
 | Môi trường | API | App ID | Mục đích |
 |---|---|---|---|
-| dev | `http://10.0.2.2:3000` | `com.example.wedding.dev` | Dev máy local |
-| staging | `https://staging-api.example.com` | `com.example.wedding.staging` | QA/UAT, dữ liệu giả |
-| prod | `https://api.example.com` | `com.example.wedding` | Khách thật, store |
+| dev | `http://10.0.2.2:3000` | `com.example.app.dev` | Dev máy local |
+| staging | `https://staging-api.example.com` | `com.example.app.staging` | QA/UAT, dữ liệu giả |
+| prod | `https://api.example.com` | `com.example.app` | Production, store |
 
 Quy tắc:
 
 - Không dùng chung database staging/prod; seed dữ liệu giả trước khi test.
 - Prod chỉ HTTPS/WSS; cleartext HTTP chỉ bật trong debug manifest.
 - Mỗi flavor có tên app, icon badge và bundle id riêng để cài song song.
-- Backend hiện chưa có auth: **không** phát hành màn hình xóa/sửa cho guest; nếu cần
-  moderation, bổ sung auth trước hoặc dùng công cụ nội bộ riêng.
+- Nếu không có auth/authorization phù hợp, **không** phát hành màn hình xóa/sửa công khai;
+  cần bổ sung auth/role/permission trước khi đưa lên store hoặc dùng công cụ nội bộ riêng.
 
 > ⚠️ Đổi bundle id sau khi phát hành là gần như không thể trên store. Chốt
 > `applicationId`/`PRODUCT_BUNDLE_IDENTIFIER` trước build đầu tiên.
@@ -66,7 +66,7 @@ android {
         }
         prod {
             dimension "env"
-            resValue "string", "app_name", "Wedding Guestbook"
+            resValue "string", "app_name", "App Example"
         }
     }
 }
@@ -99,7 +99,7 @@ dùng `localhost` (thiết bị thật dùng IP LAN của máy dev):
 {
   "API_BASE_URL": "https://api.example.com",
   "WS_URL": "wss://api.example.com/ws",
-  "SENTRY_DSN": "https://<key>@o0.ingest.sentry.io/0"
+  "SENTRY_DSN": ""
 }
 ```
 
@@ -380,9 +380,10 @@ Guestbook chỉ cần **Internet** cho chức năng cơ bản. Chỉ thêm quy�
 | Camera/Photos | Upload ảnh | Chỉ khi có tính năng, xin đúng lúc |
 | Microphone | Không dùng | Không khai báo |
 
-Privacy policy tối thiểu nêu: dữ liệu thu thập (tên, lời chúc, RSVP), mục đích, thời gian
-lưu, nơi xử lý (Supabase), cách xóa, liên hệ. Backend hiện không có endpoint xóa theo
-yêu cầu người dùng — cần quy trình admin hoặc bổ sung trước khi public rộng.
+Privacy policy tối thiểu nêu: dữ liệu thu thập (tên người dùng, nội dung do người dùng
+tạo), mục đích sử dụng, thời gian lưu, nơi xử lý backend, cách yêu cầu xóa dữ liệu,
+liên hệ. Nếu backend chưa có endpoint xóa theo yêu cầu người dùng — cần quy trình admin
+hoặc bổ sung trước khi public rộng.
 
 iOS 17+ cần `PrivacyInfo.xcprivacy` khai báo required reason API nếu dùng
 UserDefaults/file timestamp; kiểm tra cả SDK bên thứ ba. Android Data Safety phải khai

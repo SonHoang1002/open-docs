@@ -1,9 +1,10 @@
 # FFmpeg — Hướng dẫn toàn diện từ cơ bản đến nâng cao
 
 > Tài liệu tham khảo đầy đủ về FFmpeg: cấu trúc lệnh, mọi thuộc tính (option) quan trọng,
-> codec, filter, muxer, chiến lược nén, xử lý video/ảnh/gif, nhúng metadata, và mã lệnh
-> ví dụ thực hành (đặc biệt ứng dụng cho lĩnh vực wedding: convert video khách gửi,
-> tạo thumbnail, tối ưu dung lượng upload, watermark, slideshow ảnh cưới...).
+> codec, filter, muxer, chiến lược nén, xử lý video/ảnh/gif, nhúng metadata, pipeline
+> transcode/HLS/DASH, DRM, CDN và mã lệnh ví dụ thực hành. Ví dụ dùng domain
+> **products/orders** (video sản phẩm, ảnh do người bán tải lên) để minh hoạ, không phụ
+> thuộc một dự án cụ thể.
 
 ---
 
@@ -20,10 +21,17 @@
 9. [Video filters (filtergraph)](#9-video-filters-filtergraph)
 10. [Audio filters](#10-audio-filters)
 11. [Lệnh thường dùng — cheat sheet](#11-lệnh-thường-dùng--cheat-sheet)
-12. [Ứng dụng thực tế cho wedding-server](#12-ứng-dụng-thực-tế-cho-wedding-server)
-13. [Gỡ lỗi & mẹo hiệu năng](#13-gỡ-lỗi--mẹo-hiệu-năng)
-14. [Anti-patterns](#14-anti-patterns)
-15. [Tài liệu tham khảo](#15-tài-liệu-tham-kháo)
+12. [Pipeline media thực tế: video sản phẩm](#12-pipeline-media-thực-tế-video-sản-phẩm)
+13. [Pipeline transcode production & HLS/DASH](#13-pipeline-transcode-production--hlsdash)
+14. [Subtitle, loudness & accessibility](#14-subtitle-loudness--accessibility)
+15. [DRM & bảo vệ nội dung](#15-drm--bảo-vệ-nội-dung)
+16. [Storage, CDN & phân phối](#16-storage-cdn--phân-phối)
+17. [Tích hợp Node.js và Python](#17-tích-hợp-nodejs-và-python)
+18. [Xử lý lỗi, retry & failure modes](#18-xử-lý-lỗi-retry--failure-modes)
+19. [CLI reference nhanh](#19-cli-reference-nhanh)
+20. [Gỡ lỗi & mẹo hiệu năng](#20-gỡ-lỗi--mẹo-hiệu-năng)
+21. [Anti-patterns](#21-anti-patterns)
+22. [Tài liệu tham khảo](#22-tài-liệu-tham-khảo)
 
 ---
 
@@ -464,7 +472,7 @@ ffmpeg -i in.mov -c:v libx264 -c:a aac \
 ### 8.3 Matroska (MKV) — `-matroska` options
 
 ```bash
-ffmpeg -i in.mp4 -c copy -metadata title="Wedding" -metadata:s:v language=und out.mkv
+ffmpeg -i in.mp4 -c copy -metadata title="Product demo" -metadata:s:v language=und out.mkv
 ```
 
 ### 8.4 HLS / DASH

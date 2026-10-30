@@ -1,46 +1,46 @@
-# Bộ tài liệu thiết kế API — Lộ trình từ nền tảng đến thực chiến
+# Bộ tài liệu thiết kế API — Hub trung lập từ nền tảng đến thực chiến
 
-> Hub của bộ tài liệu về thiết kế API cho dự án `wedding-server` (Bun + Hono + Supabase).
-> Mục tiêu: biến việc "viết cho chạy được" thành "thiết kế để người khác dùng được, mở rộng
-> được và không phải viết lại sau 6 tháng". Bảo mật có tài liệu riêng ở
-> [`../api-security.md`](../api-security.md) — bộ này **không lặp lại** nội dung OWASP.
+> Hub của bộ tài liệu thiết kế API trung lập, tập trung vào **contract**, **REST**, **OpenAPI** và **vận hành**. 
+> Mục tiêu: giúp bạn thiết kế API để người khác dùng được, dễ mở rộng, dễ bảo trì và ít phá vỡ client sau này.
+> Bảo mật được tách riêng tại [`../api-security.md`](../api-security.md).
 
 ---
 
 ## Mục lục
 
-1. [Bộ tài liệu này giải quyết vấn đề gì](#1-bộ-tài-liệu-này-giải-quyết-vấn-đề-gì)
-2. [Đối tượng độc giả](#2-đối-tượng-độc-giả)
-3. [Cách dùng bộ tài liệu](#3-cách-dùng-bộ-tài-liệu)
-4. [Bản đồ tài liệu](#4-bản-đồ-tài-liệu)
-5. [Lộ trình 4 tuần](#5-lộ-trình-4-tuần)
-6. [Lộ trình cho team đang làm dự án](#6-lộ-trình-cho-team-đang-làm-dự-án)
-7. [Quy ước trong bộ tài liệu](#7-quy-ước-trong-bộ-tài-liệu)
-8. [Quick start — 5 bước thiết kế một API mới](#8-quick-start--5-bước-thiết-kế-một-api-mới)
-9. [Definition of Done cho một API](#9-definition-of-done-cho-một-api)
-10. [Bảng tra cứu tình huống](#10-bảng-tra-cứu-tình-huống)
-11. [Đóng góp và cập nhật tài liệu](#11-đóng-góp-và-cập-nhật-tài-liệu)
-12. [Tài liệu tham khảo](#12-tài-liệu-tham-khảo)
+- [1. Bộ tài liệu này giải quyết vấn đề gì?](#1-bộ-tài-liệu-này-giải-quyết-vấn-đề-gì)
+- [2. Đối tượng độc giả](#2-đối-tượng-độc-giả)
+- [3. Cách dùng bộ tài liệu](#3-cách-dùng-bộ-tài-liệu)
+- [4. Bản đồ tài liệu](#4-bản-đồ-tài-liệu)
+- [5. Lộ trình học 4 tuần](#5-lộ-trình-học-4-tuần)
+- [6. Lộ trình áp dụng cho team đang vận hành](#6-lộ-trình-áp-dụng-cho-team-đang-vận-hành)
+- [7. Quy ước chung trong bộ tài liệu](#7-quy-ước-chung-trong-bộ-tài-liệu)
+- [8. Quick start — 5 bước thiết kế một API mới](#8-quick-start--5-bước-thiết-kế-một-api-mới)
+- [9. Definition of Done (DoD) cho một API](#9-definition-of-done-dod-cho-một-api)
+- [10. Bảng tra cứu nhanh theo tình huống](#10-bảng-tra-cứu-nhanh-theo-tình-huống)
+- [11. Bảng tra cứu chủ đề cốt lõi](#11-bảng-tra-cứu-chủ-đề-cốt-lõi)
+- [12. Mẹo review nhanh](#12-mẹo-review-nhanh)
+- [13. Đóng góp và cập nhật tài liệu](#13-đóng-góp-và-cập-nhật-tài-liệu)
+- [14. Tài liệu tham khảo](#14-tài-liệu-tham-khảo)
 
 ---
 
 ## 1. Bộ tài liệu này giải quyết vấn đề gì?
 
-Hầu hết API "chạy được" đều mắc cùng một nhóm lỗi:
+Hầu hết API "chạy được" đều mắc một nhóm lỗi lặp đi lặp lại. Bộ tài liệu này cung cấp **quy trình, tiêu chí quyết định và checklist** để tránh chúng.
 
-| Triệu chứng | Nguyên nhân gốc | Hậu quả |
-|---|---|---|
-| Frontend phải đoán field nào optional | Không có contract rõ ràng | Sửa backend làm vỡ client |
-| `POST` tạo trùng khi mạng chập chờn | Không có idempotency | Dữ liệu rác, khó đối soát |
-| `PUT` ghi đè thay đổi của người khác | Không có optimistic locking | Mất dữ liệu âm thầm |
-| Phân trang `offset` ngày càng chậm | Không hiểu keyset pagination | UX tệ khi dữ liệu lớn |
-| Mỗi endpoint trả lỗi một kiểu | Không có error catalog | Client không xử lý được |
-| `v2` ra đời bằng cách fork code | Không có chiến lược compatibility | Bảo trì hai bản mãi mãi |
+| Triệu chứng | Nguyên nhân gốc | Hậu quả | Cách khắc phục trong bộ tài liệu |
+|---|---|---|---|
+| Frontend phải đoán field nào bắt buộc/tùy chọn | Không có contract rõ ràng | Sửa backend làm vỡ client, mất thời gian sync | [`01-fundamentals.md`](./01-fundamentals.md) (Contract), [`03-openapi.md`](./03-openapi.md) (Spec) |
+| `POST` tạo trùng khi mạng chập chờn/timeout | Không có cơ chế idempotency | Dữ liệu trùng, khó đối soát, khó khôi phục | [`01-fundamentals.md`](./01-fundamentals.md) §5, [`02-rest-design.md`](./02-rest-design.md) §11 |
+| Hai người sửa cùng lúc ghi đè lẫn nhau | Không có optimistic/pessimistic locking | Mất dữ liệu âm thầm, không báo lỗi | [`01-fundamentals.md`](./01-fundamentals.md) §11, [`02-rest-design.md`](./02-rest-design.md) §12 |
+| Phân trang `offset` ngày càng chậm, mất/trùng item | Dùng offset không có tiebreaker, sort không ổn định | UX kém, dữ liệu sai khi có insert/delete | [`01-fundamentals.md`](./01-fundamentals.md) §10, [`02-rest-design.md`](./02-rest-design.md) §8 |
+| Mỗi endpoint trả lỗi một kiểu | Thiếu error catalog và chuẩn hóa | Client phải viết nhiều nhánh xử lý, khó debug | [`01-fundamentals.md`](./01-fundamentals.md) §12, [`02-rest-design.md`](./02-rest-design.md) §9 |
+| Thay đổi nhỏ làm vỡ hàng loạt client cũ | Thiếu chiến lược compatibility/versioning | Phải hỗ trợ nhiều phiên bản, chi phí bảo trì tăng gấp đôi | [`01-fundamentals.md`](./01-fundamentals.md) §11, [`02-rest-design.md`](./02-rest-design.md) §17 |
+| Cache sai gây rò rỉ dữ liệu hoặc trả dữ liệu cũ nhầm | Không hiểu conditional request/Vary | Bảo mật kém hoặc UX tồi | [`01-fundamentals.md`](./01-fundamentals.md) §14, [`02-rest-design.md`](./02-rest-design.md) §15 |
+| API khó mở rộng nhưng không biết bắt đầu từ đâu | Thiếu quy trình thiết kế có hệ thống | Thiết kế ngẫu hứng, tranh cãi không có tiêu chí | [`02-rest-design.md`](./02-rest-design.md) §1 |
 
-Bộ tài liệu cung cấp **quy trình và tiêu chí quyết định** để tránh các lỗi trên, dùng chính
-`wedding-server` làm ví dụ xuyên suốt: `messages`, RSVP, WebSocket `/ws`. Tài liệu **không**
-hứa repo đã làm đúng mọi thứ; chỗ còn thiếu được ghi rõ là "thiết kế mục tiêu" hoặc
-"ví dụ mở rộng", kèm đường nâng cấp.
+> **Lưu ý:** Các ví dụ trong bộ tài liệu dùng domain thương mại điện tử trung lập: `customers`, `products`, `orders`, `order_items`, `payments`, `shipments`. ID có thể là số nguyên, UUID hoặc ULID. Tiền dùng integer minor units (ví dụ cents). Thời gian theo RFC 3339 UTC.
 
 ---
 
@@ -48,27 +48,26 @@ hứa repo đã làm đúng mọi thứ; chỗ còn thiếu được ghi rõ là
 
 | Vai trò | Đọc trước | Mục tiêu |
 |---|---|---|
-| Người mới học backend | `01-fundamentals.md` | Hiểu API là contract, không phải "hàm từ xa" |
-| Backend engineer vào dự án | `01` → `02` → `../api-security.md` | Thiết kế endpoint đúng từ đầu |
-| Frontend / mobile engineer | `01` mục 9, 10, 12; `02` mục 3–9, 17 | Đọc contract, xử lý lỗi, phân trang đúng |
-| Tech lead / reviewer | `02` mục 1, 21, 22; README mục 9 | Checklist review thống nhất |
-| Người viết tài liệu API | README mục 7, 11; `02` mục 18 | Spec không mâu thuẫn với code |
+| **Người mới học backend** | [`01-fundamentals.md`](./01-fundamentals.md) | Hiểu API là contract, không phải "gọi hàm từ xa". Nắm HTTP, resource, idempotency, lỗi cơ bản. |
+| **Backend engineer** | `01` → `02` → `03` → [`../api-security.md`](../api-security.md) | Thiết kế endpoint đúng từ đầu, có pagination/idempotency/locking, viết spec OpenAPI, chuẩn bị vận hành. |
+| **Frontend/Mobile engineer** | `01` §§9–12,14; `02` §§3–12; `03` §§3–6 | Đọc contract nhanh, xử lý lỗi đúng, dùng phân trang/cursor, gửi header đúng, xử lý retry an toàn. |
+| **Tech Lead/Reviewer** | `02` §§1,9,20–22; README §§9,12; `03` §§11–12 | Dùng checklist review thống nhất, phát hiện breaking change sớm, đánh giá trade-off. |
+| **Người viết tài liệu API/SDK** | README §§7,13; `03` toàn bộ | Viết spec nhất quán, dễ sinh client, tránh drift giữa code và docs. |
+| **QA/Automation** | `02` §20; `03` §§12,16 | Xây dựng test matrix, contract testing, property-based testing từ OpenAPI. |
 
-Không yêu cầu biết trước GraphQL/gRPC. Kiến thức SQL cơ bản là đủ; phần Supabase trong `02`
-chỉ dùng query builder cơ bản.
+Không yêu cầu kiến thức GraphQL/gRPC. Kiến thức SQL cơ bản là đủ cho các ví dụ.
 
 ---
 
 ## 3. Cách dùng bộ tài liệu
 
-1. **Học từ đầu** → theo lộ trình mục 5.
-2. **Đang làm việc** → tra bảng mục 10.
-3. **Review PR thêm endpoint** → mục 9 + `02` mục 22.
-4. **Tranh luận "REST hay GraphQL"** → `01` mục 3.
-5. Không cần đọc tuần tự: mỗi mục đứng độc lập, có link chéo thay vì lặp lại.
+1. **Học tuần tự** – Theo [lộ trình 4 tuần](#5-lộ-trình-học-4-tuần) nếu học từ đầu.
+2. **Giải quyết vấn đề cụ thể** – Dùng [bảng tra cứu nhanh](#10-bảng-tra-cứu-nhanh-theo-tình-huống) để đến đúng mục ngay.
+3. **Review PR** – Dùng [Definition of Done](#9-definition-of-done-dod-cho-một-api) + checklist trong [`02-rest-design.md`](./02-rest-design.md) §22.
+4. **Viết spec API** – Đọc [`02-rest-design.md`](./02-rest-design.md) §§1–10 trước, rồi đến [`03-openapi.md`](./03-openapi.md).
+5. **Đánh giá thiết kế** – Luôn hỏi: *"Nên trong bối cảnh nào?"*. Mọi quy tắc đều là đánh đổi, không phải luật bất di bất dịch.
 
-💡 Mỗi khi tài liệu nói "nên", hãy hỏi **"nên trong bối cảnh nào?"**. Thiết kế API là bài
-toán đánh đổi, không phải bảng luật.
+> 💡 **Mẹo:** Mỗi mục trong tài liệu đều có thể đọc độc lập và có link chéo để tránh lặp lại nội dung.
 
 ---
 
@@ -78,292 +77,365 @@ toán đánh đổi, không phải bảng luật.
 
 | # | Tài liệu | Nội dung cốt lõi | Trạng thái |
 |---|---|---|---|
-| 01 | [`01-fundamentals.md`](./01-fundamentals.md) | Contract, kiến trúc phân tán, phân loại API, HTTP, idempotency, REST, resource modeling, versioning, lỗi, caching | ✅ Có sẵn |
-| 02 | [`02-rest-design.md`](./02-rest-design.md) | 10 bước thiết kế, naming, method/status, PATCH, header, query, pagination, error catalog, validation, idempotency, locking, upload, cache, rate limit, webhook, case study | ✅ Có sẵn |
-| 03 | [`03-openapi.md`](./03-openapi.md) | OpenAPI 3.1, contract-first, JSON Schema, security scheme, codegen, contract testing | ✅ Có sẵn |
-| 04 | [`04-lifecycle-process.md`](./04-lifecycle-process.md) | Vòng đời API: đề xuất, review, release, versioning, deprecation, vận hành | ✅ Có sẵn |
-| 05 | [`05-project-structure.md`](./05-project-structure.md) | Cấu trúc dự án, layer, module, cấu hình, error handling, testing | ✅ Có sẵn |
-| 06 | [`06-testing-observability.md`](./06-testing-observability.md) | Test theo rủi ro, integration/e2e, đo tải, logging, metrics, tracing | ✅ Có sẵn |
-| 07 | [`07-checklists-templates.md`](./07-checklists-templates.md) | Checklist review, template spec/PR/runbook, quy trình bàn giao | ✅ Có sẵn |
+| 01 | [`01-fundamentals.md`](./01-fundamentals.md) | Contract, kiến trúc phân tán, phân loại API (REST/RPC/GraphQL/gRPC/WebSocket/Webhook), HTTP deep dive, idempotency/safety, resource modeling, Richardson Maturity Model, pagination/filter/sort, versioning/compatibility, error handling, caching, async/long-running, BFF, case study thiết kế API trung lập, anti-patterns nền tảng. | Có sẵn |
+| 02 | [`02-rest-design.md`](./02-rest-design.md) | Quy trình 10 bước thiết kế, naming, method/status, PATCH (Merge Patch vs JSON Patch), header/query, pagination (offset vs cursor + tiebreaker), error catalog RFC 9457, validation, idempotency-key, optimistic locking, file upload, authN/authZ ở endpoint, caching, rate limiting, versioning/deprecation, webhook, case study hoàn chỉnh, test matrix, anti-patterns, checklist review. | Có sẵn |
+| 03 | [`03-openapi.md`](./03-openapi.md) | Contract-first, OpenAPI 3.1 vs 3.0, cấu trúc, paths/operations, parameters/serialization, request/response, JSON Schema 2020-12, security schemes, components, tooling/codegen, quy trình viết spec, contract testing & CI, ví dụ hoàn chỉnh, từ spec đến code, anti-patterns, checklist. | Có sẵn |
+| 04 | [`04-lifecycle-process.md`](./04-lifecycle-process.md) | Vòng đời API: đề xuất → review → release → deprecation → ngừng hỗ trợ. Quy trình change management, breaking/non-breaking, changelog, rollout. | Có sẵn |
+| 05 | [`05-project-structure.md`](./05-project-structure.md) | Cấu trúc dự án API, layering (route/controller/service/repo), module hoá, error handling, config, validation, testing. | Có sẵn |
+| 06 | [`06-testing-observability.md`](./06-testing-observability.md) | Test theo rủi ro, unit/integration/contract/e2e, property-based, đo tải, logging có request-id, metrics, tracing, health/readiness/liveness. | Có sẵn |
+| 07 | [`07-checklists-templates.md`](./07-checklists-templates.md) | Checklist review PR, template API spec, template PR description, template runbook, template deprecation notice. | Có sẵn |
 
-> 📄 Spec mẫu trong `03` cũng được trích thành file dùng ngay:
-> [`openapi.yaml`](./openapi.yaml). Có thể mở bằng Swagger UI/Redoc hoặc dùng để sinh client.
+> **Spec mẫu:** [`openapi.yaml`](./openapi.yaml) — có thể mở bằng Swagger UI/Redoc/Scalar hoặc dùng để sinh client/types.
 
-### 4.2 Tài liệu chuyên đề đã có
+### 4.2 Tài liệu chuyên đề liên quan
 
 | Tài liệu | Khi nào đọc | Ghi chú |
 |---|---|---|
-| [`../api-security.md`](../api-security.md) | Trước khi đưa endpoint ra public | Nguồn duy nhất về authN/authZ, OWASP, rate limit, secret |
-| [`../websocket.md`](../websocket.md) | Khi thiết kế realtime `/ws` | Handshake, frame, pub/sub, reconnect |
-| [`../postgresql-basics.md`](../postgresql-basics.md) | Khi viết query cho endpoint | Index, NULL, transaction |
-| [`../postgresql-advanced.md`](../postgresql-advanced.md) | Khi query chậm hoặc cần khóa | Execution plan, MVCC, RLS, partition |
+| [`../api-security.md`](../api-security.md) | Trước khi đưa endpoint ra public hoặc khi thêm auth/rate limit/upload | Nguồn duy nhất về authN/authZ, OWASP API Top 10, headers bảo mật, secrets, SSRF, file upload an toàn. |
+| [`../websocket.md`](../websocket.md) | Khi thiết kế realtime (event push hai chiều) | Handshake, frame, reconnect/backoff, pub/sub, scale nhiều instance, authentication/authorization. |
+| [`../postgresql-basics.md`](../postgresql-basics.md) | Khi viết query cho endpoint CRUD | Kiểu dữ liệu, index cơ bản, NULL, transaction, query an toàn. |
+| [`../postgresql-advanced.md`](../postgresql-advanced.md) | Khi query chậm, cần khóa, migration phức tạp | Execution plan, MVCC, locking, index nâng cao, partition, RLS, zero-downtime migration. |
+| [`../mobile-integration.md`](../mobile-integration.md) | Khi tích hợp API với mobile app | Retry/idempotency, offline, auth, network chập chờn, deep link, push. |
 
-Phân tách trách nhiệm: `01` trả lời **"vì sao"**, `02` trả lời **"làm thế nào"**,
-`api-security.md` trả lời **"chống ai"**. Khi chồng lấn, `02` chỉ nêu quyết định và link.
-
----
-
-## 5. Lộ trình 4 tuần
-
-Giả định 6–8 giờ/tuần. Mục tiêu cuối tuần 4: tự thiết kế và bảo vệ được API CRUD có phân
-trang, lỗi chuẩn, versioning và realtime event.
-
-| Tuần | Nội dung | Sản phẩm |
-|---|---|---|
-| **1 — Nền tảng** | `01` mục 1–4 (contract, kiến trúc, phân loại, HTTP); mục 5–8 (idempotency, URI, REST, resource); mục 9–12 (envelope, pagination, versioning, lỗi) | Một trang mô tả resource + endpoint dự kiến, chưa code |
-| **2 — REST thực hành** | `02` mục 1–5 (quy trình, naming, method, PATCH, status); mục 6–10 (header, query, pagination, lỗi, validation); mục 11–12 (idempotency, locking) | Spec endpoint có request/response/error/pagination |
-| **3 — Bảo mật & vận hành** | `api-security.md` mục 1–12; `02` mục 13–18 (upload, quyền, cache, rate limit, versioning, webhook); `websocket.md` mục 8–15 | Danh sách rủi ro đã giảm thiểu + test case bảo mật |
-| **4 — Hoàn chỉnh** | `02` mục 19–22 (case study, test matrix, anti-pattern, checklist); `postgresql-basics.md` mục 9; `postgresql-advanced.md` mục 2, 5 | Spec guestbook + test matrix + ghi chú trade-off |
-
-Mẹo: cuối mỗi tuần, viết lại 5 điều học được bằng lời của bạn. Nếu không viết được, bạn chưa
-thực sự hiểu — đọc lại mục tương ứng.
+**Phân tách trách nhiệm:** `01` trả lời *"vì sao"*, `02` trả lời *"làm thế nào"*, `03` trả lời *"mô tả contract thế nào"*, `api-security.md` trả lời *"chống gì"*. Khi có chồng lấn, chỉ nêu quyết định ngắn và link đến tài liệu có trách nhiệm chính.
 
 ---
 
-## 6. Lộ trình cho team đang làm dự án
+## 5. Lộ trình học 4 tuần
 
-Team không có 4 tuần? Vá dần theo mức độ rủi ro. Thứ tự ưu tiên thay đổi **rẻ nhưng giảm đau
-nhiều**:
+Giả định **6–8 giờ/tuần**. Mục tiêu cuối tuần 4: tự thiết kế và bảo vệ được API CRUD có phân trang, validation, lỗi chuẩn, idempotency, optimistic locking, versioning và có spec OpenAPI hoàn chỉnh.
 
-| Sprint | Việc làm | Tài liệu | Tiêu chí xong |
+| Tuần | Nội dung học | Thực hành | Sản phẩm đầu ra |
 |---|---|---|---|
-| 0 | Chốt naming, error format, envelope | `02` mục 2, 9; README mục 7 | Có style guide 1 trang trong repo |
-| 1 | Chuẩn hóa status code + error catalog | `02` mục 3, 5, 9 | Không còn `200` kèm `success:false` |
-| 2 | Sửa cursor `before` có tiebreaker | `02` mục 8 | Không mất/trùng bản ghi cùng timestamp |
-| 3 | Thêm validation schema, giới hạn body | `02` mục 10 | Mọi input qua schema, có test case xấu |
-| 4 | `Idempotency-Key` cho `POST` | `02` mục 11 | Gửi lại 3 lần chỉ tạo 1 bản ghi |
-| 5 | `ETag`/`If-Match` cho update | `02` mục 12 | Sửa đồng thời → một client nhận `412` |
-| 6 | Versioning + deprecation policy | `02` mục 17 | Có `/api/v1`, có header `Sunset` |
-| 7 | Realtime contract + reconnect | `websocket.md` mục 11, 14 | Client không mất event khi reconnect ngắn |
-| 8 | Rate limit + quan sát | `api-security.md` mục 7; `02` mục 16 | Có `429`, `Retry-After`, log có request id |
+| **Tuần 1 — Nền tảng** | [`01-fundamentals.md`](./01-fundamentals.md) §§1–8: Contract, phân tán, phân loại API, HTTP, idempotency, resource/URI, REST constraints, RMM, resource modeling. | Chọn 1 domain (ví dụ `orders`), xác định resources/quan hệ, vẽ bảng endpoint dự kiến. | Tài liệu ngắn: use case + resource model + danh sách endpoint (chưa code). |
+| **Tuần 2 — REST thực hành** | [`01-fundamentals.md`](./01-fundamentals.md) §§9–14; [`02-rest-design.md`](./02-rest-design.md) §§1–12: Envelope/naming, pagination/filter/sort, lỗi, caching, quy trình 10 bước, method/status, PATCH, query, cursor+ tiebreaker, error catalog, validation, idempotency, locking. | Thiết kế đầy đủ `customers`/`orders`/`order_items`: request/response mẫu, error catalog, cursor pagination, `Idempotency-Key`, `If-Match`. | Spec chi tiết cho 4–6 endpoint với ví dụ request/response/lỗi đầy đủ. |
+| **Tuần 3 — OpenAPI & Contract-first** | [`03-openapi.md`](./03-openapi.md) §§1–12: Contract-first, cấu trúc, params/body/response, JSON Schema 2020-12, security, components, tooling, quy trình, contract testing/CI. [`../api-security.md`](../api-security.md) §§1–7 (overview). | Viết `openapi.yaml` cho API tuần 2. Dùng Redocly/Spectral lint, sinh types bằng `openapi-typescript`. | File `openapi.yaml` hoàn chỉnh, pass lint, có lỗi mẫu RFC 9457, security scheme, components tái sử dụng. |
+| **Tuần 4 — Vận hành & Review** | [`02-rest-design.md`](./02-rest-design.md) §§13–22; [`03-openapi.md`](./03-openapi.md) §§13–16; [`04-lifecycle-process.md`](./04-lifecycle-process.md) (đọc), [`06-testing-observability.md`](./06-testing-observability.md) §§1–4 (overview). | Thêm upload (nếu cần), rate limit, versioning/deprecation plan, test matrix, chạy review bằng checklist DoD. Viết ngắn trade-off. | API spec sẵn sàng review: DoD đầy đủ, test matrix, kế hoạch deprecation/versioning, ghi chú trade-off rõ ràng. |
 
-**Nguyên tắc:** không "đập đi xây lại" API đang chạy. Mỗi sprint chỉ đổi một chiều contract,
-giữ tương thích ngược, ghi CHANGELOG.
-
-⚠️ Đừng bắt đầu bằng versioning khi error format còn hỗn loạn. Version mới sẽ lặp lại lỗi cũ,
-chỉ nhân đôi chi phí bảo trì.
+**Sau mỗi tuần:** Viết lại 5 điều học được bằng lời của chính bạn. Nếu không viết được rõ ràng, đọc lại mục tương ứng — đó là dấu hiệu chưa hiểu đủ để áp dụng.
 
 ---
 
-## 7. Quy ước trong bộ tài liệu
+## 6. Lộ trình áp dụng cho team đang vận hành
 
-### 7.1 REST và JSON
+Không cần "đập đi xây lại". Ưu tiên những thay đổi **rẻ, ít phá vỡ, giảm đau nhiều nhất** theo thứ tự rủi ro.
 
-- Endpoint mô tả **resource** (danh từ số nhiều); hành vi do HTTP method quyết định.
-- Request/response dùng `application/json; charset=utf-8`.
-- Field dùng `snake_case` để khớp schema `messages` (`sender_name`, `will_attend`,
-  `number_attend`, `created_at`). Không trộn `camelCase` trong cùng API.
-- Thời gian RFC 3339 UTC: `2026-10-25T09:30:00Z`.
-- ID trong ví dụ là số nguyên (khớp `messages.id`); chuyển sang UUID không đổi hình dạng contract.
+| Sprint | Việc làm | Tài liệu tham khảo | Tiêu chí hoàn thành |
+|---|---|---|---|
+| **0** | Chốt quy ước: naming, error format (hướng tới RFC 9457), envelope, field naming (`snake_case`). Ghi vào style guide ngắn. | [`02-rest-design.md`](./02-rest-design.md) §§2,7,9; README §7 | Có `docs/api-style-guide.md` (hoặc mục trong README), team đồng ý áp dụng. |
+| **1** | Chuẩn hóa status code. Loại bỏ `200` + `success:false`. Thêm error catalog cơ bản. | [`02-rest-design.md`](./02-rest-design.md) §§3,5,9 | Không còn pattern `200` kèm `success:false`. Tất cả lỗi dùng status code đúng. |
+| **2** | Sửa phân trang cursor: thêm tiebreaker `(sort_key, id)`, validate cursor, trả `has_more` đúng. | [`01-fundamentals.md`](./01-fundamentals.md) §10; [`02-rest-design.md`](./02-rest-design.md) §8 | Test: timestamp trùng không mất/trùng item. Cursor không parse được → `400 invalid_cursor`. |
+| **3** | Thêm validation schema (whitelist field, trim, giới hạn độ dài), body limit, kiểm tra `Content-Type`. | [`02-rest-design.md`](./02-rest-design.md) §10 | Mọi input ghi đều qua schema. `413`/`415`/`422` rõ ràng. Có test case dữ liệu xấu. |
+| **4** | Thêm `Idempotency-Key` cho `POST` quan trọng (tạo order/payment). Lưu key+response, xử lý conflict/replay. | [`01-fundamentals.md`](./01-fundamentals.md) §5; [`02-rest-design.md`](./02-rest-design.md) §11 | Gửi lại 3 lần cùng key+body → chỉ tạo 1 resource, nhận cùng response. Cùng key khác body → `409`. |
+| **5** | Thêm optimistic locking cho update nhạy cảm: `version` + `If-Match`/`ETag`, trả `412`. | [`02-rest-design.md`](./02-rest-design.md) §12 | Sửa đồng thời → một client nhận `412 precondition_failed`, hướng dẫn tải lại. |
+| **6** | Thêm OpenAPI cho endpoint quan trọng (contract-first dần). Bắt đầu với `GET`/`POST` dùng nhiều nhất. | [`03-openapi.md`](./03-openapi.md) §§1,11,12 | Có `openapi.yaml` cho module, lint pass, types sinh ra dùng trong code/test. |
+| **7** | Chuẩn hóa authZ object-level. Audit các endpoint sửa/xóa. Thêm rate limit cho public ghi. | [`02-rest-design.md`](./02-rest-design.md) §14; [`../api-security.md`](../api-security.md) §§3,4,7 | Không chỉ kiểm tra role, còn kiểm tra quyền trên resource cụ thể. Có `429` + `Retry-After`. |
+| **8** | Versioning + deprecation policy. Thêm header `Deprecation`/`Sunset` khi chuẩn bị ngừng. Quan sát usage trước khi tắt. | [`02-rest-design.md`](./02-rest-design.md) §17; [`04-lifecycle-process.md`](./04-lifecycle-process.md) | Có chính sách bằng văn bản, chỉ version khi breaking, không tắt đột ngột. |
+
+> ⚠️ **Nguyên tắc quan trọng:** Đừng bắt đầu bằng versioning khi error format còn hỗn loạn. Version mới chỉ nhân đôi chi phí bảo trì nếu không sửa gốc. Luôn giữ tương thích ngược khi có thể, ghi changelog cho mọi thay đổi contract.
+
+---
+
+## 7. Quy ước chung trong bộ tài liệu
+
+### 7.1 REST, URL, JSON
+
+- **Resource là danh từ số nhiều:** `/customers`, `/orders`, `/products`. Không dùng động từ trong path.
+- **Method thể hiện hành vi:** `GET` đọc, `POST` tạo/xử lý, `PUT` thay thế toàn bộ, `PATCH` sửa một phần, `DELETE` xóa.
+- **Tránh nesting sâu:** Tối đa 2 cấp lồng (`/orders/{id}/order_items`). Nếu quan hệ phức tạp hơn, dùng collection độc lập với filter (`/order_items?order_id=...`).
+- **Query dùng cho view/filter/sort/pagination:** Không dùng query để định danh resource.
+- **JSON:** `application/json; charset=utf-8`. Field dùng `snake_case`. Không trộn `camelCase`/`PascalCase`.
+- **Thời gian:** RFC 3339 UTC, ví dụ `2026-10-30T09:30:00Z`. Luôn lưu UTC, hiển thị theo timezone người dùng.
+- **Tiền tệ:** Dùng integer minor units (`amount_cents`), tránh float/double.
+- **ID:** Có thể `int`/`uuid`/`ulid`. ID lớn hơn `2^53` trong JavaScript nên truyền dạng string nếu cần, nhưng giữ nguyên quy ước trong toàn API.
 
 ### 7.2 Error format
 
-Chuẩn đích là **RFC 9457 Problem Details**:
+Hướng tới **RFC 9457 Problem Details**:
 
 ```json
 {
-  "type": "https://wedding.example/errors/validation-failed",
+  "type": "https://api.example.com/errors/validation-failed",
   "title": "Dữ liệu không hợp lệ",
   "status": 422,
-  "detail": "Trường 'sender_name' không được để trống.",
-  "instance": "/api/v1/messages",
+  "detail": "Trường 'email' không đúng định dạng.",
+  "instance": "/api/v1/customers",
   "code": "validation_failed",
-  "request_id": "req_01J9Z3K7"
+  "request_id": "req_01J9Z3K7X8Y9Z0",
+  "errors": [
+    { "field": "email", "code": "invalid_format", "message": "Email không hợp lệ" }
+  ]
 }
 ```
 
-Repo hiện tại trả `{ "success": false, "error": "..." }`. Đó là **hiện trạng**, không phải
-chuẩn của bộ tài liệu. Lộ trình: thêm `type/title/status/code` trong minor release, giữ
-`error` cho client cũ, sau đó bỏ dần `success`. Chi tiết ở `02` mục 9.
+| Field | Bắt buộc | Ghi chú |
+|---|---|---|
+| `type` | Khuyến nghị | URI định danh loại lỗi (có thể trỏ tới docs). Dùng `about:blank` nếu chưa có trang. |
+| `title` | Có | Mô tả ngắn, ổn định theo loại lỗi. |
+| `status` | Có | Trùng HTTP status. |
+| `detail` | Khuyến nghị | Giải thích cụ thể cho request này. |
+| `instance` | Khuyến nghị | Path của request gây lỗi. |
+| `code` | Khuyến nghị | Machine-readable, enum ổn định cho client xử lý. |
+| `request_id` | Khuyến nghị | Dùng để trace log server. |
+| `errors[]` | Chỉ khi validation | Chi tiết lỗi theo field/path. |
 
-### 7.3 Versioning
+**Quy tắc:** Không trả stack trace, SQL, tên bảng/cột, message thô từ ORM/DB. `4xx` giúp client sửa, `5xx` phải trung tính và được log đầy đủ.
 
-- URL: `/api/v1/...` — dễ debug, dễ route, phù hợp dự án nhỏ.
-- Không version khi chưa có consumer bên ngoài; thay đổi additive là đủ.
-- Breaking change tăng version lớn + header `Sunset`.
+### 7.3 Versioning, compatibility, deprecation
 
-### 7.4 Ngôn ngữ và trình bày
+- **URL versioning** là thực dụng nhất: `/api/v1/...`, `/api/v2/...`. Giữ host không đổi.
+- **Chỉ version khi breaking:** Thay đổi kiểu field, xóa field bắt buộc, đổi status code thành công, đổi ngữ nghĩa, thắt chặt validation làm request cũ bị từ chối.
+- **Additive là non-breaking:** Thêm field optional vào response, thêm endpoint mới, thêm query param optional.
+- **Deprecation:** Thêm header `Deprecation: <RFC1123 date>`, `Sunset: <RFC1123 date>`, `Link: <migration-doc>; rel="deprecation"`. Thông báo trước, đo usage, hỗ trợ migrate, chỉ tắt sau khi không còn consumer quan trọng.
+- **Tách rõ "hiện trạng" vs "thiết kế mục tiêu":** Nếu code chưa làm, phải ghi rõ là đề xuất.
 
-- Tiếng Việt, giữ thuật ngữ kỹ thuật tiếng Anh khi tự nhiên (idempotency, cursor, payload).
-- Code block luôn có language: `ts`, `json`, `http`, `sql`, `bash`, `text`.
-- `⚠️` cho cảnh báo mất dữ liệu/bảo mật, `💡` cho mẹo và trade-off.
-- Ví dụ mở rộng (chưa có trong repo) được ghi rõ **"ví dụ"** ngay trong câu dẫn.
+### 7.4 Ngôn ngữ, trình bày, code
 
-### 7.5 Tính chính xác
-
-- Không bịa endpoint đang tồn tại. Bảng "hiện trạng" và "thiết kế mục tiêu" luôn tách riêng.
-- Số liệu hiệu năng chỉ nêu khi có nguồn hoặc ghi rõ là giả định.
-- Code TypeScript dùng API của Hono 4 / Bun 1.4 / Supabase JS 2.
+- **Ngôn ngữ:** Tiếng Việt, giữ thuật ngữ kỹ thuật tiếng Anh khi tự nhiên (`idempotency`, `cursor`, `etag`, `payload`).
+- **Code block:** Luôn có language tag (`ts`, `json`, `http`, `sql`, `bash`, `yaml`, `text`).
+- **Ký hiệu:** `⚠️` cảnh báo mất dữ liệu/bảo mật, `💡` mẹo/trade-off.
+- **Code mẫu:** Có thể chạy được hoặc ghi rõ `// pseudocode`. Với ví dụ stack cụ thể, ưu tiên dạng trung lập hoặc nêu nhiều lựa chọn.
+- **Chính xác:** Không bịa endpoint/schema đang tồn tại. Chỉ nói dựa trên tài liệu/codebase. Số liệu hiệu năng chỉ nêu khi có căn cứ hoặc rõ là giả định.
 
 ---
 
 ## 8. Quick start — 5 bước thiết kế một API mới
 
-Áp dụng cho một tính năng cụ thể, ví dụ "lưu ảnh kỷ niệm của khách".
+Áp dụng cho tính năng cụ thể, ví dụ: *"Tạo đơn hàng từ giỏ hàng"* với domain `orders/order_items/payments`.
 
-**Bước 1 — Viết use case bằng ngôn ngữ người dùng.**
-
+### Bước 1: Viết use case bằng ngôn ngữ người dùng
 ```text
-Khách mở thiệp → chụp ảnh → gửi kèm lời chúc → ảnh hiện trong album realtime.
-Chủ tiệc có thể xóa ảnh phản cảm.
+Khách hàng thêm sản phẩm vào giỏ → chuyển sang thanh toán → tạo đơn hàng (pending)
+→ thanh toán → đơn hàng chuyển trạng thái (paid) → gửi thông báo.
+Chỉ chủ đơn hàng hoặc admin mới xem được chi tiết đơn hàng.
 ```
 
-Chưa nhắc bảng, endpoint hay framework. Bước này mơ hồ thì mọi bước sau đều sai.
+### Bước 2: Xác định resource và quan hệ
+| Resource | Thuộc tính chính | Quan hệ | Ghi chú |
+|---|---|---|---|
+| `customers` | `id`, `email`, `name`, `created_at` | 1–n `orders` | Thông tin khách hàng |
+| `products` | `id`, `name`, `price_cents`, `stock`, `status` | n–n (qua `order_items`) | Danh mục sản phẩm |
+| `orders` | `id`, `customer_id`, `status`, `total_cents`, `created_at`, `updated_at` | 1–n `order_items`, 1–1 `payments` | Đơn hàng (aggregate root) |
+| `order_items` | `id`, `order_id`, `product_id`, `quantity`, `unit_price_cents`, `line_total_cents` | n–1 `orders`, n–1 `products` | Chi tiết đơn hàng |
+| `payments` | `id`, `order_id`, `amount_cents`, `status`, `provider`, `created_at` | n–1 `orders` | Thanh toán |
 
-**Bước 2 — Xác định resource và quan hệ.**
+### Bước 3: Gán method, status, quyền
+| Nhu cầu | Endpoint | Method | Success | Quyền | Ghi chú |
+|---|---|---|---|---|---|
+| Tạo đơn hàng từ giỏ | `/api/v1/orders` | `POST` | `201` + `Location` | Authenticated (customer) | Idempotent với `Idempotency-Key`. Validate tồn tại/kho sản phẩm. |
+| Xem danh sách đơn của tôi | `/api/v1/customers/me/orders` | `GET` | `200` | Authenticated (owner) | Cursor pagination, filter theo `status`. |
+| Xem chi tiết đơn hàng | `/api/v1/orders/{id}` | `GET` | `200` | Owner hoặc admin | Trả đầy đủ items, payments. Kiểm tra object-level. |
+| Cập nhật trạng thái đơn | `/api/v1/orders/{id}/status` | `PATCH` | `200` | Admin hoặc service | Chỉ cho phép chuyển trạng thái hợp lệ (state machine). Có thể dùng `If-Match`. |
+| Hủy đơn hàng | `/api/v1/orders/{id}` | `DELETE` | `204` | Owner (chỉ pending) hoặc admin | Chỉ hủy được nếu chưa thanh toán/đã xử lý. Audit log. |
 
-| Resource | Thuộc tính chính | Quan hệ |
+### Bước 4: Viết contract trước handler
+Tối thiểu cần có:
+- **Request schema:** `POST /orders` cần `items: [{product_id, quantity}]` + validation (quantity > 0, stock đủ).
+- **Response mẫu:** `201` có `data` với `id`, `status`, `total_cents`, `items`, `created_at`. `Location: /api/v1/orders/{id}`.
+- **Error catalog:** `422` (stock không đủ), `409` (idempotency conflict), `403` (không phải chủ đơn), `404` (không tìm thấy).
+- **Pagination:** `GET /customers/me/orders` dùng cursor `(created_at, id)`.
+- **Security:** AuthN bắt buộc, authZ object-level, rate limit cho `POST`.
+
+Nếu chưa viết được response mẫu cho thành công và ít nhất 2 lỗi quan trọng, chưa hiểu đủ yêu cầu.
+
+### Bước 5: Review bằng checklist + test case
+Dùng [DoD §9](#9-definition-of-done-dod-cho-một-api) và [test matrix `02` §20](./02-rest-design.md#20-test-case-matrix). Phải trả lời được:
+- *"Gửi `POST` 2 lần với cùng `Idempotency-Key` thì sao?"* → Chỉ tạo 1 đơn, trả cùng response.
+- *"Hai admin cập nhật trạng thái cùng lúc thì sao?"* → Một bên nhận `412` hoặc conflict được xử lý đúng.
+- *"Tăng trang nhiều lần, có đơn mới được tạo thì sao?"* → Cursor không trùng/mất nhờ tiebreaker.
+- *"Client cũ không gửi field mới thì sao?"* → Vẫn hoạt động (additive).
+- *"Stock hết giữa lúc validate và tạo thì sao?"* → Transaction + kiểm tra lại, trả `409`/`422` rõ ràng.
+
+---
+
+## 9. Definition of Done (DoD) cho một API
+
+Một endpoint/API chỉ được coi là "xong" khi **tất cả** mục dưới đây đạt. Nếu không áp dụng, ghi rõ lý do và người chấp nhận rủi ro.
+
+### 9.1 Contract & Design
+- [ ] **Use case rõ ràng:** Có actor, mục đích, business rule quan trọng.
+- [ ] **Resource chuẩn:** URL danh từ số nhiều, không verb, không trailing slash, nesting ≤ 2 cấp.
+- [ ] **Method đúng ngữ nghĩa:** `GET` không đổi state. `PUT` thay thế toàn bộ, `PATCH` sửa một phần.
+- [ ] **Schema rõ ràng:** Request/response có schema, field required/optional xác định. Field mới là additive.
+- [ ] **Status code đúng:** Không lạm dụng `200` cho lỗi. `201` kèm `Location`. `204` không body.
+- [ ] **Error đầy đủ:** Có error catalog với `code` machine-readable. Dùng RFC 9457 khi có thể.
+- [ ] **OpenAPI cập nhật:** Spec có example thành công + lỗi, `operationId`, components tái sử dụng.
+
+### 9.2 Hành vi & Dữ liệu
+- [ ] **Validation:** Whitelist field, trim string, giới hạn độ dài/giá trị, kiểm tra enum. Chặn mass assignment.
+- [ ] **Idempotency:** `POST` tạo resource có idempotency key hoặc unique constraint tự nhiên.
+- [ ] **Concurrency:** Update nhạy cảm dùng optimistic locking (`version` + `If-Match`) hoặc pessimistic lock có lý do.
+- [ ] **Pagination ổn định:** Collection dùng cursor + tiebreaker khi dữ liệu thay đổi thường xuyên. Có `limit` max và mặc định hợp lý.
+- [ ] **Transaction:** Thao tác nhiều bảng dùng transaction. Kiểm tra lại điều kiện quan trọng (stock, balance) trong transaction.
+- [ ] **Không N+1:** Đã xem xét query, dùng join/select cần thiết hoặc batch load.
+- [ ] **Index phù hợp:** Query chính có index hỗ trợ filter/sort/pagination.
+
+### 9.3 Bảo mật & Rate limiting
+- [ ] **AuthN/AuthZ:** Kiểm tra xác thực đúng actor. **Object-level authorization** bắt buộc (không chỉ role).
+- [ ] **Least privilege:** Chỉ trả field cần thiết, ẩn field nhạy cảm.
+- [ ] **Input safety:** Giới hạn body size, kiểm tra `Content-Type`. Chống mass assignment.
+- [ ] **Abuse prevention:** Rate limit cho endpoint public/ghi dữ liệu. Có lý do nếu không áp dụng.
+- [ ] **Secrets:** Không log token/secret/PII nhạy cảm. Tham khảo [`../api-security.md`](../api-security.md).
+
+### 9.4 Vận hành, quan sát & tài liệu
+- [ ] **Logging:** Có `request_id`, log lỗi với context đủ debug (không chứa PII/secret).
+- [ ] **Metrics/Health:** Ý thức về latency/error rate. Có health/readiness nếu quan trọng.
+- [ ] **Timeouts:** Có timeout cho dependency (DB/external API). Xử lý lỗi gracefully.
+- [ ] **Retry an toàn:** Chỉ retry idempotent hoặc có idempotency key. Có backoff + jitter.
+- [ ] **Test:** Happy path, validation, not found, unauthorized/forbidden, conflict, rate limit, concurrency case quan trọng.
+- [ ] **Migration/rollback:** Có ghi chú nếu đổi schema/contract. Xem xét zero-downtime.
+- [ ] **Docs đồng bộ:** API docs/spec/README cập nhật cùng PR. Thêm changelog nếu thay đổi contract.
+- [ ] **Review:** Đã review với ít nhất 1 consumer (FE/mobile) nếu ảnh hưởng client.
+
+> 💡 Checklist này có chủ đích ngắn. **Đừng tick cho có.** Nếu mục không áp dụng, xóa hoặc ghi lý do rõ ràng.
+
+---
+
+## 10. Bảng tra cứu nhanh theo tình huống
+
+| Tình huống | Đọc mục nào | Ghi chú |
 |---|---|---|
-| `messages` | `id`, `sender_name`, `content`, `created_at` | 1–n với `photos` |
-| `photos` | `id`, `message_id`, `url`, `status` | n–1 với `messages` |
-
-Ảnh luôn gắn với một lời chúc → sub-resource `/messages/{id}/photos`. Nếu ảnh có album và
-quyền riêng → collection `/photos?message_id=...`.
-
-**Bước 3 — Gán method, status code, quyền.**
-
-| Nhu cầu | Endpoint | Method | Success | Quyền |
-|---|---|---|---|---|
-| Gửi ảnh | `/api/v1/messages/{id}/photos` | `POST` | `201` + `Location` | public + rate limit |
-| Xem album | `/api/v1/messages/{id}/photos` | `GET` | `200` | public |
-| Xóa ảnh | `/api/v1/photos/{id}` | `DELETE` | `204` | admin |
-
-**Bước 4 — Viết contract trước handler.** Tối thiểu: request schema, response thành công,
-danh sách lỗi, phân trang nếu là collection, event realtime phát ra. Chưa viết được response
-mẫu nghĩa là chưa hiểu yêu cầu.
-
-**Bước 5 — Review bằng checklist và test case.** Dùng mục 9 và test matrix `02` mục 20. Phải
-trả lời được: "Gửi 2 lần thì sao?", "Dữ liệu tăng 1000 lần thì sao?", "Client cũ gọi endpoint
-mới thì sao?".
+| "API là gì, khác gì gọi hàm?" | [`01-fundamentals.md`](./01-fundamentals.md) §1 | Contract, producer/consumer. |
+| "Chọn REST, GraphQL, gRPC, WebSocket?" | [`01-fundamentals.md`](./01-fundamentals.md) §3 | Bảng so sánh + câu hỏi quyết định. |
+| "PUT hay PATCH?" | [`01-fundamentals.md`](./01-fundamentals.md) §4, [`02-rest-design.md`](./02-rest-design.md) §§3–4 | Thay thế toàn bộ vs sửa một phần. Merge Patch vs JSON Patch. |
+| "Trả status code nào?" | [`01-fundamentals.md`](./01-fundamentals.md) §4, [`02-rest-design.md`](./02-rest-design.md) §5 | Catalog đầy đủ + quy tắc `400` vs `422`, `401` vs `403`. |
+| "Thiết kế filter/sort/search thế nào?" | [`01-fundamentals.md`](./01-fundamentals.md) §10, [`02-rest-design.md`](./02-rest-design.md) §7 | Whitelist field, tránh SQL injection, search khác filter. |
+| "Offset hay cursor pagination?" | [`01-fundamentals.md`](./01-fundamentals.md) §10, [`02-rest-design.md`](./02-rest-design.md) §8 | Ưu điểm/nhược, tiebreaker bắt buộc, cursor opaque. |
+| "Lỗi nên trả thế nào để client dễ xử lý?" | [`01-fundamentals.md`](./01-fundamentals.md) §12, [`02-rest-design.md`](./02-rest-design.md) §9 | RFC 9457, `code`, `request_id`, `errors[]`, error catalog. |
+| "Validate input như thế nào?" | [`02-rest-design.md`](./02-rest-design.md) §10 | Schema, trim, whitelist, body limit, `Content-Type`. |
+| "POST gửi trùng khi timeout/retry?" | [`01-fundamentals.md`](./01-fundamentals.md) §5, [`02-rest-design.md`](./02-rest-design.md) §11 | `Idempotency-Key`, unique constraint, xử lý replay/conflict. |
+| "Hai người sửa cùng lúc?" | [`01-fundamentals.md`](./01-fundamentals.md) §11, [`02-rest-design.md`](./02-rest-design.md) §12 | Optimistic locking (`ETag`/`If-Match`/`version`), `412`. |
+| "Upload file an toàn?" | [`02-rest-design.md`](./02-rest-design.md) §13, [`../api-security.md`](../api-security.md) | Multipart vs presigned URL, magic bytes, hạn chế size/type, EXIF. |
+| "AuthN/AuthZ cho endpoint?" | [`02-rest-design.md`](./02-rest-design.md) §14, [`../api-security.md`](../api-security.md) §§3–4 | Object-level, scope/role, `401` vs `403`. |
+| "Cache response thế nào?" | [`01-fundamentals.md`](./01-fundamentals.md) §14, [`02-rest-design.md`](./02-rest-design.md) §15 | `Cache-Control`, `ETag`, `If-None-Match`, `Vary`, không cache auth response. |
+| "Chống spam/abuse?" | [`02-rest-design.md`](./02-rest-design.md) §16, [`../api-security.md`](../api-security.md) §7 | Rate limiting thuật toán, shared store, `429` + `Retry-After`. |
+| "Đổi API không làm vỡ client cũ?" | [`01-fundamentals.md`](./01-fundamentals.md) §11, [`02-rest-design.md`](./02-rest-design.md) §17, [`04-lifecycle-process.md`](./04-lifecycle-process.md) | Additive vs breaking, versioning, deprecation (`Deprecation`/`Sunset`). |
+| "Thiết kế webhook?" | [`02-rest-design.md`](./02-rest-design.md) §18 | Signature (HMAC), timestamp + replay window, retry + idempotency, SSRF protection. |
+| "Viết OpenAPI contract-first?" | [`03-openapi.md`](./03-openapi.md) toàn bộ | Quy trình, components, security, lint, codegen, contract testing. |
+| "Thiết kế từ đầu cho use case thực tế?" | [`01-fundamentals.md`](./01-fundamentals.md) §17 (thay bằng domain orders), [`02-rest-design.md`](./02-rest-design.md) §19 | Áp dụng quy trình 10 bước với domain trung lập. |
+| "Review PR thêm endpoint?" | [`02-rest-design.md`](./02-rest-design.md) §§20–22, README §9 | Test matrix + checklist DoD. |
 
 ---
 
-## 9. Definition of Done cho một API
+## 11. Bảng tra cứu chủ đề cốt lõi
 
-Endpoint chỉ "xong" khi **tất cả** mục dưới đây đạt. Không đạt mục nào thì ghi rõ lý do và
-người chấp nhận rủi ro.
-
-### 9.1 Contract
-
-- [ ] Có use case và actor (public / user / admin / service).
-- [ ] URL danh từ số nhiều, không verb, không trailing slash, lồng tối đa 2 cấp.
-- [ ] Method đúng ngữ nghĩa; `GET` không đổi state.
-- [ ] Request schema có ràng buộc kiểu, độ dài, miền giá trị.
-- [ ] Response mẫu cho **mọi** status code có thể trả.
-- [ ] Field mới là additive, không đổi kiểu field cũ.
-- [ ] Có `request_id` trong log và (khuyến nghị) trong response lỗi.
-
-### 9.2 Hành vi
-
-- [ ] Status code đúng catalog, không lạm dụng `200` cho lỗi.
-- [ ] Lỗi có `code` machine-readable + thông điệp cho người đọc.
-- [ ] Tạo có thể retry an toàn (idempotency key hoặc natural key).
-- [ ] Update kiểm soát lost update (`If-Match` hoặc version).
-- [ ] Collection phân trang ổn định, có `limit` tối đa.
-- [ ] Không N+1; đã xem `EXPLAIN` cho query chính.
-
-### 9.3 Vận hành
-
-- [ ] Có rate limit hoặc lý do không cần.
-- [ ] Có timeout và xử lý lỗi dependency (Supabase, storage).
-- [ ] Log không chứa PII/secret; có metric lỗi và latency.
-- [ ] Test: happy path, validation, not found, conflict, unauthorized, rate limit.
-- [ ] Có ghi chú migration/rollback nếu đổi schema.
-- [ ] Tài liệu API cập nhật cùng PR, không "làm sau".
-
-### 9.4 Bảo mật (chi tiết ở `api-security.md`)
-
-- [ ] Xác thực đúng actor; kiểm tra quyền ở server, không dựa vào UI.
-- [ ] Không trả field nhạy cảm (`guest_of` chi tiết, số điện thoại) cho public.
-- [ ] Giới hạn kích thước body và kiểm tra `Content-Type`.
-- [ ] Có biện pháp chống abuse cho endpoint ghi dữ liệu công khai.
-
-💡 Checklist cố tình ngắn. Mục nào không áp dụng được thì xóa khỏi checklist thay vì tick cho có.
+| Chủ đề | Nơi học | Nơi áp dụng nhanh |
+|---|---|---|
+| **Contract-first** | [`03-openapi.md`](./03-openapi.md) §§1,11 | [`03-openapi.md`](./03-openapi.md) §16 checklist |
+| **Richardson Maturity Model** | [`01-fundamentals.md`](./01-fundamentals.md) §7 | Đánh giá mức độ "RESTful" thực tế |
+| **Idempotency** | [`01-fundamentals.md`](./01-fundamentals.md) §5, [`02-rest-design.md`](./02-rest-design.md) §11 | `Idempotency-Key` header + bảng/Redis |
+| **Cursor pagination + tiebreaker** | [`02-rest-design.md`](./02-rest-design.md) §8 | Code mẫu encode/decode cursor, SQL `(key, id)` |
+| **PATCH vs JSON Patch/Merge Patch** | [`02-rest-design.md`](./02-rest-design.md) §4 | Chọn đúng theo độ phức tạp |
+| **RFC 9457 Error** | [`01-fundamentals.md`](./01-fundamentals.md) §12, [`02-rest-design.md`](./02-rest-design.md) §9 | `problem()` helper, error catalog |
+| **Optimistic locking** | [`02-rest-design.md`](./02-rest-design.md) §12 | `version` + `If-Match` → `412` |
+| **Rate limiting** | [`02-rest-design.md`](./02-rest-design.md) §16, [`../api-security.md`](../api-security.md) §7 | Thuật toán + `Retry-After` + shared store |
+| **Caching & conditional request** | [`01-fundamentals.md`](./01-fundamentals.md) §14, [`02-rest-design.md`](./02-rest-design.md) §15 | `ETag`/`If-None-Match`/`304`, `Vary` |
+| **Versioning & deprecation** | [`02-rest-design.md`](./02-rest-design.md) §17, [`04-lifecycle-process.md`](./04-lifecycle-process.md) | URL versioning, `Deprecation`/`Sunset` headers |
+| **OpenAPI 3.1** | [`03-openapi.md`](./03-openapi.md) toàn bộ | `type: [T,"null"]` thay `nullable`, JSON Schema 2020-12 |
+| **Contract testing** | [`03-openapi.md`](./03-openapi.md) §12 | `oasdiff breaking`, Schemathesis, validate response theo schema |
 
 ---
 
-## 10. Bảng tra cứu tình huống
+## 12. Mẹo review nhanh
 
-| Tình huống | Đọc mục nào |
-|---|---|
-| "API là gì, khác gì gọi hàm?" | `01` mục 1 |
-| "Chọn REST, GraphQL hay gRPC?" | `01` mục 3 |
-| "PUT hay PATCH?" | `02` mục 3, 4 |
-| "Trả status code nào?" | `02` mục 5 |
-| "Client cần header gì?" | `02` mục 6 |
-| "Thiết kế filter/sort thế nào?" | `02` mục 7 |
-| "Phân trang offset hay cursor?" | `01` mục 10; `02` mục 8 |
-| "Làm sao để lỗi dễ xử lý?" | `01` mục 12; `02` mục 9 |
-| "Validate input bằng gì?" | `02` mục 10 |
-| "POST bị gửi trùng thì sao?" | `01` mục 5; `02` mục 11 |
-| "Hai người sửa cùng lúc?" | `02` mục 12 |
-| "Upload ảnh cho guestbook?" | `02` mục 13 |
-| "Endpoint này public hay cần auth?" | `02` mục 14; `api-security.md` mục 3–4 |
-| "Cache response thế nào?" | `01` mục 14; `02` mục 15 |
-| "Chống spam gửi lời chúc?" | `02` mục 16; `api-security.md` mục 7 |
-| "Đổi API mà không làm vỡ app cũ?" | `01` mục 11; `02` mục 17 |
-| "Thiết kế webhook cho đối tác?" | `02` mục 18 |
-| "Thiết kế lại API guestbook từ đầu?" | `01` mục 17; `02` mục 19 |
-| "Review PR thêm endpoint" | `02` mục 20, 22; README mục 9 |
-| "Realtime event qua WebSocket" | `websocket.md` mục 14, 18 |
-| "Query chậm, cần index" | `postgresql-basics.md` mục 9; `postgresql-advanced.md` mục 2 |
+Khi review PR thêm/sửa endpoint, hỏi nhanh các câu sau:
+
+| Câu hỏi | Nếu trả lời "không"/"chưa" | Hành động |
+|---|---|---|
+| **Contract đã rõ chưa?** | Chưa có example request/response/lỗi | Yêu cầu bổ sung vào spec/docs. |
+| **Method/status đúng chưa?** | Dùng `GET` đổi state, `200` cho lỗi | Sửa theo [`02-rest-design.md`](./02-rest-design.md) §§3,5. |
+| **Có validation chưa?** | Chấp nhận body thô, không whitelist | Thêm schema + `422`. |
+| **Trùng request xử lý thế nào?** | `POST` không idempotent | Thêm `Idempotency-Key` hoặc unique constraint. |
+| **Sửa đồng thời thế nào?** | PUT/PATCH ghi đè không kiểm tra | Thêm optimistic locking hoặc giải thích tại sao không cần. |
+| **Phân trang có ổn định không?** | Chỉ `offset` cho feed lớn | Chuyển cursor + tiebreaker hoặc chứng minh an toàn. |
+| **Phân quyền đúng chưa?** | Chỉ check role, không check owner | Thêm object-level authorization. |
+| **Lỗi có thể debug được không?** | Thiếu `request_id`, lộ chi tiết nội bộ | Chuẩn hóa error + logging. |
+| **Có phá vỡ client cũ không?** | Đổi tên/xóa/đổi kiểu field bắt buộc | Breaking → versioning hoặc rollback plan. |
+| **Có test chưa?** | Chỉ happy path | Bổ sung validation/conflict/not found. |
 
 ---
 
-## 11. Đóng góp và cập nhật tài liệu
+## 13. Đóng góp và cập nhật tài liệu
 
-### 11.1 Nguyên tắc
+### 13.1 Nguyên tắc
+1. **Code là nguồn sự thật cuối cùng.** Nếu tài liệu mâu thuẫn với implementation đang chạy, phải làm rõ "hiện trạng" vs "đề xuất" và sửa một trong hai trong cùng PR.
+2. **Một thay đổi contract = một thay đổi tài liệu.** Thay đổi request/response/status/error phải cập nhật docs + OpenAPI.
+3. **Không thêm mục "sẽ làm" mơ hồ.** Ghi rõ trạng thái, ưu tiên, hoặc link issue có ngữ cảnh.
+4. **Ví dụ phải hữu ích:** Chạy được hoặc đánh dấu rõ `// pseudocode`. Ưu tiên ví dụ trung lập theo domain `customers/orders/products`.
+5. **Không nhân bản bảo mật:** Link tới [`../api-security.md`](../api-security.md), chỉ mô tả quyết định thiết kế cần thiết.
+6. **Giữ nhất quán:** Tuân theo quy ước §7, giữ style hiện có (bảng, code block, `⚠️`/`💡`).
+7. **Trung lập:** Tránh phụ thuộc stack cụ thể trừ khi minh họa rõ ràng là ví dụ hoặc ghi đa stack.
 
-1. **Code là nguồn sự thật cuối cùng.** Tài liệu và `index.ts` mâu thuẫn → sửa một trong hai
-   trong cùng PR.
-2. **Một thay đổi contract = một thay đổi tài liệu.** PR đổi response phải kèm ví dụ mới.
-3. **Không thêm mục "sẽ làm".** Ghi "hiện trạng" hoặc "đề xuất", kèm ngày/người quyết định.
-4. **Ví dụ phải chạy được** hoặc được đánh dấu rõ là pseudo-code.
-5. **Không nhân bản nội dung bảo mật.** Link tới `api-security.md`, chỉ nêu quyết định thiết kế.
-
-### 11.2 Quy trình
-
+### 13.2 Quy trình đóng góp
 ```text
-1. Mở issue: mục nào sai/thiếu, ảnh hưởng ai?
-2. Nhánh docs/<slug>, sửa tối thiểu, giữ style hiện có.
-3. Kiểm tra heading, anchor trong Mục lục, link tương đối.
-4. Review: 1 người hiểu code + 1 consumer của API.
-5. Merge; nếu đổi contract, cập nhật CHANGELOG.
+1. Mở issue: Nêu rõ vấn đề/thiếu gì, ảnh hưởng đến ai, đề xuất ngắn.
+2. Tạo nhánh: docs/<slug-ngắn>
+3. Sửa tài liệu: Chỉ sửa file liên quan, cập nhật TOC/anchor nếu đổi heading.
+4. Kiểm tra: Link tương đối, heading anchor GitHub, code block có language.
+5. Review: Ít nhất 1 người am hiểu + 1 consumer nếu ảnh hưởng contract.
+6. Merge: Cập nhật changelog nếu thay đổi contract quan trọng.
 ```
 
+### 13.3 Lệnh kiểm tra nhanh trước khi merge
 ```bash
-# Kiểm tra nhanh trước khi merge
+# Đếm dòng
 wc -l docs/api/*.md
+
+# Liệt kê heading
 grep -n '^## ' docs/api/*.md
-grep -oE '\]\(\.\.?/[^)]+\)' docs/api/*.md   # link tương đối
+
+# Kiểm tra link tương đối
+grep -oE '\]\(\.\.?/[^)]+\)' docs/api/*.md
+
+# Kiểm tra từ khóa cần tránh (nếu áp dụng cho file được chỉ định)
+grep -n -E '\b(wedding|supabase|hono|bun )\b' docs/api/README.md docs/api/01-fundamentals.md docs/api/02-rest-design.md docs/api/03-openapi.md
 ```
 
-⚠️ Anchor GitHub = lowercase, bỏ dấu câu, space → `-`. Đổi tiêu đề H2 mà quên anchor trong
-Mục lục là lỗi thường gặp nhất.
+> ⚠️ **Lưu ý anchor GitHub:** Tiêu đề lowercase, bỏ dấu câu, khoảng trắng → `-`. Thay đổi H2/H3 mà quên cập nhật TOC là lỗi rất phổ biến.
 
-### 11.3 Ai duyệt nội dung gì
-
-| Nội dung | Người duyệt |
-|---|---|
-| Contract, status code, error format | Backend reviewer |
-| Trải nghiệm consumer, phân trang, realtime | Frontend/mobile reviewer |
-| Auth, rate limit, upload | Security reviewer |
-| Query, index, migration | Người phụ trách database |
-
----
-
-## 12. Tài liệu tham khảo
-
-- **RFC 9110** — HTTP Semantics: https://www.rfc-editor.org/rfc/rfc9110
-- **RFC 9111** — HTTP Caching: https://www.rfc-editor.org/rfc/rfc9111
-- **RFC 9457** — Problem Details for HTTP APIs: https://www.rfc-editor.org/rfc/rfc9457
-- **RFC 8594** — Sunset HTTP Header: https://www.rfc-editor.org/rfc/rfc8594
-- **RFC 9745** — Deprecation HTTP Header: https://www.rfc-editor.org/rfc/rfc9745
-- **Microsoft REST API Guidelines**: https://github.com/microsoft/api-guidelines
-- **Google API Design Guide**: https://cloud.google.com/apis/design
-- **Zalando RESTful API Guidelines**: https://opensource.zalando.com/restful-api-guidelines/
-- **OWASP API Security Top 10**: https://owasp.org/API-Security/editions/2023/en/0x11-t10/
+### 13.4 Phân công review
+| Nội dung | Người duyệt đề xuất | Tiêu chí |
+|---|---|---|
+| **Contract, status, error format** | Backend Reviewer | Nhất quán, đúng HTTP semantics. |
+| **Consumer UX, pagination, realtime** | Frontend/Mobile Reviewer | Dễ dùng, xử lý lỗi rõ ràng. |
+| **Auth, rate limit, upload, headers bảo mật** | Security Reviewer | Theo [`../api-security.md`](../api-security.md). |
+| **Query, index, migration, locking** | DB Reviewer | Hiệu năng, tránh deadlock, zero-downtime. |
+| **OpenAPI/spec, codegen, contract testing** | API Spec Reviewer | Schema đúng, components tái sử dụng, lint pass. |
 
 ---
 
-*Bắt đầu đọc: [`01-fundamentals.md`](./01-fundamentals.md) →*
+## 14. Tài liệu tham khảo
+
+### Chuẩn HTTP & Web API
+- [RFC 9110 — HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110)
+- [RFC 9111 — HTTP Caching](https://www.rfc-editor.org/rfc/rfc9111)
+- [RFC 9457 — Problem Details for HTTP APIs](https://www.rfc-editor.org/rfc/rfc9457)
+- [RFC 8594 — Sunset HTTP Header](https://www.rfc-editor.org/rfc/rfc8594)
+- [RFC 9745 — Deprecation HTTP Response Header](https://www.rfc-editor.org/rfc/rfc9745)
+- [RFC 6585 — Additional HTTP Status Codes](https://www.rfc-editor.org/rfc/rfc6585)
+
+### API Design Guidelines
+- [Microsoft REST API Guidelines](https://github.com/microsoft/api-guidelines)
+- [Google API Design Guide](https://cloud.google.com/apis/design)
+- [Zalando RESTful API Guidelines](https://opensource.zalando.com/restful-api-guidelines/)
+- [Richardson Maturity Model — Martin Fowler](https://martinfowler.com/articles/richardsonMaturityModel.html)
+- [Roy Fielding's Dissertation (Chapter 5)](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm)
+
+### OpenAPI & Tooling
+- [OpenAPI Specification 3.1.1](https://spec.openapis.org/oas/v3.1.1.html)
+- [JSON Schema 2020-12](https://json-schema.org/draft/2020-12/json-schema-core)
+- [Redocly CLI](https://redocly.com/docs/cli)
+- [Spectral](https://stoplight.io/open-source/spectral)
+- [openapi-typescript](https://github.com/drwpow/openapi-typescript)
+- [orval](https://orval.dev/)
+- [oasdiff](https://github.com/oasdiff/oasdiff)
+- [Schemathesis](https://schemathesis.readthedocs.io/)
+
+### Bảo mật & Thực tiễn
+- [OWASP API Security Top 10 (2023)](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
+- [Stripe — Idempotent Requests](https://docs.stripe.com/api/idempotent_requests)
+- [MDN Web Docs — HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP)
+
+---
+
+*Bắt đầu đọc:* [`01-fundamentals.md`](./01-fundamentals.md) → [`02-rest-design.md`](./02-rest-design.md) → [`03-openapi.md`](./03-openapi.md)
